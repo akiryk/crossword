@@ -1,0 +1,70 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+:root {
+  --deadCellColor: #000;
+  --borderColor: #888;
+  --highlight: rgb(255, 234, 217);
+  --darkHighlight: rgb(73, 73, 73);
+  --cellSize: 32px;
+  --gridSize: 15;
+}
+
+.Crossword {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: calc(var(--gridSize) * var(--cellSize));
+  margin: auto;
+}
+
+.Crossword--pattern .cell {
+  cursor: pointer;
+}
+
+.Crossword--pattern .cell--inactive:focus {
+  background-color: var(--deadCellColor);
+  color: currentColor;
+}
+
+.cell {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--borderColor);
+  border-right-width: 0;
+  border-bottom-width: 0;
+  outline: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-align: center;
+  font-family: "Open Sans", sans-serif;
+  font-size: 20px;
+  text-transform: uppercase;
+}
+
+.cell--active:focus {
+  background-color: var(--highlight);
+}
+
+.cell--inactive:focus {
+  background-color: var(--darkHighlight);
+  color: var(--darkHighlight);
+}
+
+.cell:nth-child(15n) {
+  border-right-width: 1px;
+}
+
+.cell:nth-last-child(-n + 15) {
+  border-bottom-width: 1px;
+}
+
+.cell--active {
+  background-color: #fff;
+}
+
+.cell--inactive {
+  background-color: var(--deadCellColor);
+}
