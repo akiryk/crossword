@@ -5,8 +5,8 @@ import "./App.css";
 import {
   MODES,
   CREATE_PATTERN,
-  ENTER_ACROSS_WORDS,
-  ENTER_DOWN_WORDS,
+  GO_LEFT_TO_RIGHT,
+  GO_TOP_TO_BOTTOM,
 } from "./utils/constants";
 
 function App() {
@@ -35,7 +35,7 @@ function App() {
         type="radio"
         name="mode"
         id="vertical"
-        value={`${ENTER_DOWN_WORDS}`}
+        value={`${GO_TOP_TO_BOTTOM}`}
         onChange={handleChange}
       />
       <label htmlFor="horizontal">Horizontal</label>
@@ -43,7 +43,7 @@ function App() {
         type="radio"
         name="mode"
         id="horizontal"
-        value={`${ENTER_ACROSS_WORDS}`}
+        value={`${GO_LEFT_TO_RIGHT}`}
         onChange={handleChange}
       />
       <div className="wrapper">
