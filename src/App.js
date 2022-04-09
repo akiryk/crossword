@@ -59,38 +59,106 @@ function App() {
     }
   }
 
-  function handleMakeHints() {
-    const wordsAcross = {};
-    let acrossWordCount = 0;
-    let acrossWord = [];
-    let currentWord;
-    for (let y = 0; y < SPAN; y++) {
+  function makeAcrossWords({
+    currentCell,
+    x,
+    y,
+    currentWord,
+    acrossWordCount,
+  }) {
+    const previousCell = gridData[`${x - 1}:${y}`];
+    const nextCell = gridData[`${x + 1}:${y}`];
+    if (!previousCell?.value && !!currentCell.value && !!nextCell?.value) {
+      // first letter in an across word!
+      acrossWordCount += 1;
+      currentWord = `${currentWord}${currentCell.value}`;
+      grid.wordsAcross[acrossWordCount] = {
+        word: "",
+        startingCell: currentCell,
+        endingCell: null,
+      };
+    }
+    if (!!previousCell?.value && !!currentCell.value && !!nextCell?.value) {
+      // middling letter!
+      currentWord = `${currentWord}${currentCell.value}`;
+    }
+    if (!!previousCell?.value && !!currentCell.value && !nextCell?.value) {
+      currentWord = `${currentWord}${currentCell.value}`;
+      grid.wordsAcross[acrossWordCount] = {
+        ...grid.wordsAcross[acrossWordCount],
+        word: currentWord,
+        endingCell: currentCell,
+      };
       currentWord = "";
+    }
+    return { acrossWord: currentWord, acrossCount: acrossWordCount };
+  }
+
+  function makeDownWords({ currentCell, x, y, currentWord, downWordCount }) {
+    const previousCell = gridData[`${x}:${y - 1}`];
+    const nextCell = gridData[`${x}:${y + 1}`];
+    if (!previousCell?.value && !!currentCell.value && !!nextCell?.value) {
+      currentWord = `${currentWord}${currentCell.value}`;
+      // first letter in an across word!
+      downWordCount += 1;
+      grid.wordsDown[downWordCount] = {
+        word: "",
+        startingCell: currentCell,
+        endingCell: null,
+      };
+    }
+    if (!!previousCell?.value && !!currentCell.value && !!nextCell?.value) {
+      currentWord = `${currentWord}${currentCell.value}`;
+    }
+    if (!!previousCell?.value && !!currentCell.value && !nextCell?.value) {
+      currentWord = `${currentWord}${currentCell.value}`;
+      grid.wordsDown[downWordCount] = {
+        ...grid.wordsDown[downWordCount],
+        word: currentWord,
+        endingCell: currentCell,
+      };
+      currentWord = "";
+    }
+    return { downWord: currentWord, downCount: downWordCount };
+  }
+
+  function handleMakeHints() {
+    let acrossWordCount = 0;
+    let downWordCount = 0;
+    let currentAcrossWord = "";
+    let currentDownWord = "";
+    for (let y = 0; y < SPAN; y++) {
       for (let x = 0; x < SPAN; x++) {
-        const currentCell = gridData[`${x}:${y}`];
-        const previousCell = gridData[`${x - 1}:${y}`];
-        const nextCell = gridData[`${x + 1}:${y}`];
-        currentWord = `${currentWord}${currentCell.value}`;
-        if (!previousCell?.value && !!currentCell.value && !!nextCell?.value) {
-          // first letter in an across word!
-          acrossWordCount += 1;
-          wordsAcross[acrossWordCount] = {
-            word: "",
-            startingCell: currentCell,
-            endingCell: null,
-          };
-        }
-        if (!!previousCell?.value && !!currentCell.value && !nextCell?.value) {
-          wordsAcross[acrossWordCount] = {
-            ...wordsAcross[acrossWordCount],
-            word: currentWord,
-            endingCell: currentCell,
-          };
-          currentWord = "";
-        }
+        let currentCell = gridData[`${x}:${y}`];
+        const { acrossWord, acrossCount } = makeAcrossWords({
+          currentCell,
+          x,
+          y,
+          currentWord: currentAcrossWord,
+          acrossWordCount,
+        });
+        acrossWordCount = acrossCount;
+        currentAcrossWord = acrossWord;
       }
     }
-    console.log(wordsAcross);
+
+    for (let x = 0; x < SPAN; x++) {
+      for (let y = 0; y < SPAN; y++) {
+        let currentCell = gridData[`${x}:${y}`];
+        const { downWord, downCount } = makeDownWords({
+          currentCell,
+          x,
+          y,
+          currentWord: currentDownWord,
+          downWordCount,
+        });
+        downWordCount = downCount;
+        currentDownWord = downWord;
+      }
+    }
+
+    console.table(grid.wordsAcross);
+    console.table(grid.wordsDown);
   }
 
   return (

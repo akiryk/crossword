@@ -1,12 +1,10 @@
 import { SPAN } from "../utils/constants";
 class Cell {
-  constructor({ x, y, top, bottom, isActive = true, value = "" }) {
+  constructor({ x, y, isActive = true, value = "" }) {
     this.x = x;
     this.y = y;
-    this.id = `${y}:${x}`;
+    this.id = `${x}:${y}`;
     this.isActive = isActive;
-    this.top = top;
-    this.bottom = bottom;
     this.value = value;
   }
 
@@ -42,6 +40,8 @@ export default class Grid {
     this.crossSpan = crossSpan;
     this.downSpan = downSpan;
     this.cells = [];
+    this.wordsAcross = {};
+    this.wordsDown = {};
     for (let y = 0; y < crossSpan; y++) {
       for (let x = 0; x < downSpan; x++) {
         const cell = new Cell({
