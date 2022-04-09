@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 import { Button } from "./Common";
 import Cell from "./Cell";
 import Grid from "./Grid";
 import {
-  CREATE_PATTERN,
+  ANSWER_PHASE,
   GO_TOP_TO_BOTTOM,
   GO_LEFT_TO_RIGHT,
   GO_BOTTOM_TO_TOP,
@@ -71,7 +70,7 @@ function getCellToTheLeft({ currentRow, currentColumn }) {
   return { row: newRow, column: newColumn };
 }
 
-export default function CrosswordContainer({ mode }) {
+export default function CrosswordContainer({ mode, phase }) {
   const [cells, setCells] = useState(null);
   const [grid, setGrid] = useState(null);
 
@@ -82,7 +81,7 @@ export default function CrosswordContainer({ mode }) {
     setCells(cells);
   }, []);
 
-  function goToNextCell({ row, column, overrideMode }) {
+  function goToNextCell({ row, column, overrideMode, mode }) {
     const nextCellMode = overrideMode ? overrideMode : mode;
     let nextCellFunction = () => {};
     switch (nextCellMode) {
@@ -108,6 +107,33 @@ export default function CrosswordContainer({ mode }) {
     setCellWithFocus(nextCell);
   }
 
+  function gotoPreviousCell({ row, column, overrideMode, mode }) {
+    const nextCellMode = overrideMode ? overrideMode : mode;
+    console.log(nextCellMode);
+    let nextCellFunction = () => {};
+    switch (nextCellMode) {
+      case GO_RIGHT_TO_LEFT:
+        nextCellFunction = getCellToTheRight;
+        break;
+      case GO_LEFT_TO_RIGHT:
+        nextCellFunction = getCellToTheLeft;
+        break;
+      case GO_BOTTOM_TO_TOP:
+        nextCellFunction = getCellBelow;
+        break;
+      case GO_TOP_TO_BOTTOM:
+        nextCellFunction = getCellAbove;
+        break;
+      default:
+        break;
+    }
+    const nextCell = nextCellFunction({
+      currentRow: row,
+      currentColumn: column,
+    });
+    setCellWithFocus(nextCell);
+  }
+
   const handleNumberingCells = () => {
     console.log(`grid`, grid);
   };
@@ -122,8 +148,10 @@ export default function CrosswordContainer({ mode }) {
     <Crossword
       grid={grid}
       goToNextCell={goToNextCell}
+      gotoPreviousCell={gotoPreviousCell}
       cellWithFocus={cellWithFocus}
       mode={mode}
+      phase={phase}
       onClick={handleClick}
     />
   );
@@ -131,8 +159,10 @@ export default function CrosswordContainer({ mode }) {
 
 function Crossword({
   mode,
+  phase,
   grid,
   goToNextCell,
+  gotoPreviousCell,
   cellWithFocus,
   handleNumberingCells,
   onClick,
@@ -143,7 +173,7 @@ function Crossword({
         <div>
           <div
             className={
-              mode === CREATE_PATTERN
+              mode === ANSWER_PHASE
                 ? "Crossword Crossword--pattern"
                 : "Crossword"
             }
@@ -158,7 +188,9 @@ function Crossword({
                     row={i}
                     column={j}
                     mode={mode}
+                    phase={phase}
                     goToNextCell={goToNextCell}
+                    gotoPreviousCell={gotoPreviousCell}
                     cellWithFocus={cellWithFocus}
                   />
                 );

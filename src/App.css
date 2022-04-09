@@ -12,12 +12,15 @@
   --gridSize: 15;
 }
 
+.Wrapper {
+  max-width: calc(var(--gridSize) * var(--cellSize));
+  margin: auto;
+}
+
 .Crossword {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  max-width: calc(var(--gridSize) * var(--cellSize));
-  margin: auto;
 }
 
 .Crossword--pattern .cell {

@@ -1,24 +1,27 @@
 import React, { useState, useRef, useEffect } from "react";
 import {
-  CREATE_PATTERN,
+  ANSWER_PHASE,
   GO_TOP_TO_BOTTOM,
   GO_LEFT_TO_RIGHT,
   GO_RIGHT_TO_LEFT,
   GO_BOTTOM_TO_TOP,
 } from "../utils/constants";
 
-const SPACEBAR_KEY = 32;
-// const DELETE_KEY = 8;
 const LEFT_ARROW_KEY = 37;
 const RIGHT_ARROW_KEY = 39;
 const UP_ARROW_KEY = 38;
 const DOWN_ARROW_KEY = 40;
+const DELETE_KEY = 8;
+
+const keyIsLetter = (key) => "abcdefghijklmnopqrstuvwxyz".includes(key);
 
 function Cell({
   row,
   column,
   mode,
+  phase,
   goToNextCell,
+  gotoPreviousCell,
   cellWithFocus,
   cell,
   onClick,
@@ -38,14 +41,20 @@ function Cell({
   }, [cellWithFocus, column, row, isActive, goToNextCell]);
 
   function handleChange(event) {
-    if (isActive && mode !== CREATE_PATTERN) {
-      setValue(event.target.value.slice(-1).toUpperCase());
-      goToNextCell({ row, column });
+    if (isActive && mode !== ANSWER_PHASE) {
+      const value = event.target.value;
+      setValue(value.slice(-1).toUpperCase());
+      if (value) {
+        goToNextCell({ row, column });
+      } else {
+        // delete key!
+        gotoPreviousCell({ row, column });
+      }
     }
   }
 
   function handleClick(event) {
-    if (mode === CREATE_PATTERN) {
+    if (mode === ANSWER_PHASE) {
       if (isActive) {
         setValue("");
       }
@@ -56,6 +65,8 @@ function Cell({
   function handleKeyUp(event) {
     const code = event?.keyCode;
     switch (code) {
+      case DELETE_KEY:
+        break;
       case LEFT_ARROW_KEY:
         goToNextCell({ row, column, overrideMode: GO_RIGHT_TO_LEFT });
         break;
