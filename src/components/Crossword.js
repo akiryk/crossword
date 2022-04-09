@@ -81,7 +81,7 @@ export default function CrosswordContainer({ mode, phase }) {
     setCells(cells);
   }, []);
 
-  function goToNextCell({ row, column, overrideMode, mode }) {
+  function goToNextCell({ row, column, overrideMode }) {
     const nextCellMode = overrideMode ? overrideMode : mode;
     let nextCellFunction = () => {};
     switch (nextCellMode) {
@@ -107,9 +107,8 @@ export default function CrosswordContainer({ mode, phase }) {
     setCellWithFocus(nextCell);
   }
 
-  function gotoPreviousCell({ row, column, overrideMode, mode }) {
+  function gotoPreviousCell({ row, column, overrideMode }) {
     const nextCellMode = overrideMode ? overrideMode : mode;
-    console.log(nextCellMode);
     let nextCellFunction = () => {};
     switch (nextCellMode) {
       case GO_RIGHT_TO_LEFT:
