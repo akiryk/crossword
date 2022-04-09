@@ -9,7 +9,7 @@
   --highlight: rgb(255, 234, 217);
   --darkHighlight: rgb(73, 73, 73);
   --cellSize: 32px;
-  --gridSize: 15;
+  --gridSize: 5;
 }
 
 .Wrapper {
@@ -56,11 +56,11 @@
   color: var(--darkHighlight);
 }
 
-.cell:nth-child(15n) {
+.cell:nth-child(5n) {
   border-right-width: 1px;
 }
 
-.cell:nth-last-child(-n + 15) {
+.cell:nth-last-child(-n + 5) {
   border-bottom-width: 1px;
 }
 

@@ -1,3 +1,4 @@
+import { SPAN } from "../utils/constants";
 class Cell {
   constructor({ x, y, top, bottom, isActive = true }) {
     this.x = x;
@@ -27,7 +28,7 @@ class Cell {
 }
 
 export default class Grid {
-  constructor({ crossSpan = 15, downSpan = 15 } = {}) {
+  constructor({ crossSpan = SPAN, downSpan = SPAN } = {}) {
     this.crossSpan = crossSpan;
     this.downSpan = downSpan;
     this.cells = [];

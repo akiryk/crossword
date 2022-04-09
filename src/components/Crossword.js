@@ -8,23 +8,22 @@ import {
   GO_LEFT_TO_RIGHT,
   GO_BOTTOM_TO_TOP,
   GO_RIGHT_TO_LEFT,
+  SPAN,
 } from "../utils/constants";
 
-const SPAN = 15;
+// function getNextColumnOrRowUp(current) {
+//   if (current > 0) {
+//     return current - 1;
+//   }
+//   return SPAN - 1;
+// }
 
-function getNextColumnOrRowUp(current) {
-  if (current > 0) {
-    return current - 1;
-  }
-  return SPAN - 1;
-}
-
-function getNextColumnOrRowDown(current) {
-  if (current < SPAN - 1) {
-    return current + 1;
-  }
-  return 0;
-}
+// function getNextColumnOrRowDown(current) {
+//   if (current < SPAN - 1) {
+//     return current + 1;
+//   }
+//   return 0;
+// }
 
 function getCellBelow({ currentRow, currentColumn }) {
   let newRow = currentRow;
@@ -122,9 +121,9 @@ export default function CrosswordContainer({ mode, phase }) {
     setCellWithFocus(nextCell);
   }
 
-  const handleNumberingCells = () => {
-    console.log(`grid`, grid);
-  };
+  function handleClearPuzzle() {
+    // TODO
+  }
 
   // when a cell is clicked in PATTERN mode, toggle it on or off
   // by using the Cell class method.
@@ -141,6 +140,7 @@ export default function CrosswordContainer({ mode, phase }) {
       mode={mode}
       phase={phase}
       onClick={handleClick}
+      onClearPuzzle={handleClearPuzzle}
     />
   );
 }
@@ -152,7 +152,7 @@ function Crossword({
   goToNextCell,
   gotoPreviousCell,
   cellWithFocus,
-  handleNumberingCells,
+  onClearPuzzle,
   onClick,
 }) {
   return (
@@ -185,7 +185,7 @@ function Crossword({
               });
             })}
           </div>
-          <Button onClick={handleNumberingCells}>Number Words</Button>
+          <Button onClick={onClearPuzzle}>Clear</Button>
         </div>
       ) : null}
     </>
