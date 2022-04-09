@@ -1,12 +1,13 @@
 import { SPAN } from "../utils/constants";
 class Cell {
-  constructor({ x, y, top, bottom, isActive = true }) {
+  constructor({ x, y, top, bottom, isActive = true, value = "" }) {
     this.x = x;
     this.y = y;
     this.id = `${y}:${x}`;
     this.isActive = isActive;
     this.top = top;
     this.bottom = bottom;
+    this.value = value;
   }
 
   setLeftAndRight(left, right) {
@@ -25,6 +26,15 @@ class Cell {
   toggleActive() {
     this.isActive = !this.isActive;
   }
+
+  setValue(value = "") {
+    this.value = value;
+  }
+
+  clear() {
+    this.value = "";
+    this.isActive = true;
+  }
 }
 
 export default class Grid {
@@ -41,15 +51,17 @@ export default class Grid {
         });
 
         this.cells.push(cell);
-        this.grid[`${i}:${j}`] = cell;
+        this.gridData[`${i}:${j}`] = cell;
       }
     }
 
     // loop through all the cells and find first and last letter of each word
     this.cells.forEach((cell) => {
-      const left = cell.x > 0 ? this.grid[`${cell.x - 1}:${cell.y}`] : null;
+      const left = cell.x > 0 ? this.gridData[`${cell.x - 1}:${cell.y}`] : null;
       const right =
-        cell.x < crossSpan - 1 ? this.grid[`${cell.x + 1}:${cell.y}`] : null;
+        cell.x < crossSpan - 1
+          ? this.gridData[`${cell.x + 1}:${cell.y}`]
+          : null;
       cell.setLeftAndRight(left, right);
       const isFirstCellInWord =
         cell.isActive && (cell.left === null || !cell.left.isActive);
@@ -60,10 +72,17 @@ export default class Grid {
     });
 
     return {
-      grid: this.grid,
+      grid: this,
+      gridData: this.gridData,
       cells: this.cells,
     };
   }
 
-  grid = {};
+  gridData = {};
+
+  clear() {
+    this.cells.forEach((cell) => {
+      cell.clear();
+    });
+  }
 }

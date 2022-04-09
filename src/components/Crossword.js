@@ -60,11 +60,17 @@ function getCellToTheLeft({ currentRow, currentColumn }) {
 export default function CrosswordContainer({ mode, phase }) {
   const [cells, setCells] = useState(null);
   const [grid, setGrid] = useState(null);
+  const [gridData, setGridData] = useState(null);
+  const [hasCleared, setHasCleared] = useState(false);
 
   const [cellWithFocus, setCellWithFocus] = useState(null);
   useEffect(() => {
-    const { grid, cells } = new Grid({ crossSpan: SPAN, downSpan: SPAN });
+    const { grid, gridData, cells } = new Grid({
+      crossSpan: SPAN,
+      downSpan: SPAN,
+    });
     setGrid(grid);
+    setGridData(gridData);
     setCells(cells);
   }, []);
 
@@ -122,25 +128,21 @@ export default function CrosswordContainer({ mode, phase }) {
   }
 
   function handleClearPuzzle() {
-    // TODO
+    grid.clear();
+    setHasCleared((c) => !c);
+    setCellWithFocus(null);
   }
-
-  // when a cell is clicked in PATTERN mode, toggle it on or off
-  // by using the Cell class method.
-  const handleClick = (cell) => {
-    cell.toggleActive();
-  };
 
   return (
     <Crossword
-      grid={grid}
+      grid={gridData}
       goToNextCell={goToNextCell}
       gotoPreviousCell={gotoPreviousCell}
       cellWithFocus={cellWithFocus}
       mode={mode}
       phase={phase}
-      onClick={handleClick}
       onClearPuzzle={handleClearPuzzle}
+      hasCleared={hasCleared}
     />
   );
 }
@@ -155,6 +157,7 @@ function Crossword({
   onClearPuzzle,
   onClick,
 }) {
+  console.log(grid);
   return (
     <>
       {grid ? (
