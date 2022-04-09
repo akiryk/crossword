@@ -42,16 +42,16 @@ export default class Grid {
     this.crossSpan = crossSpan;
     this.downSpan = downSpan;
     this.cells = [];
-    for (let i = 0; i < crossSpan; i++) {
-      for (let j = 0; j < downSpan; j++) {
+    for (let y = 0; y < crossSpan; y++) {
+      for (let x = 0; x < downSpan; x++) {
         const cell = new Cell({
-          x: i,
-          y: j,
+          x,
+          y,
           isActive: true,
         });
 
         this.cells.push(cell);
-        this.gridData[`${i}:${j}`] = cell;
+        this.gridData[`${x}:${y}`] = cell;
       }
     }
 

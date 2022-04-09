@@ -17,10 +17,10 @@ const COMMAND_KEY = 91;
 function Cell({
   row,
   column,
-  mode,
+  directionMode,
   phase,
   goToNextCell,
-  gotoPreviousCell,
+  goToPreviousCell,
   cellWithFocus,
   cell,
 }) {
@@ -28,7 +28,7 @@ function Cell({
   const setValue = (value) => {
     cell.setValue(value);
   };
-  const [forceUpdate, setForceUpdate] = useState(false);
+  const [, setForceUpdate] = useState(false);
 
   useEffect(() => {
     // if this cell is the current cell,
@@ -49,7 +49,7 @@ function Cell({
         goToNextCell({ row, column });
       } else {
         // delete key!
-        gotoPreviousCell({ row, column });
+        goToPreviousCell({ row, column });
       }
     }
   }
@@ -58,11 +58,19 @@ function Cell({
     const code = event?.keyCode;
     switch (code) {
       case DELETE_KEY:
-        if (mode === GO_LEFT_TO_RIGHT && !cell.value) {
-          goToNextCell({ row, column, overrideMode: GO_RIGHT_TO_LEFT });
+        if (directionMode === GO_LEFT_TO_RIGHT && !cell.value) {
+          goToNextCell({
+            row,
+            column,
+            overrideDirectionMode: GO_RIGHT_TO_LEFT,
+          });
         }
-        if (mode === GO_TOP_TO_BOTTOM && !cell.value) {
-          goToNextCell({ row, column, overrideMode: GO_BOTTOM_TO_TOP });
+        if (directionMode === GO_TOP_TO_BOTTOM && !cell.value) {
+          goToNextCell({
+            row,
+            column,
+            overrideDirectionMode: GO_BOTTOM_TO_TOP,
+          });
         }
         break;
       case COMMAND_KEY:
@@ -76,16 +84,16 @@ function Cell({
         }
         break;
       case LEFT_ARROW_KEY:
-        goToNextCell({ row, column, overrideMode: GO_RIGHT_TO_LEFT });
+        goToNextCell({ row, column, overrideDirectionMode: GO_RIGHT_TO_LEFT });
         break;
       case RIGHT_ARROW_KEY:
-        goToNextCell({ row, column, overrideMode: GO_LEFT_TO_RIGHT });
+        goToNextCell({ row, column, overrideDirectionMode: GO_LEFT_TO_RIGHT });
         break;
       case UP_ARROW_KEY:
-        goToNextCell({ row, column, overrideMode: GO_BOTTOM_TO_TOP });
+        goToNextCell({ row, column, overrideDirectionMode: GO_BOTTOM_TO_TOP });
         break;
       case DOWN_ARROW_KEY:
-        goToNextCell({ row, column, overrideMode: GO_TOP_TO_BOTTOM });
+        goToNextCell({ row, column, overrideDirectionMode: GO_TOP_TO_BOTTOM });
         break;
       default:
         break;
