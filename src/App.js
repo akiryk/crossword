@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import React, { useState } from "react";
 import Crossword from "./components/Crossword";
 import "./App.css";
@@ -13,9 +12,7 @@ function App() {
   const [mode, setMode] = useState(CREATE_PATTERN);
   function handleChange(e) {
     const newMode = e.target.value;
-    console.log("newMode", newMode);
     if (MODES.includes(newMode)) {
-      console.log("set");
       setMode(newMode);
     }
   }

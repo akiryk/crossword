@@ -51,7 +51,6 @@ function Cell({
       }
       setIsActive((currentState) => !currentState);
       onClick(cell);
-      };
     }
   }
   function handleKeyUp(event) {
