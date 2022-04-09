@@ -28,6 +28,7 @@ function App() {
   const [phase, setPhase] = useState(ANSWER_PHASE);
   const [mode, setMode] = useState(GO_LEFT_TO_RIGHT);
   function handleChange(e) {
+    console.log("handleChange");
     const newMode = e.target.value;
     if (MODES.includes(newMode)) {
       setMode(newMode);
@@ -46,7 +47,7 @@ function App() {
               id="horizontal"
               value={`${GO_LEFT_TO_RIGHT}`}
               onChange={handleChange}
-              checked
+              checked={mode === GO_LEFT_TO_RIGHT}
             />
             <label htmlFor="horizontal">Handle across words</label>
           </StyledInputWrapper>{" "}
@@ -56,6 +57,7 @@ function App() {
               name="mode"
               id="vertical"
               value={`${GO_TOP_TO_BOTTOM}`}
+              checked={mode === GO_TOP_TO_BOTTOM}
               onChange={handleChange}
             />
             <label htmlFor="vertical">Handle down words</label>

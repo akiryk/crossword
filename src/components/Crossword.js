@@ -27,47 +27,35 @@ function getNextColumnOrRowDown(current) {
 }
 
 function getCellBelow({ currentRow, currentColumn }) {
-  let newRow = 0;
-  let newColumn = currentColumn;
+  let newRow = currentRow;
   if (currentRow < SPAN - 1) {
     newRow = currentRow + 1;
-  } else {
-    newColumn = getNextColumnOrRowDown(currentColumn);
   }
-  return { row: newRow, column: newColumn };
+  return { row: newRow, column: currentColumn };
 }
 
 function getCellAbove({ currentRow, currentColumn }) {
-  let newRow = SPAN - 1;
-  let newColumn = currentColumn;
+  let newRow = SPAN;
   if (currentRow > 0) {
     newRow = currentRow - 1;
-  } else {
-    newColumn = getNextColumnOrRowUp(currentColumn);
   }
-  return { row: newRow, column: newColumn };
+  return { row: newRow, column: currentColumn };
 }
 
 function getCellToTheRight({ currentRow, currentColumn }) {
-  let newRow = currentRow;
-  let newColumn = 0;
+  let newColumn = currentColumn;
   if (currentColumn < SPAN - 1) {
     newColumn = currentColumn + 1;
-  } else {
-    newRow = getNextColumnOrRowDown(currentRow);
   }
-  return { row: newRow, column: newColumn };
+  return { row: currentRow, column: newColumn };
 }
 
 function getCellToTheLeft({ currentRow, currentColumn }) {
-  let newRow = currentRow;
-  let newColumn = SPAN - 1;
+  let newColumn = SPAN;
   if (currentColumn > 0) {
     newColumn = currentColumn - 1;
-  } else {
-    newRow = getNextColumnOrRowUp(currentRow);
   }
-  return { row: newRow, column: newColumn };
+  return { row: currentRow, column: newColumn };
 }
 
 export default function CrosswordContainer({ mode, phase }) {
@@ -104,6 +92,7 @@ export default function CrosswordContainer({ mode, phase }) {
       currentRow: row,
       currentColumn: column,
     });
+
     setCellWithFocus(nextCell);
   }
 

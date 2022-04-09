@@ -12,6 +12,7 @@ const RIGHT_ARROW_KEY = 39;
 const UP_ARROW_KEY = 38;
 const DOWN_ARROW_KEY = 40;
 const DELETE_KEY = 8;
+const COMMAND_KEY = 91;
 
 const keyIsLetter = (key) => "abcdefghijklmnopqrstuvwxyz".includes(key);
 
@@ -31,17 +32,18 @@ function Cell({
   const inputRef = useRef();
 
   useEffect(() => {
+    // if this cell is the current cell,
+    // AND this cell is active
+    // THEN give it focus. Else, stay on the existing cell.
     if (cellWithFocus?.row === row && cellWithFocus?.column === column) {
       if (isActive) {
         inputRef.current.focus();
-      } else {
-        goToNextCell({ row, column });
       }
     }
   }, [cellWithFocus, column, row, isActive, goToNextCell]);
 
   function handleChange(event) {
-    if (isActive && mode !== ANSWER_PHASE) {
+    if (isActive && phase === ANSWER_PHASE) {
       const value = event.target.value;
       setValue(value.slice(-1).toUpperCase());
       if (value) {
@@ -53,19 +55,25 @@ function Cell({
     }
   }
 
-  function handleClick(event) {
-    if (mode === ANSWER_PHASE) {
-      if (isActive) {
-        setValue("");
-      }
-      setIsActive((currentState) => !currentState);
-      onClick(cell);
-    }
-  }
   function handleKeyUp(event) {
     const code = event?.keyCode;
     switch (code) {
       case DELETE_KEY:
+        if (mode === GO_LEFT_TO_RIGHT && !value) {
+          goToNextCell({ row, column, overrideMode: GO_RIGHT_TO_LEFT });
+        }
+        if (mode === GO_TOP_TO_BOTTOM && !value) {
+          goToNextCell({ row, column, overrideMode: GO_BOTTOM_TO_TOP });
+        }
+        break;
+      case COMMAND_KEY:
+        if (phase === ANSWER_PHASE) {
+          if (isActive) {
+            setValue("");
+          }
+          setIsActive((currentState) => !currentState);
+          onClick(cell);
+        }
         break;
       case LEFT_ARROW_KEY:
         goToNextCell({ row, column, overrideMode: GO_RIGHT_TO_LEFT });
@@ -88,7 +96,6 @@ function Cell({
     <input
       className={isActive ? "cell cell--active" : "cell cell--inactive"}
       onChange={handleChange}
-      onClick={handleClick}
       onKeyUp={handleKeyUp}
       value={value}
       ref={inputRef}
