@@ -20,6 +20,10 @@ class Cell {
   setisLastCellInWord(b = false) {
     this.isLastCellInWord = b;
   }
+
+  toggleActive() {
+    this.isActive = !this.isActive;
+  }
 }
 
 export default class Grid {

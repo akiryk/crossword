@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { Button } from "./Common";
 import Cell from "./Cell";
 import Grid from "./Grid";
 import {
@@ -12,7 +14,6 @@ import {
 const SPAN = 15;
 
 function getNextColumnOrRowUp(current) {
-  console.log(`current is ${current}`);
   if (current > 0) {
     return current - 1;
   }
@@ -70,11 +71,14 @@ function getCellToTheLeft({ currentRow, currentColumn }) {
   return { row: newRow, column: newColumn };
 }
 
-export default function Crossword({ mode }) {
+export default function CrosswordContainer({ mode }) {
   const [cells, setCells] = useState(null);
+  const [grid, setGrid] = useState(null);
+
   const [cellWithFocus, setCellWithFocus] = useState(null);
   useEffect(() => {
-    const { cells } = new Grid({ crossSpan: SPAN, downSpan: SPAN });
+    const { grid, cells } = new Grid({ crossSpan: SPAN, downSpan: SPAN });
+    setGrid(grid);
     setCells(cells);
   }, []);
 
@@ -104,26 +108,66 @@ export default function Crossword({ mode }) {
     setCellWithFocus(nextCell);
   }
 
+  const handleNumberingCells = () => {
+    console.log(`grid`, grid);
+  };
+
+  // when a cell is clicked in PATTERN mode, toggle it on or off
+  // by using the Cell class method.
+  const handleClick = (cell) => {
+    cell.toggleActive();
+  };
+
   return (
-    <div
-      className={
-        mode === CREATE_PATTERN ? "Crossword Crossword--pattern" : "Crossword"
-      }
-    >
-      {Array.from(Array(SPAN)).map((undefinedItem, i) => {
-        return Array.from(Array(SPAN)).map((undefinedItem, j) => {
-          return (
-            <Cell
-              key={`${i}:${j}`}
-              row={i}
-              column={j}
-              mode={mode}
-              goToNextCell={goToNextCell}
-              cellWithFocus={cellWithFocus}
-            />
-          );
-        });
-      })}
-    </div>
+    <Crossword
+      grid={grid}
+      goToNextCell={goToNextCell}
+      cellWithFocus={cellWithFocus}
+      mode={mode}
+      onClick={handleClick}
+    />
+  );
+}
+
+function Crossword({
+  mode,
+  grid,
+  goToNextCell,
+  cellWithFocus,
+  handleNumberingCells,
+  onClick,
+}) {
+  return (
+    <>
+      {grid ? (
+        <div>
+          <div
+            className={
+              mode === CREATE_PATTERN
+                ? "Crossword Crossword--pattern"
+                : "Crossword"
+            }
+          >
+            {Array.from(Array(SPAN)).map((undefinedItem, i) => {
+              return Array.from(Array(SPAN)).map((undefinedItem, j) => {
+                return (
+                  <Cell
+                    cell={grid[`${i}:${j}`]}
+                    onClick={onClick}
+                    key={`${i}:${j}`}
+                    row={i}
+                    column={j}
+                    mode={mode}
+                    goToNextCell={goToNextCell}
+                    cellWithFocus={cellWithFocus}
+                  />
+                );
+              });
+            })}
+          </div>
+          <Button onClick={handleNumberingCells}>Number Words</Button>
+        </div>
+      ) : null}
+    </>
   );
 }

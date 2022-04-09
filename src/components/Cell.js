@@ -14,7 +14,15 @@ const RIGHT_ARROW_KEY = 39;
 const UP_ARROW_KEY = 38;
 const DOWN_ARROW_KEY = 40;
 
-function Cell({ row, column, mode, goToNextCell, cellWithFocus }) {
+function Cell({
+  row,
+  column,
+  mode,
+  goToNextCell,
+  cellWithFocus,
+  cell,
+  onClick,
+}) {
   const [isActive, setIsActive] = useState(true);
   const [value, setValue] = useState("");
   const inputRef = useRef();
@@ -42,6 +50,8 @@ function Cell({ row, column, mode, goToNextCell, cellWithFocus }) {
         setValue("");
       }
       setIsActive((currentState) => !currentState);
+      onClick(cell);
+      };
     }
   }
   function handleKeyUp(event) {
