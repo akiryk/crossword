@@ -1,3 +1,6 @@
+$span: 5;
+$totalCells: $span * $span;
+
 .App {
   font-family: sans-serif;
   text-align: center;
@@ -9,7 +12,8 @@
   --highlight: rgb(255, 234, 217);
   --darkHighlight: rgb(73, 73, 73);
   --cellSize: 32px;
-  --gridSize: 5;
+  --span: 5;
+  --totalCells: calc(5 * 5);
 }
 
 *,
@@ -19,7 +23,7 @@
 }
 
 .Wrapper {
-  max-width: calc(var(--gridSize) * var(--cellSize));
+  max-width: calc(var(--span) * var(--cellSize));
   margin: auto;
 }
 
@@ -78,18 +82,8 @@
   position: absolute;
 }
 
-.cellWrapper--number-1::before {
-  content: "1";
-}
-.cellWrapper--number-2::before {
-  content: "2";
-}
-.cellWrapper--number-3::before {
-  content: "3";
-}
-.cellWrapper--number-4::before {
-  content: "4";
-}
-.cellWrapper--number-5::before {
-  content: "5";
+@for $i from 1 through $totalCells {
+  .cellWrapper--number-#{$i}::before {
+    content: "#{$i}";
+  }
 }

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Button } from "./components/Common";
 import Grid from "./components/Grid";
 import CrosswordContainer from "./components/CrosswordContainer";
-import "./App.css";
+import "./App.scss";
 import {
   DIRECTION_MODES,
   PHASE_TITLES,
