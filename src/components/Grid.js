@@ -51,16 +51,17 @@ export default class Grid {
         });
 
         this.cells.push(cell);
-        this.gridData[`${x}:${y}`] = cell;
+        this.gridCells[`${x}:${y}`] = cell;
       }
     }
 
     // loop through all the cells and find first and last letter of each word
     this.cells.forEach((cell) => {
-      const left = cell.x > 0 ? this.gridData[`${cell.x - 1}:${cell.y}`] : null;
+      const left =
+        cell.x > 0 ? this.gridCells[`${cell.x - 1}:${cell.y}`] : null;
       const right =
         cell.x < crossSpan - 1
-          ? this.gridData[`${cell.x + 1}:${cell.y}`]
+          ? this.gridCells[`${cell.x + 1}:${cell.y}`]
           : null;
       cell.setLeftAndRight(left, right);
       const isFirstCellInWord =
@@ -73,12 +74,12 @@ export default class Grid {
 
     return {
       grid: this,
-      gridData: this.gridData,
+      gridCells: this.gridCells,
       cells: this.cells,
     };
   }
 
-  gridData = {};
+  gridCells = {};
 
   clear() {
     this.cells.forEach((cell) => {

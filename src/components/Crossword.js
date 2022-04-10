@@ -6,7 +6,7 @@ import { ANSWER_PHASE, SPAN } from "../utils/constants";
 export default function Crossword({
   directionMode,
   phase,
-  gridData,
+  gridCells,
   goToNextCell,
   goToPreviousCell,
   cellWithFocus,
@@ -14,7 +14,7 @@ export default function Crossword({
 }) {
   return (
     <>
-      {gridData ? (
+      {gridCells ? (
         <div>
           <div
             className={
@@ -27,7 +27,7 @@ export default function Crossword({
               return Array.from(Array(SPAN)).map((undefinedItem, x) => {
                 return (
                   <Cell
-                    cell={gridData[`${x}:${y}`]}
+                    cell={gridCells[`${x}:${y}`]}
                     onClick={onClick}
                     key={`${x}:${y}`}
                     row={y}

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import classNames from "classnames";
 import {
   ANSWER_PHASE,
   GO_TOP_TO_BOTTOM,
@@ -100,14 +101,26 @@ function Cell({
     }
   }
 
+  let inputClasses = "cell";
+  let wrapperClasses = "cellWrapper";
+  if (cell.isActive || cell.value) {
+    inputClasses += " cell--active";
+  } else {
+    inputClasses += " cell--inactive";
+  }
+  if (cell.displayNumber) {
+    wrapperClasses += ` cellWrapper--numbered cellWrapper--number-${cell.displayNumber}`;
+  }
   return (
-    <input
-      className={cell.isActive ? "cell cell--active" : "cell cell--inactive"}
-      onChange={handleChange}
-      onKeyUp={handleKeyUp}
-      value={cell.value}
-      ref={inputRef}
-    />
+    <div className={wrapperClasses}>
+      <input
+        className={inputClasses}
+        onChange={handleChange}
+        onKeyUp={handleKeyUp}
+        value={cell.value}
+        ref={inputRef}
+      />
+    </div>
   );
 }
 
