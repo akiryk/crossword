@@ -6,7 +6,9 @@ class Cell {
     this.id = `${x}:${y}`;
     this.isActive = isActive;
     this.value = value;
+    this.finalValue = null;
     this.displayNumber = 0;
+    this.cellHasFocus = false;
   }
 
   toggleActive() {
@@ -15,12 +17,15 @@ class Cell {
 
   setValue(value = "") {
     this.value = value;
+    this.update();
   }
 
   clear() {
     this.value = "";
     this.isActive = true;
     this.displayNumber = null;
+    this.finalValue = null;
+    this.cellHasFocus = null;
     this.update();
   }
 
@@ -36,6 +41,21 @@ class Cell {
     this.displayNumber = number;
     this.update();
   }
+
+  setFinalValue() {
+    this.finalValue = this.value ? "LIVE" : "DEAD";
+    this.update();
+  }
+
+  enableFocus() {
+    this.cellHasFocus = true;
+    this.update();
+  }
+
+  disableFocus() {
+    this.cellHasFocus = false;
+    this.update();
+  }
 }
 
 export default class Grid {
@@ -45,6 +65,8 @@ export default class Grid {
     this.cellsArray = [];
     this.wordsAcross = {};
     this.wordsDown = {};
+    this.cellWithFocus = null;
+
     for (let y = 0; y < crossSpan; y++) {
       for (let x = 0; x < downSpan; x++) {
         const cell = new Cell({
@@ -63,9 +85,23 @@ export default class Grid {
 
   cellsObject = {};
 
+  finalizeAnswers() {
+    this.cellsArray.forEach((cell) => {
+      cell.setFinalValue();
+    });
+  }
+
   clear() {
     this.cellsArray.forEach((cell) => {
       cell.clear();
     });
+  }
+
+  setCellWithFocus(id) {
+    if (this.cellWithFocus) {
+      this.cellWithFocus.disableFocus();
+    }
+    this.cellWithFocus = this.cellsObject[id];
+    this.cellWithFocus.enableFocus();
   }
 }

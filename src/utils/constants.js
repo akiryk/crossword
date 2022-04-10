@@ -18,4 +18,4 @@ export const PHASE_DESCRIPTIONS = {
   [ANSWER_PHASE]: "Enter words and set dead areas",
   [HINT_PHASE]: "Enter for each of your answers",
 };
-export const SPAN = 5;
+export const SPAN = 15;

@@ -32,9 +32,13 @@ function App() {
   const [directionMode, setDirectionMode] = useState(GO_LEFT_TO_RIGHT);
   // const [toggleRerender, setToggleRender] = useState(false);
   const [grid, setGrid] = useState(null);
-  const [gridData, setGridData] = useState(null);
+  const [cellsObject, setCellsObject] = useState(null);
   const [cells, setCells] = useState([]);
-  const [cellWithFocus, setCellWithFocus] = useState(null);
+  // const [cellWithFocus, setCellWithFocus] = useState(null);
+
+  const setCellWithFocus = ({ id }) => {
+    grid?.setCellWithFocus(id);
+  };
 
   useEffect(() => {
     const grid = new Grid({
@@ -42,7 +46,7 @@ function App() {
       downSpan: SPAN,
     });
     setGrid(grid);
-    setGridData(grid.cellsObject);
+    setCellsObject(grid.cellsObject);
     setCells(grid.cellsArray);
   }, []);
 
@@ -74,18 +78,19 @@ function App() {
         // and the next cell does have value
         // Check if it starts a horizontal word
         if (
-          !gridData[`${x - 1}:${y}`]?.value &&
-          gridData[`${x + 1}:${y}`]?.value
+          !cellsObject[`${x - 1}:${y}`]?.value &&
+          cellsObject[`${x + 1}:${y}`]?.value
         ) {
           let value = cell.value;
           word = "";
           let currentX = x;
+          // get the complete horizontal word
           while (value) {
             word = `${word}${value}`;
             currentX++;
-            value = gridData[`${currentX}:${y}`]?.value;
+            value = cellsObject[`${currentX}:${y}`]?.value;
           }
-          gridData[`${x}:${y}`].number = count;
+          cellsObject[`${x}:${y}`].number = count;
           allWords[count] = {
             acrossWord: word,
             startCell: cell,
@@ -95,18 +100,19 @@ function App() {
 
         // Check if it starts a vertical word
         if (
-          !gridData[`${x}:${y - 1}`]?.value &&
-          gridData[`${x}:${y + 1}`]?.value
+          !cellsObject[`${x}:${y - 1}`]?.value &&
+          cellsObject[`${x}:${y + 1}`]?.value
         ) {
           let value = cell.value;
           word = "";
           let currentY = y;
+          // get the complete vertical word
           while (value) {
             word = `${word}${value}`;
             currentY++;
-            value = gridData[`${x}:${currentY}`]?.value;
+            value = cellsObject[`${x}:${currentY}`]?.value;
           }
-          gridData[`${x}:${y}`].number = count;
+          cellsObject[`${x}:${y}`].number = count;
           allWords[count] = {
             ...allWords[count],
             startCell: cell,
@@ -120,7 +126,7 @@ function App() {
         count++;
       }
     });
-    // setToggleRender((c) => !c);
+    grid.finalizeAnswers();
   }
 
   return (
@@ -155,9 +161,8 @@ function App() {
         <CrosswordContainer
           directionMode={directionMode}
           phase={phase}
-          cellWithFocus={cellWithFocus}
           setCellWithFocus={setCellWithFocus}
-          gridData={gridData}
+          cellsObject={cellsObject}
         />
         <Button onClick={handleMakeHints}>Make Hints</Button>
         <Button onClick={handleClearPuzzle}>Clear</Button>

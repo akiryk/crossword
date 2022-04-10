@@ -1,4 +1,4 @@
-$span: 5;
+$span: 15;
 $totalCells: $span * $span;
 
 .App {
@@ -12,8 +12,8 @@ $totalCells: $span * $span;
   --highlight: rgb(255, 234, 217);
   --darkHighlight: rgb(73, 73, 73);
   --cellSize: 32px;
-  --span: 5;
-  --totalCells: calc(5 * 5);
+  --span: 15;
+  --totalCells: calc(15 * 15);
 }
 
 *,
@@ -70,6 +70,13 @@ $totalCells: $span * $span;
 
 .cell--inactive {
   background-color: var(--deadCellColor);
+}
+
+.cell--live {
+  background-color: #fff;
+}
+.cell--dead {
+  background-color: #000;
 }
 
 .cellWrapper {

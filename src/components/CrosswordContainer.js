@@ -45,10 +45,9 @@ function getCellToTheLeft({ currentRow, currentColumn }) {
 export default function CrosswordContainer({
   directionMode,
   phase,
-  gridData,
+  cellsObject,
   hasCleared,
   setCellWithFocus,
-  cellWithFocus,
 }) {
   function goToNextCell({ row, column, overrideDirectionMode }) {
     const nextCellMode = overrideDirectionMode
@@ -76,7 +75,7 @@ export default function CrosswordContainer({
       currentColumn: column,
     });
 
-    setCellWithFocus(nextCell);
+    setCellWithFocus({ id: `${nextCell.column}:${nextCell.row}` });
   }
 
   function goToPreviousCell({ row, column, overrideDirectionMode }) {
@@ -109,10 +108,9 @@ export default function CrosswordContainer({
 
   return (
     <Crossword
-      gridData={gridData}
+      cellsObject={cellsObject}
       goToNextCell={goToNextCell}
       goToPreviousCell={goToPreviousCell}
-      cellWithFocus={cellWithFocus}
       setCellWithFocus={setCellWithFocus}
       directionMode={directionMode}
       phase={phase}

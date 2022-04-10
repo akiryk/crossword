@@ -22,14 +22,12 @@ function Cell({
   phase,
   goToNextCell,
   goToPreviousCell,
-  cellWithFocus,
   cell,
 }) {
   const inputRef = useRef();
-  const setValue = (value) => {
-    cell.setValue(value);
-  };
   const [displayNumber, setDisplayNumber] = useState(null);
+  const [value, setValue] = useState(cell?.value);
+  const [finalValue, setFinalValue] = useState("");
 
   // cell.subscribe((data) => {
   //   setDisplayNumber(data.displayNumber);
@@ -38,28 +36,22 @@ function Cell({
   // const subscribe = cell.subscribe;
   useEffect(() => {
     cell.subscribe((data) => {
-      console.log("callback!");
       setDisplayNumber(data.displayNumber);
-    });
-  }, [cell]);
-
-  useEffect(() => {
-    // if this cell is the current cell,
-    // AND this cell is active
-    // THEN give it focus. Else, stay on the existing cell.
-    if (cellWithFocus?.row === row && cellWithFocus?.column === column) {
-      if (cell.isActive) {
+      setFinalValue(data.finalValue);
+      setValue(data.value);
+      if (data.cellHasFocus) {
+        inputRef.current.select();
         inputRef.current.focus();
       }
-    }
-  }, [cellWithFocus, column, row, cell, goToNextCell]);
+    });
+  }, [cell]);
 
   function handleChange(event) {
     if (cell.isActive && phase === ANSWER_PHASE) {
       const value = event.target.value;
-      setValue(value.slice(-1).toUpperCase());
+      cell.setValue(value.slice(-1).toUpperCase());
       if (value) {
-        goToNextCell({ row, column });
+        // goToNextCell({ row, column });
       } else {
         // delete key!
         goToPreviousCell({ row, column });
@@ -70,31 +62,22 @@ function Cell({
   function handleKeyUp(event) {
     const code = event?.keyCode;
     switch (code) {
-      case DELETE_KEY:
-        if (directionMode === GO_LEFT_TO_RIGHT && !cell.value) {
-          goToNextCell({
-            row,
-            column,
-            overrideDirectionMode: GO_RIGHT_TO_LEFT,
-          });
-        }
-        if (directionMode === GO_TOP_TO_BOTTOM && !cell.value) {
-          goToNextCell({
-            row,
-            column,
-            overrideDirectionMode: GO_BOTTOM_TO_TOP,
-          });
-        }
-        break;
-      case COMMAND_KEY:
-        if (phase === ANSWER_PHASE) {
-          // if (cell.isActive) {
-          cell.setValue("");
-          cell.toggleActive();
-          // }
-          // onClick(cell);
-        }
-        break;
+      // case DELETE_KEY:
+      //   if (directionMode === GO_LEFT_TO_RIGHT && !cell.value) {
+      //     goToNextCell({
+      //       row,
+      //       column,
+      //       overrideDirectionMode: GO_RIGHT_TO_LEFT,
+      //     });
+      //   }
+      //   if (directionMode === GO_TOP_TO_BOTTOM && !cell.value) {
+      //     goToNextCell({
+      //       row,
+      //       column,
+      //       overrideDirectionMode: GO_BOTTOM_TO_TOP,
+      //     });
+      //   }
+      //   break;
       case LEFT_ARROW_KEY:
         goToNextCell({ row, column, overrideDirectionMode: GO_RIGHT_TO_LEFT });
         break;
@@ -119,6 +102,11 @@ function Cell({
   } else {
     inputClasses += " cell--inactive";
   }
+  if (finalValue === "DEAD") {
+    inputClasses += " cell--dead";
+  } else if (finalValue === "LIVE") {
+    inputClasses += " cell--live";
+  }
   if (displayNumber) {
     wrapperClasses += ` cellWrapper--numbered cellWrapper--number-${displayNumber}`;
   }
@@ -128,7 +116,7 @@ function Cell({
         className={inputClasses}
         onChange={handleChange}
         onKeyUp={handleKeyUp}
-        value={cell.value}
+        value={value}
         ref={inputRef}
       />
     </div>
