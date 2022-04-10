@@ -30,25 +30,24 @@ const StyledInputWrapper = styled.div`
 function App() {
   const [phase, setPhase] = useState(ANSWER_PHASE);
   const [directionMode, setDirectionMode] = useState(GO_LEFT_TO_RIGHT);
-  const [toggleRerender, setToggleRender] = useState(false);
+  // const [toggleRerender, setToggleRender] = useState(false);
   const [grid, setGrid] = useState(null);
-  const [gridCells, setGridData] = useState(null);
+  const [gridData, setGridData] = useState(null);
   const [cells, setCells] = useState([]);
   const [cellWithFocus, setCellWithFocus] = useState(null);
 
   useEffect(() => {
-    const { grid, gridCells, cells } = new Grid({
+    const grid = new Grid({
       crossSpan: SPAN,
       downSpan: SPAN,
     });
     setGrid(grid);
-    setGridData(gridCells);
-    setCells(cells);
+    setGridData(grid.cellsObject);
+    setCells(grid.cellsArray);
   }, []);
 
   function handleClearPuzzle() {
     grid.clear();
-    setToggleRender((c) => !c);
     setCellWithFocus(null);
   }
 
@@ -75,8 +74,8 @@ function App() {
         // and the next cell does have value
         // Check if it starts a horizontal word
         if (
-          !gridCells[`${x - 1}:${y}`]?.value &&
-          gridCells[`${x + 1}:${y}`]?.value
+          !gridData[`${x - 1}:${y}`]?.value &&
+          gridData[`${x + 1}:${y}`]?.value
         ) {
           let value = cell.value;
           word = "";
@@ -84,9 +83,9 @@ function App() {
           while (value) {
             word = `${word}${value}`;
             currentX++;
-            value = gridCells[`${currentX}:${y}`]?.value;
+            value = gridData[`${currentX}:${y}`]?.value;
           }
-          gridCells[`${x}:${y}`].number = count;
+          gridData[`${x}:${y}`].number = count;
           allWords[count] = {
             acrossWord: word,
             startCell: cell,
@@ -96,8 +95,8 @@ function App() {
 
         // Check if it starts a vertical word
         if (
-          !gridCells[`${x}:${y - 1}`]?.value &&
-          gridCells[`${x}:${y + 1}`]?.value
+          !gridData[`${x}:${y - 1}`]?.value &&
+          gridData[`${x}:${y + 1}`]?.value
         ) {
           let value = cell.value;
           word = "";
@@ -105,9 +104,9 @@ function App() {
           while (value) {
             word = `${word}${value}`;
             currentY++;
-            value = gridCells[`${x}:${currentY}`]?.value;
+            value = gridData[`${x}:${currentY}`]?.value;
           }
-          gridCells[`${x}:${y}`].number = count;
+          gridData[`${x}:${y}`].number = count;
           allWords[count] = {
             ...allWords[count],
             startCell: cell,
@@ -117,11 +116,11 @@ function App() {
         }
       }
       if (incrementCount) {
-        cell.displayNumber = count;
+        cell.setDisplayNumber(count);
         count++;
       }
     });
-    setToggleRender((c) => !c);
+    // setToggleRender((c) => !c);
   }
 
   return (
@@ -158,7 +157,7 @@ function App() {
           phase={phase}
           cellWithFocus={cellWithFocus}
           setCellWithFocus={setCellWithFocus}
-          gridCells={gridCells}
+          gridData={gridData}
         />
         <Button onClick={handleMakeHints}>Make Hints</Button>
         <Button onClick={handleClearPuzzle}>Clear</Button>

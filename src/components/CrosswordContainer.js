@@ -45,7 +45,7 @@ function getCellToTheLeft({ currentRow, currentColumn }) {
 export default function CrosswordContainer({
   directionMode,
   phase,
-  gridCells,
+  gridData,
   hasCleared,
   setCellWithFocus,
   cellWithFocus,
@@ -109,7 +109,7 @@ export default function CrosswordContainer({
 
   return (
     <Crossword
-      gridCells={gridCells}
+      gridData={gridData}
       goToNextCell={goToNextCell}
       goToPreviousCell={goToPreviousCell}
       cellWithFocus={cellWithFocus}

@@ -29,7 +29,19 @@ function Cell({
   const setValue = (value) => {
     cell.setValue(value);
   };
-  const [, setForceUpdate] = useState(false);
+  const [displayNumber, setDisplayNumber] = useState(null);
+
+  // cell.subscribe((data) => {
+  //   setDisplayNumber(data.displayNumber);
+  // });
+
+  // const subscribe = cell.subscribe;
+  useEffect(() => {
+    cell.subscribe((data) => {
+      console.log("callback!");
+      setDisplayNumber(data.displayNumber);
+    });
+  }, [cell]);
 
   useEffect(() => {
     // if this cell is the current cell,
@@ -79,7 +91,6 @@ function Cell({
           // if (cell.isActive) {
           cell.setValue("");
           cell.toggleActive();
-          setForceUpdate((c) => !c);
           // }
           // onClick(cell);
         }
@@ -103,13 +114,13 @@ function Cell({
 
   let inputClasses = "cell";
   let wrapperClasses = "cellWrapper";
-  if (cell.isActive || cell.value) {
+  if (cell.isActive) {
     inputClasses += " cell--active";
   } else {
     inputClasses += " cell--inactive";
   }
-  if (cell.displayNumber) {
-    wrapperClasses += ` cellWrapper--numbered cellWrapper--number-${cell.displayNumber}`;
+  if (displayNumber) {
+    wrapperClasses += ` cellWrapper--numbered cellWrapper--number-${displayNumber}`;
   }
   return (
     <div className={wrapperClasses}>
