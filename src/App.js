@@ -63,14 +63,15 @@ function App() {
   }
 
   function handleMakeHints() {
-    const allWords = {};
+    const allWords = [];
     let word;
-    let count = 1;
+    let count = 0;
     let x;
     let y;
     let incrementCount;
     cells.forEach((cell) => {
       incrementCount = false;
+      const wordObject = {};
       if (cell.value) {
         x = cell.x;
         y = cell.y;
@@ -91,10 +92,8 @@ function App() {
             value = cellsObject[`${currentX}:${y}`]?.value;
           }
           cellsObject[`${x}:${y}`].number = count;
-          allWords[count] = {
-            acrossWord: word,
-            startCell: cell,
-          };
+          wordObject.acrossWord = word;
+          wordObject.startCell = cell;
           incrementCount = true;
         }
 
@@ -113,20 +112,36 @@ function App() {
             value = cellsObject[`${x}:${currentY}`]?.value;
           }
           cellsObject[`${x}:${y}`].number = count;
-          allWords[count] = {
-            ...allWords[count],
-            startCell: cell,
-            downWord: word,
-          };
+          wordObject.downWord = word;
+          wordObject.startCell = cell;
           incrementCount = true;
         }
       }
       if (incrementCount) {
-        cell.setDisplayNumber(count);
+        cell.setDisplayNumber(count + 1);
+        allWords.push(wordObject);
         count++;
       }
     });
     grid.finalizeAnswers();
+    const aw = {};
+    const dw = {};
+    allWords.forEach((word) => {
+      if (word.acrossWord) {
+        aw[word.acrossWord] = {
+          word: word.acrossWord,
+          number: word.startCell.displayNumber,
+        };
+      }
+      if (word.downWord) {
+        dw[word.downWord] = {
+          word: word.downWord,
+          number: word.startCell.displayNumber,
+        };
+      }
+    });
+    console.table(aw);
+    console.table(dw);
   }
 
   return (
