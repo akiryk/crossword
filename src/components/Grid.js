@@ -6,7 +6,7 @@ class Cell {
     this.id = `${x}:${y}`;
     this.isActive = isActive;
     this.value = value;
-    this.finalValue = null;
+    this.displayState = null;
     this.displayNumber = 0;
     this.cellHasFocus = false;
   }
@@ -24,7 +24,7 @@ class Cell {
     this.value = "";
     this.isActive = true;
     this.displayNumber = null;
-    this.finalValue = null;
+    this.displayState = null;
     this.cellHasFocus = null;
     this.update();
   }
@@ -43,7 +43,7 @@ class Cell {
   }
 
   setFinalValue() {
-    this.finalValue = this.value ? "LIVE" : "DEAD";
+    this.displayState = this.value ? "LIVE" : "DEAD";
     this.update();
   }
 
@@ -63,8 +63,8 @@ export default class Grid {
     this.crossSpan = crossSpan;
     this.downSpan = downSpan;
     this.cellsArray = [];
-    this.wordsAcross = {};
-    this.wordsDown = {};
+    this.startCellsWordsAcross = [];
+    this.startCellsWordsDown = [];
     this.cellWithFocus = null;
 
     for (let y = 0; y < crossSpan; y++) {
@@ -103,5 +103,13 @@ export default class Grid {
     }
     this.cellWithFocus = this.cellsObject[id];
     this.cellWithFocus.enableFocus();
+  }
+
+  addAcrossWordStartCell(cell) {
+    this.startCellsWordsAcross.push(cell);
+  }
+
+  addDownWordStartCell(cell) {
+    this.startCellsWordsDown.push(cell);
   }
 }

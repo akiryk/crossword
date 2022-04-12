@@ -14,6 +14,7 @@ import {
   GO_TOP_TO_BOTTOM,
   SPAN,
 } from "./utils/constants";
+import HintingForm from "./components/HintingForm";
 
 const StyledInputs = styled.div`
   display: flex;
@@ -29,6 +30,8 @@ const StyledInputWrapper = styled.div`
 
 function App() {
   const [phase, setPhase] = useState(ANSWER_PHASE);
+  const [shouldShowHintingForm, setShouldShowHintingForm] = useState(false);
+
   const [directionMode, setDirectionMode] = useState(GO_LEFT_TO_RIGHT);
   // const [toggleRerender, setToggleRender] = useState(false);
   const [grid, setGrid] = useState(null);
@@ -62,22 +65,22 @@ function App() {
     }
   }
 
-  function handleMakeHints() {
+  function makeHints() {
     const allWords = [];
     let word;
-    let count = 0;
+    let cellDisplayNumber = 1;
     let x;
     let y;
-    let incrementCount;
+    let shouldIncrementCount;
     cells.forEach((cell) => {
-      incrementCount = false;
-      const wordObject = {};
+      shouldIncrementCount = false;
       if (cell.value) {
         x = cell.x;
         y = cell.y;
+
+        // Check if it starts a horizontal word
         // The cell starts a word if the previous cell does not have value
         // and the next cell does have value
-        // Check if it starts a horizontal word
         if (
           !cellsObject[`${x - 1}:${y}`]?.value &&
           cellsObject[`${x + 1}:${y}`]?.value
@@ -91,10 +94,9 @@ function App() {
             currentX++;
             value = cellsObject[`${currentX}:${y}`]?.value;
           }
-          cellsObject[`${x}:${y}`].number = count;
-          wordObject.acrossWord = word;
-          wordObject.startCell = cell;
-          incrementCount = true;
+          cellsObject[`${x}:${y}`].acrossWord = word;
+          grid.addAcrossWordStartCell(cell);
+          shouldIncrementCount = true;
         }
 
         // Check if it starts a vertical word
@@ -111,37 +113,18 @@ function App() {
             currentY++;
             value = cellsObject[`${x}:${currentY}`]?.value;
           }
-          cellsObject[`${x}:${y}`].number = count;
-          wordObject.downWord = word;
-          wordObject.startCell = cell;
-          incrementCount = true;
+          cellsObject[`${x}:${y}`].downWord = word;
+          grid.addDownWordStartCell(cell);
+          shouldIncrementCount = true;
         }
       }
-      if (incrementCount) {
-        cell.setDisplayNumber(count + 1);
-        allWords.push(wordObject);
-        count++;
+      if (shouldIncrementCount) {
+        cell.setDisplayNumber(cellDisplayNumber);
+        cellDisplayNumber++;
       }
     });
     grid.finalizeAnswers();
-    const aw = {};
-    const dw = {};
-    allWords.forEach((word) => {
-      if (word.acrossWord) {
-        aw[word.acrossWord] = {
-          word: word.acrossWord,
-          number: word.startCell.displayNumber,
-        };
-      }
-      if (word.downWord) {
-        dw[word.downWord] = {
-          word: word.downWord,
-          number: word.startCell.displayNumber,
-        };
-      }
-    });
-    console.table(aw);
-    console.table(dw);
+    setShouldShowHintingForm(true);
   }
 
   return (
@@ -179,8 +162,9 @@ function App() {
           setCellWithFocus={setCellWithFocus}
           cellsObject={cellsObject}
         />
-        <Button onClick={handleMakeHints}>Make Hints</Button>
+        <Button onClick={makeHints}>Make Hints</Button>
         <Button onClick={handleClearPuzzle}>Clear</Button>
+        {shouldShowHintingForm && <HintingForm grid={grid} />}
       </div>
     </div>
   );

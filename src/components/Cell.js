@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import classNames from "classnames";
 import {
   ANSWER_PHASE,
   GO_TOP_TO_BOTTOM,
@@ -27,7 +26,7 @@ function Cell({
   const inputRef = useRef();
   const [displayNumber, setDisplayNumber] = useState(null);
   const [value, setValue] = useState(cell?.value);
-  const [finalValue, setFinalValue] = useState("");
+  const [cellDisplayState, setCellDisplayState] = useState("");
 
   // cell.subscribe((data) => {
   //   setDisplayNumber(data.displayNumber);
@@ -35,11 +34,11 @@ function Cell({
 
   // const subscribe = cell.subscribe;
   useEffect(() => {
-    cell.subscribe((data) => {
-      setDisplayNumber(data.displayNumber);
-      setFinalValue(data.finalValue);
-      setValue(data.value);
-      if (data.cellHasFocus) {
+    cell.subscribe((newCellData) => {
+      setDisplayNumber(newCellData.displayNumber);
+      setCellDisplayState(newCellData.displayState);
+      setValue(newCellData.value);
+      if (newCellData.cellHasFocus) {
         inputRef.current.select();
         inputRef.current.focus();
       }
@@ -102,9 +101,9 @@ function Cell({
   } else {
     inputClasses += " cell--inactive";
   }
-  if (finalValue === "DEAD") {
+  if (cellDisplayState === "DEAD") {
     inputClasses += " cell--dead";
-  } else if (finalValue === "LIVE") {
+  } else if (cellDisplayState === "LIVE") {
     inputClasses += " cell--live";
   }
   if (displayNumber) {
