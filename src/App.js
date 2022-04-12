@@ -37,7 +37,6 @@ function App() {
   const [grid, setGrid] = useState(null);
   const [cellsObject, setCellsObject] = useState(null);
   const [cells, setCells] = useState([]);
-  // const [cellWithFocus, setCellWithFocus] = useState(null);
 
   const setCellWithFocus = ({ id }) => {
     grid?.setCellWithFocus(id);
@@ -54,8 +53,9 @@ function App() {
   }, []);
 
   function handleClearPuzzle() {
+    console.log("set false");
     grid.clear();
-    setCellWithFocus(null);
+    setShouldShowHintingForm(false);
   }
 
   function handleChange(e) {
@@ -66,7 +66,6 @@ function App() {
   }
 
   function makeHints() {
-    const allWords = [];
     let word;
     let cellDisplayNumber = 1;
     let x;

@@ -50,7 +50,7 @@ function Cell({
       const value = event.target.value;
       cell.setValue(value.slice(-1).toUpperCase());
       if (value) {
-        // goToNextCell({ row, column });
+        goToNextCell({ row, column });
       } else {
         // delete key!
         goToPreviousCell({ row, column });
