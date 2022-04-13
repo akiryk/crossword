@@ -55,6 +55,7 @@ $totalCells: $span * $span;
   font-size: 20px;
   text-transform: uppercase;
   caret-color: transparent;
+  background-color: #fff;
 }
 
 .cell--active:focus {
@@ -67,7 +68,7 @@ $totalCells: $span * $span;
 }
 
 .cell--active {
-  background-color: transparent;
+  background-color: #fff;
 }
 
 .cell--inactive {

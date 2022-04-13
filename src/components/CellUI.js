@@ -101,8 +101,8 @@ function CellUI({
 
   function handleClick(event) {
     // highlight the row or the column, depending on direction
-    grid.setCellWithFocus(cell.id);
-    grid.highlightDirection(cell);
+    // grid.setCellWithFocus(cell.id);
+    // grid.highlightDirection(cell);
     switch (event.detail) {
       case 2: {
         grid.toggleGridDirection();
@@ -112,6 +112,11 @@ function CellUI({
       default:
         break;
     }
+  }
+
+  function handleCellHasFocus() {
+    grid.setCellWithFocus(cell.id);
+    grid.highlightDirection(cell);
   }
 
   let inputClasses = "cell";
@@ -143,6 +148,7 @@ function CellUI({
         value={value}
         ref={inputRef}
         onClick={handleClick}
+        onFocus={handleCellHasFocus}
       />
     </div>
   );
