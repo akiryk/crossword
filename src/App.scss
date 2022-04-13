@@ -53,6 +53,7 @@ $totalCells: $span * $span;
   font-family: "Open Sans", sans-serif;
   font-size: 20px;
   text-transform: uppercase;
+  caret-color: transparent;
 }
 
 .cell--active:focus {
@@ -77,6 +78,14 @@ $totalCells: $span * $span;
 }
 .cell--dead {
   background-color: #000;
+}
+
+.cell:focus {
+  // background-color: blue;
+}
+
+.cell::selection {
+  background-color: var(--highlight);
 }
 
 .cellWrapper {

@@ -12,7 +12,6 @@ const RIGHT_ARROW_KEY = 39;
 const UP_ARROW_KEY = 38;
 const DOWN_ARROW_KEY = 40;
 const DELETE_KEY = 8;
-const COMMAND_KEY = 91;
 
 function Cell({
   row,
@@ -22,15 +21,21 @@ function Cell({
   goToNextCell,
   goToPreviousCell,
   cell,
+  setDirectionMode,
 }) {
   const inputRef = useRef();
   const [displayNumber, setDisplayNumber] = useState(null);
   const [value, setValue] = useState(cell?.value);
   const [cellDisplayState, setCellDisplayState] = useState("");
 
-  // cell.subscribe((data) => {
-  //   setDisplayNumber(data.displayNumber);
-  // });
+  useEffect(() => {
+    if (directionMode === GO_TOP_TO_BOTTOM) {
+      // get the column
+      // cell.parent.getColumn();
+    } else {
+      // get the row
+    }
+  }, [directionMode, cell]);
 
   // const subscribe = cell.subscribe;
   useEffect(() => {
@@ -58,25 +63,26 @@ function Cell({
     }
   }
 
-  function handleKeyUp(event) {
+  function handleKeyDown(event) {
     const code = event?.keyCode;
+    // inputRef.current.select();
     switch (code) {
-      // case DELETE_KEY:
-      //   if (directionMode === GO_LEFT_TO_RIGHT && !cell.value) {
-      //     goToNextCell({
-      //       row,
-      //       column,
-      //       overrideDirectionMode: GO_RIGHT_TO_LEFT,
-      //     });
-      //   }
-      //   if (directionMode === GO_TOP_TO_BOTTOM && !cell.value) {
-      //     goToNextCell({
-      //       row,
-      //       column,
-      //       overrideDirectionMode: GO_BOTTOM_TO_TOP,
-      //     });
-      //   }
-      //   break;
+      case DELETE_KEY:
+        if (directionMode === GO_LEFT_TO_RIGHT && !cell.value) {
+          goToNextCell({
+            row,
+            column,
+            overrideDirectionMode: GO_RIGHT_TO_LEFT,
+          });
+        }
+        if (directionMode === GO_TOP_TO_BOTTOM && !cell.value) {
+          goToNextCell({
+            row,
+            column,
+            overrideDirectionMode: GO_BOTTOM_TO_TOP,
+          });
+        }
+        break;
       case LEFT_ARROW_KEY:
         goToNextCell({ row, column, overrideDirectionMode: GO_RIGHT_TO_LEFT });
         break;
@@ -89,6 +95,22 @@ function Cell({
       case DOWN_ARROW_KEY:
         goToNextCell({ row, column, overrideDirectionMode: GO_TOP_TO_BOTTOM });
         break;
+      default:
+        break;
+    }
+  }
+
+  function handleClick(event) {
+    switch (event.detail) {
+      case 1: {
+        break;
+      }
+      case 2: {
+        setDirectionMode((c) =>
+          c === GO_LEFT_TO_RIGHT ? GO_TOP_TO_BOTTOM : GO_LEFT_TO_RIGHT
+        );
+        break;
+      }
       default:
         break;
     }
@@ -114,9 +136,10 @@ function Cell({
       <input
         className={inputClasses}
         onChange={handleChange}
-        onKeyUp={handleKeyUp}
+        onKeyUp={handleKeyDown}
         value={value}
         ref={inputRef}
+        onClick={handleClick}
       />
     </div>
   );

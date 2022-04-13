@@ -53,7 +53,6 @@ function App() {
   }, []);
 
   function handleClearPuzzle() {
-    console.log("set false");
     grid.clear();
     setShouldShowHintingForm(false);
   }
@@ -160,6 +159,8 @@ function App() {
           phase={phase}
           setCellWithFocus={setCellWithFocus}
           cellsObject={cellsObject}
+          setDirectionMode={setDirectionMode}
+          grid={grid}
         />
         <Button onClick={makeHints}>Make Hints</Button>
         <Button onClick={handleClearPuzzle}>Clear</Button>

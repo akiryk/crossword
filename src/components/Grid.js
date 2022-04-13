@@ -1,6 +1,6 @@
 import { SPAN } from "../utils/constants";
 class Cell {
-  constructor({ x, y, isActive = true, value = "" }) {
+  constructor({ x, y, isActive = true, value = "", gridParent }) {
     this.x = x;
     this.y = y;
     this.id = `${x}:${y}`;
@@ -9,6 +9,7 @@ class Cell {
     this.displayState = null;
     this.displayNumber = 0;
     this.cellHasFocus = false;
+    this.gridParent = gridParent;
   }
 
   toggleActive() {
@@ -73,6 +74,7 @@ export default class Grid {
           x,
           y,
           isActive: true,
+          gridParent: this,
         });
 
         this.cellsArray.push(cell);
@@ -93,6 +95,8 @@ export default class Grid {
 
   clear() {
     this.cellsArray.forEach((cell) => {
+      this.startCellsWordsAcross = [];
+      this.startCellsWordsDown = [];
       cell.clear();
     });
   }
@@ -111,5 +115,9 @@ export default class Grid {
 
   addDownWordStartCell(cell) {
     this.startCellsWordsDown.push(cell);
+  }
+
+  getColumn(cell) {
+    console.log(cell.id);
   }
 }

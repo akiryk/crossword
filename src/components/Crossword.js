@@ -10,6 +10,7 @@ export default function Crossword({
   goToNextCell,
   goToPreviousCell,
   onClick,
+  setDirectionMode,
 }) {
   return (
     <>
@@ -35,6 +36,7 @@ export default function Crossword({
                     phase={phase}
                     goToNextCell={goToNextCell}
                     goToPreviousCell={goToPreviousCell}
+                    setDirectionMode={setDirectionMode}
                   />
                 );
               });

@@ -7,7 +7,6 @@ const HintingForm = ({ grid }) => {
   return (
     <form>
       {startCellsWordsAcross.map((cell) => {
-        console.log(cell);
         if (cell.acrossWord) {
           return (
             <div>
@@ -23,7 +22,6 @@ const HintingForm = ({ grid }) => {
       })}
       <p>----------------</p>
       {startCellsWordsDown.map((cell) => {
-        console.log(cell);
         if (cell.downWord) {
           return (
             <div>

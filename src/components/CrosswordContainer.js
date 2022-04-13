@@ -48,6 +48,8 @@ export default function CrosswordContainer({
   cellsObject,
   hasCleared,
   setCellWithFocus,
+  setDirectionMode,
+  grid,
 }) {
   function goToNextCell({ row, column, overrideDirectionMode }) {
     const nextCellMode = overrideDirectionMode
@@ -115,6 +117,8 @@ export default function CrosswordContainer({
       directionMode={directionMode}
       phase={phase}
       hasCleared={hasCleared}
+      setDirectionMode={setDirectionMode}
+      grid={grid}
     />
   );
 }
