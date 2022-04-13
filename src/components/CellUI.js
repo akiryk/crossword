@@ -12,29 +12,18 @@ const RIGHT_ARROW_KEY = 39;
 const UP_ARROW_KEY = 38;
 const DOWN_ARROW_KEY = 40;
 const DELETE_KEY = 8;
+const SHIFT_KEY = 16;
+const SPACEBAR_KEY = 32;
 
-function CellUI({
-  row,
-  column,
-  phase,
-  goToNextCell,
-  goToPreviousCell,
-  cell,
-  grid,
-}) {
+const NATIVE_DELETE_EVENT = "deleteContentBackward";
+
+function CellUI({ row, column, goToNextCell, goToPreviousCell, cell, grid }) {
   const inputRef = useRef();
   const [displayNumber, setDisplayNumber] = useState(null);
   const [value, setValue] = useState(cell?.value);
   const [cellDisplayState, setCellDisplayState] = useState("");
   const [isInSelectedRowOrColumn, setIsInSelectedRowOrColumn] = useState(false);
 
-  // const hasFocus = cell.cellHasFocus;
-  // useEffect(() => {
-  //   if (hasFocus) {
-  //     grid.highlightDirection(cell);
-  //   }
-  // }, [grid, cell, hasFocus]);
-  // const subscribe = cell.subscribe;
   useEffect(() => {
     cell.subscribe((newCellData) => {
       setDisplayNumber(newCellData.displayNumber);
@@ -50,13 +39,13 @@ function CellUI({
   }, [cell, grid]);
 
   function handleChange(event) {
-    if (cell.isActive && phase === ANSWER_PHASE) {
-      const value = event.target.value;
+    const value = event.target.value?.trim();
+    if (value) {
       cell.setValue(value.slice(-1).toUpperCase());
-      if (value) {
-        goToNextCell({ row, column });
-      } else {
-        // delete key!
+      goToNextCell({ row, column });
+    } else {
+      if (event.nativeEvent?.inputType === NATIVE_DELETE_EVENT) {
+        cell.setValue(value.slice(-1).toUpperCase());
         goToPreviousCell({ row, column });
       }
     }
@@ -66,6 +55,10 @@ function CellUI({
     const code = event?.keyCode;
     const directionMode = grid.gridDirection;
     switch (code) {
+      case SHIFT_KEY:
+      case SPACEBAR_KEY:
+        grid.toggleGridDirection(cell);
+        break;
       case DELETE_KEY:
         if (directionMode === GO_LEFT_TO_RIGHT && !cell.value) {
           goToNextCell({
@@ -105,8 +98,7 @@ function CellUI({
     // grid.highlightDirection(cell);
     switch (event.detail) {
       case 2: {
-        grid.toggleGridDirection();
-        grid.highlightDirection(cell);
+        grid.toggleGridDirection(cell);
         break;
       }
       default:
@@ -121,10 +113,8 @@ function CellUI({
 
   let inputClasses = "cell";
 
-  if (cell.isActive) {
+  if (cell.isActive && cell.value) {
     inputClasses += " cell--active";
-  } else {
-    inputClasses += " cell--inactive";
   }
   if (isInSelectedRowOrColumn) {
     inputClasses += " cell--inSelectedRowOrColumn";

@@ -47,7 +47,6 @@ function setCellWithFocus({ grid, id }) {
 }
 
 export default function CrosswordContainer({
-  phase,
   hasCleared,
   setDirectionMode,
   grid,
@@ -114,7 +113,6 @@ export default function CrosswordContainer({
       goToNextCell={goToNextCell}
       goToPreviousCell={goToPreviousCell}
       setCellWithFocus={setCellWithFocus}
-      phase={phase}
       hasCleared={hasCleared}
       setDirectionMode={setDirectionMode}
       grid={grid}

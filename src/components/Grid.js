@@ -127,13 +127,14 @@ export default class Grid {
     this.startCellsWordsDown.push(cell);
   }
 
-  toggleGridDirection() {
+  toggleGridDirection(cell) {
     this.gridDirection =
       this.gridDirection === GO_LEFT_TO_RIGHT
         ? GO_TOP_TO_BOTTOM
         : GO_LEFT_TO_RIGHT;
     this.currentColumn = -1;
     this.currentRow = -1;
+    this.highlightDirection(cell);
   }
 
   highlightDirection({ x, y }) {

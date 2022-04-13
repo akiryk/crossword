@@ -5,7 +5,6 @@ import { ANSWER_PHASE, SPAN } from "../utils/constants";
 
 export default function Crossword({
   grid,
-  phase,
   goToNextCell,
   goToPreviousCell,
   onClick,
@@ -13,7 +12,7 @@ export default function Crossword({
   if (!grid) {
     return null;
   }
-  const { cellsArray, directionMode } = grid;
+  const { cellsArray } = grid;
   console.log(grid.gridDirection);
   return (
     <div className="Crossword">
@@ -26,8 +25,6 @@ export default function Crossword({
           key={cell.id}
           row={cell.y}
           column={cell.x}
-          directionMode={directionMode}
-          phase={phase}
           goToNextCell={goToNextCell}
           goToPreviousCell={goToPreviousCell}
         />
