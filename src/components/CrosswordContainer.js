@@ -42,19 +42,20 @@ function getCellToTheLeft({ currentRow, currentColumn }) {
   return { row: currentRow, column: newColumn };
 }
 
+function setCellWithFocus({ grid, id }) {
+  grid?.setCellWithFocus(id);
+}
+
 export default function CrosswordContainer({
-  directionMode,
   phase,
-  cellsObject,
   hasCleared,
-  setCellWithFocus,
   setDirectionMode,
   grid,
 }) {
   function goToNextCell({ row, column, overrideDirectionMode }) {
     const nextCellMode = overrideDirectionMode
       ? overrideDirectionMode
-      : directionMode;
+      : grid.gridDirection;
     let nextCellFunction = () => {};
     switch (nextCellMode) {
       case GO_RIGHT_TO_LEFT:
@@ -77,13 +78,13 @@ export default function CrosswordContainer({
       currentColumn: column,
     });
 
-    setCellWithFocus({ id: `${nextCell.column}:${nextCell.row}` });
+    setCellWithFocus({ grid, id: `${nextCell.column}:${nextCell.row}` });
   }
 
   function goToPreviousCell({ row, column, overrideDirectionMode }) {
     const nextCellMode = overrideDirectionMode
       ? overrideDirectionMode
-      : directionMode;
+      : grid.gridDirection;
     let nextCellFunction = () => {};
     switch (nextCellMode) {
       case GO_RIGHT_TO_LEFT:
@@ -105,16 +106,14 @@ export default function CrosswordContainer({
       currentRow: row,
       currentColumn: column,
     });
-    setCellWithFocus(nextCell);
+    setCellWithFocus(grid, nextCell);
   }
 
   return (
     <Crossword
-      cellsObject={cellsObject}
       goToNextCell={goToNextCell}
       goToPreviousCell={goToPreviousCell}
       setCellWithFocus={setCellWithFocus}
-      directionMode={directionMode}
       phase={phase}
       hasCleared={hasCleared}
       setDirectionMode={setDirectionMode}

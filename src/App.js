@@ -35,12 +35,6 @@ function App() {
   const [directionMode, setDirectionMode] = useState(GO_LEFT_TO_RIGHT);
   // const [toggleRerender, setToggleRender] = useState(false);
   const [grid, setGrid] = useState(null);
-  const [cellsObject, setCellsObject] = useState(null);
-  const [cells, setCells] = useState([]);
-
-  const setCellWithFocus = ({ id }) => {
-    grid?.setCellWithFocus(id);
-  };
 
   useEffect(() => {
     const grid = new Grid({
@@ -48,8 +42,6 @@ function App() {
       downSpan: SPAN,
     });
     setGrid(grid);
-    setCellsObject(grid.cellsObject);
-    setCells(grid.cellsArray);
   }, []);
 
   function handleClearPuzzle() {
@@ -65,12 +57,13 @@ function App() {
   }
 
   function makeHints() {
+    const { cellsArray, cellsObject } = grid;
     let word;
     let cellDisplayNumber = 1;
     let x;
     let y;
     let shouldIncrementCount;
-    cells.forEach((cell) => {
+    cellsArray.forEach((cell) => {
       shouldIncrementCount = false;
       if (cell.value) {
         x = cell.x;
@@ -157,8 +150,6 @@ function App() {
         <CrosswordContainer
           directionMode={directionMode}
           phase={phase}
-          setCellWithFocus={setCellWithFocus}
-          cellsObject={cellsObject}
           setDirectionMode={setDirectionMode}
           grid={grid}
         />

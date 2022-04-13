@@ -13,42 +13,41 @@ const UP_ARROW_KEY = 38;
 const DOWN_ARROW_KEY = 40;
 const DELETE_KEY = 8;
 
-function Cell({
+function CellUI({
   row,
   column,
-  directionMode,
   phase,
   goToNextCell,
   goToPreviousCell,
   cell,
-  setDirectionMode,
+  grid,
 }) {
   const inputRef = useRef();
   const [displayNumber, setDisplayNumber] = useState(null);
   const [value, setValue] = useState(cell?.value);
   const [cellDisplayState, setCellDisplayState] = useState("");
+  const [isInSelectedRowOrColumn, setIsInSelectedRowOrColumn] = useState(false);
 
-  useEffect(() => {
-    if (directionMode === GO_TOP_TO_BOTTOM) {
-      // get the column
-      // cell.parent.getColumn();
-    } else {
-      // get the row
-    }
-  }, [directionMode, cell]);
-
+  // const hasFocus = cell.cellHasFocus;
+  // useEffect(() => {
+  //   if (hasFocus) {
+  //     grid.highlightDirection(cell);
+  //   }
+  // }, [grid, cell, hasFocus]);
   // const subscribe = cell.subscribe;
   useEffect(() => {
     cell.subscribe((newCellData) => {
       setDisplayNumber(newCellData.displayNumber);
       setCellDisplayState(newCellData.displayState);
       setValue(newCellData.value);
+      setIsInSelectedRowOrColumn(newCellData.isInSelectedRowOrColumn);
       if (newCellData.cellHasFocus) {
         inputRef.current.select();
         inputRef.current.focus();
+        grid.highlightDirection(cell);
       }
     });
-  }, [cell]);
+  }, [cell, grid]);
 
   function handleChange(event) {
     if (cell.isActive && phase === ANSWER_PHASE) {
@@ -65,7 +64,7 @@ function Cell({
 
   function handleKeyDown(event) {
     const code = event?.keyCode;
-    // inputRef.current.select();
+    const directionMode = grid.gridDirection;
     switch (code) {
       case DELETE_KEY:
         if (directionMode === GO_LEFT_TO_RIGHT && !cell.value) {
@@ -101,14 +100,13 @@ function Cell({
   }
 
   function handleClick(event) {
+    // highlight the row or the column, depending on direction
+    grid.setCellWithFocus(cell.id);
+    grid.highlightDirection(cell);
     switch (event.detail) {
-      case 1: {
-        break;
-      }
       case 2: {
-        setDirectionMode((c) =>
-          c === GO_LEFT_TO_RIGHT ? GO_TOP_TO_BOTTOM : GO_LEFT_TO_RIGHT
-        );
+        grid.toggleGridDirection();
+        grid.highlightDirection(cell);
         break;
       }
       default:
@@ -117,17 +115,22 @@ function Cell({
   }
 
   let inputClasses = "cell";
-  let wrapperClasses = "cellWrapper";
+
   if (cell.isActive) {
     inputClasses += " cell--active";
   } else {
     inputClasses += " cell--inactive";
+  }
+  if (isInSelectedRowOrColumn) {
+    inputClasses += " cell--inSelectedRowOrColumn";
   }
   if (cellDisplayState === "DEAD") {
     inputClasses += " cell--dead";
   } else if (cellDisplayState === "LIVE") {
     inputClasses += " cell--live";
   }
+  // use wrapperClasses for the cell number only
+  let wrapperClasses = "cellWrapper";
   if (displayNumber) {
     wrapperClasses += ` cellWrapper--numbered cellWrapper--number-${displayNumber}`;
   }
@@ -145,4 +148,4 @@ function Cell({
   );
 }
 
-export default Cell;
+export default CellUI;

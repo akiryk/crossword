@@ -1,49 +1,37 @@
 import React from "react";
-import Cell from "./Cell";
+import CellUI from "./CellUI";
 
 import { ANSWER_PHASE, SPAN } from "../utils/constants";
 
 export default function Crossword({
-  directionMode,
+  grid,
   phase,
-  cellsObject,
   goToNextCell,
   goToPreviousCell,
   onClick,
-  setDirectionMode,
 }) {
+  if (!grid) {
+    return null;
+  }
+  const { cellsArray, directionMode } = grid;
+  console.log(grid.gridDirection);
   return (
-    <>
-      {cellsObject ? (
-        <div>
-          <div
-            className={
-              directionMode === ANSWER_PHASE
-                ? "Crossword Crossword--pattern"
-                : "Crossword"
-            }
-          >
-            {Array.from(Array(SPAN)).map((undefinedItem, y) => {
-              return Array.from(Array(SPAN)).map((undefinedItem, x) => {
-                return (
-                  <Cell
-                    cell={cellsObject[`${x}:${y}`]}
-                    onClick={onClick}
-                    key={`${x}:${y}`}
-                    row={y}
-                    column={x}
-                    directionMode={directionMode}
-                    phase={phase}
-                    goToNextCell={goToNextCell}
-                    goToPreviousCell={goToPreviousCell}
-                    setDirectionMode={setDirectionMode}
-                  />
-                );
-              });
-            })}
-          </div>
-        </div>
-      ) : null}
-    </>
+    <div className="Crossword">
+      <div className="highliter" />
+      {cellsArray.map((cell) => (
+        <CellUI
+          grid={grid}
+          cell={cell}
+          onClick={onClick}
+          key={cell.id}
+          row={cell.y}
+          column={cell.x}
+          directionMode={directionMode}
+          phase={phase}
+          goToNextCell={goToNextCell}
+          goToPreviousCell={goToPreviousCell}
+        />
+      ))}
+    </div>
   );
 }

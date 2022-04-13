@@ -31,6 +31,7 @@ $totalCells: $span * $span;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  position: relative;
 }
 
 .Crossword--pattern .cell {
@@ -45,7 +46,7 @@ $totalCells: $span * $span;
 .cell {
   width: 32px;
   height: 32px;
-  outline: 0;
+  outline: 1px solid var(--borderColor);
   border: 0;
   padding: 0;
   box-sizing: border-box;
@@ -66,7 +67,7 @@ $totalCells: $span * $span;
 }
 
 .cell--active {
-  background-color: #fff;
+  background-color: transparent;
 }
 
 .cell--inactive {
@@ -74,7 +75,7 @@ $totalCells: $span * $span;
 }
 
 .cell--live {
-  background-color: #fff;
+  background-color: transparent;
 }
 .cell--dead {
   background-color: #000;
@@ -88,9 +89,12 @@ $totalCells: $span * $span;
   background-color: var(--highlight);
 }
 
+.cell--inSelectedRowOrColumn {
+  background-color: rgb(212, 245, 255);
+}
+
 .cellWrapper {
   display: inline-block;
-  outline: 1px solid var(--borderColor);
   position: relative;
 }
 
