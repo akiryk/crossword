@@ -97,7 +97,10 @@ function App() {
       <h2>{PHASE_TITLES[ANSWER_PHASE]}</h2>
       <p>{PHASE_DESCRIPTIONS[ANSWER_PHASE]}</p>
       <div className="Wrapper">
-        <CrosswordContainer grid={grid} />
+        <CrosswordContainer
+          grid={grid}
+          isCellEditingDisabled={shouldShowHintingForm}
+        />
         <Button onClick={makeHints}>Make Hints</Button>
         <Button onClick={handleClearPuzzle}>Clear</Button>
         {shouldShowHintingForm && <HintingForm grid={grid} />}

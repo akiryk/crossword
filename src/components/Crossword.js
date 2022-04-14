@@ -7,26 +7,25 @@ export default function Crossword({
   grid,
   goToNextCell,
   goToPreviousCell,
-  onClick,
+  isCellEditingDisabled,
 }) {
   if (!grid) {
     return null;
   }
   const { cellsArray } = grid;
-  console.log(grid.gridDirection);
   return (
     <div className="Crossword">
       <div className="highliter" />
       {cellsArray.map((cell) => (
         <CellUI
-          grid={grid}
-          cell={cell}
-          onClick={onClick}
-          key={cell.id}
           row={cell.y}
           column={cell.x}
           goToNextCell={goToNextCell}
           goToPreviousCell={goToPreviousCell}
+          cell={cell}
+          grid={grid}
+          key={cell.id}
+          isCellEditingDisabled={isCellEditingDisabled}
         />
       ))}
     </div>

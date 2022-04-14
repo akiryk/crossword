@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import {
-  ANSWER_PHASE,
   GO_TOP_TO_BOTTOM,
   GO_LEFT_TO_RIGHT,
   GO_RIGHT_TO_LEFT,
   GO_BOTTOM_TO_TOP,
+  WHITE_CELL,
+  BLACK_CELL,
 } from "../utils/constants";
 
 const LEFT_ARROW_KEY = 37;
@@ -17,7 +18,15 @@ const SPACEBAR_KEY = 32;
 
 const NATIVE_DELETE_EVENT = "deleteContentBackward";
 
-function CellUI({ row, column, goToNextCell, goToPreviousCell, cell, grid }) {
+function CellUI({
+  row,
+  column,
+  goToNextCell,
+  goToPreviousCell,
+  cell,
+  grid,
+  isCellEditingDisabled,
+}) {
   const inputRef = useRef();
   const [displayNumber, setDisplayNumber] = useState(null);
   const [value, setValue] = useState(cell?.value);
@@ -60,14 +69,14 @@ function CellUI({ row, column, goToNextCell, goToPreviousCell, cell, grid }) {
         grid.toggleGridDirection(cell);
         break;
       case DELETE_KEY:
-        if (directionMode === GO_LEFT_TO_RIGHT && !cell.value) {
+        if (directionMode === GO_LEFT_TO_RIGHT) {
           goToNextCell({
             row,
             column,
             overrideDirectionMode: GO_RIGHT_TO_LEFT,
           });
         }
-        if (directionMode === GO_TOP_TO_BOTTOM && !cell.value) {
+        if (directionMode === GO_TOP_TO_BOTTOM) {
           goToNextCell({
             row,
             column,
@@ -119,9 +128,9 @@ function CellUI({ row, column, goToNextCell, goToPreviousCell, cell, grid }) {
   if (isInSelectedRowOrColumn) {
     inputClasses += " cell--inSelectedRowOrColumn";
   }
-  if (cellDisplayState === "DEAD") {
+  if (cellDisplayState === BLACK_CELL) {
     inputClasses += " cell--dead";
-  } else if (cellDisplayState === "LIVE") {
+  } else if (cellDisplayState === WHITE_CELL) {
     inputClasses += " cell--live";
   }
   // use wrapperClasses for the cell number only
@@ -134,7 +143,7 @@ function CellUI({ row, column, goToNextCell, goToPreviousCell, cell, grid }) {
       <input
         className={inputClasses}
         onChange={handleChange}
-        onKeyUp={handleKeyDown}
+        onKeyDown={handleKeyDown}
         value={value}
         ref={inputRef}
         onClick={handleClick}

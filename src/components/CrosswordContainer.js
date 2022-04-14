@@ -46,11 +46,7 @@ function setCellWithFocus({ grid, id }) {
   grid?.setCellWithFocus(id);
 }
 
-export default function CrosswordContainer({
-  hasCleared,
-  setDirectionMode,
-  grid,
-}) {
+export default function CrosswordContainer({ grid, isCellEditingDisabled }) {
   function goToNextCell({ row, column, overrideDirectionMode }) {
     const nextCellMode = overrideDirectionMode
       ? overrideDirectionMode
@@ -112,10 +108,8 @@ export default function CrosswordContainer({
     <Crossword
       goToNextCell={goToNextCell}
       goToPreviousCell={goToPreviousCell}
-      setCellWithFocus={setCellWithFocus}
-      hasCleared={hasCleared}
-      setDirectionMode={setDirectionMode}
       grid={grid}
+      isCellEditingDisabled={isCellEditingDisabled}
     />
   );
 }

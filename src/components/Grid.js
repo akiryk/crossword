@@ -1,4 +1,10 @@
-import { SPAN, GO_TOP_TO_BOTTOM, GO_LEFT_TO_RIGHT } from "../utils/constants";
+import {
+  SPAN,
+  GO_TOP_TO_BOTTOM,
+  GO_LEFT_TO_RIGHT,
+  WHITE_CELL,
+  BLACK_CELL,
+} from "../utils/constants";
 class Cell {
   constructor({ x, y, isActive = true, value = "", gridParent }) {
     this.x = x;
@@ -45,7 +51,7 @@ class Cell {
   }
 
   setFinalValue() {
-    this.displayState = this.value ? "LIVE" : "DEAD";
+    this.displayState = this.value ? WHITE_CELL : BLACK_CELL;
     this.update();
   }
 
@@ -99,8 +105,11 @@ export default class Grid {
 
   finalizeAnswers() {
     this.cellsArray.forEach((cell) => {
+      // Set the cell to white or black, depending on if it has a value
       cell.setFinalValue();
     });
+    // reset the currently highlighted row or column
+    this.unhighlightCells();
   }
 
   clear() {
@@ -137,17 +146,22 @@ export default class Grid {
     this.highlightDirection(cell);
   }
 
+  unhighlightCells() {
+    while (this.highlightedCells.length) {
+      this.highlightedCells.pop().toggleIsInSelectedRowOrColumn(false);
+    }
+  }
+
   highlightDirection({ x, y }) {
     if (
       (this.gridDirection === GO_LEFT_TO_RIGHT && y === this.currentRow) ||
       (this.gridDirection === GO_TOP_TO_BOTTOM && x === this.currentColumn)
     ) {
+      // user is in the currently highlighted row or column so no need to re-style cells
       return;
     }
-    // we need to change our highlighted cells, so reset the existing ones
-    while (this.highlightedCells.length) {
-      this.highlightedCells.pop().toggleIsInSelectedRowOrColumn(false);
-    }
+    // user is in a different row or column, so de-highlight the existing cells
+    this.unhighlightCells();
 
     this.currentRow = y;
     this.currentColumn = x;
@@ -161,18 +175,5 @@ export default class Grid {
       cell.toggleIsInSelectedRowOrColumn(true);
       this.highlightedCells.push(cell);
     }
-
-    // this.highlightedCells =
-    //   this.gridDirection === GO_LEFT_TO_RIGHT
-    //     ? this.cellsArray.filter(filterByRow)
-    //     : this.cellsArray.filter(filterByColumn);
-
-    // oldHighlightedCells.forEach((cell) =>
-    //   cell.toggleIsInSelectedRowOrColumn(false)
-    // );
-
-    // this.highlightedCells.forEach((cell) =>
-    //   cell.toggleIsInSelectedRowOrColumn(true)
-    // );
   }
 }
