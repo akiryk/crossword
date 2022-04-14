@@ -19,11 +19,12 @@ const HintingFormContainer = ({ grid }) => {
   const [downWordHintFields, setDownWordHintFields] = useState([]);
 
   useEffect(() => {
-    startCellsWordsAcross.forEach(({ acrossWord }) => {
+    startCellsWordsAcross.forEach(({ acrossWord, displayNumber }) => {
       setAcrossWordHintFields((c) => {
         return [
           ...c,
           {
+            displayNumber: displayNumber.toString(),
             hint: "",
             answer: acrossWord,
           },
@@ -33,11 +34,12 @@ const HintingFormContainer = ({ grid }) => {
   }, [startCellsWordsAcross]);
 
   useEffect(() => {
-    startCellsWordsDown.forEach(({ downWord }) => {
+    startCellsWordsDown.forEach(({ downWord, displayNumber }) => {
       setDownWordHintFields((c) => {
         return [
           ...c,
           {
+            displayNumber: displayNumber.toString(),
             hint: "",
             answer: downWord,
           },
