@@ -40,8 +40,8 @@ function CellUI({
       setValue(newCellData.value);
       setIsInSelectedRowOrColumn(newCellData.isInSelectedRowOrColumn);
       if (newCellData.cellHasFocus) {
-        inputRef.current.select();
         inputRef.current.focus();
+        inputRef.current.select();
         grid.highlightDirection(cell);
       }
     });
@@ -52,11 +52,6 @@ function CellUI({
     if (value) {
       cell.setValue(value.slice(-1).toUpperCase());
       goToNextCell({ row, column });
-    } else {
-      if (event.nativeEvent?.inputType === NATIVE_DELETE_EVENT) {
-        cell.setValue(value.slice(-1).toUpperCase());
-        goToPreviousCell({ row, column });
-      }
     }
   }
 
@@ -69,6 +64,7 @@ function CellUI({
         grid.toggleGridDirection(cell);
         break;
       case DELETE_KEY:
+        cell.setValue("");
         if (directionMode === GO_LEFT_TO_RIGHT) {
           goToNextCell({
             row,
@@ -135,9 +131,7 @@ function CellUI({
   }
   // use wrapperClasses for the cell number only
   let wrapperClasses = "cellWrapper";
-  if (displayNumber) {
-    wrapperClasses += ` cellWrapper--numbered cellWrapper--number-${displayNumber}`;
-  }
+
   return (
     <div className={wrapperClasses}>
       <input
@@ -149,6 +143,9 @@ function CellUI({
         onClick={handleClick}
         onFocus={handleCellHasFocus}
       />
+      {!!displayNumber && (
+        <span className="displayNumber">{displayNumber}</span>
+      )}
     </div>
   );
 }

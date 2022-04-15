@@ -10,6 +10,7 @@ import {
   SPAN,
 } from "./utils/constants";
 import HintingForm from "./components/HintingForm";
+import CrosswordContextProvider from "./context/CrosswordContextProvider";
 
 function App() {
   const [shouldShowHintingForm, setShouldShowHintingForm] = useState(false);
@@ -91,20 +92,18 @@ function App() {
     grid.finalizeAnswers();
     setShouldShowHintingForm(true);
   }
-
   return (
     <div className="App">
-      <h2>{PHASE_TITLES[ANSWER_PHASE]}</h2>
-      <p>{PHASE_DESCRIPTIONS[ANSWER_PHASE]}</p>
-      <div className="Wrapper">
-        <CrosswordContainer
-          grid={grid}
-          isCellEditingDisabled={shouldShowHintingForm}
-        />
-        <Button onClick={makeHints}>Make Hints</Button>
-        <Button onClick={handleClearPuzzle}>Clear</Button>
-        {shouldShowHintingForm && <HintingForm grid={grid} />}
-      </div>
+      <CrosswordContextProvider>
+        <h2>{PHASE_TITLES[ANSWER_PHASE]}</h2>
+        <p>{PHASE_DESCRIPTIONS[ANSWER_PHASE]}</p>
+        <div className="Wrapper">
+          <CrosswordContainer grid={grid} />
+          <Button onClick={makeHints}>Make Hints</Button>
+          <Button onClick={handleClearPuzzle}>Clear</Button>
+          {shouldShowHintingForm && <HintingForm grid={grid} />}
+        </div>
+      </CrosswordContextProvider>
     </div>
   );
 }

@@ -1,19 +1,42 @@
 import React, { useState, useEffect } from "react";
-
+import { useCrosswordContext } from "../context/CrosswordContextProvider";
 const HINT_SIZE = "50";
 
-// const HintingForm = ({ onSubmit }) => {
-//   return (
+const saveData = ({
+  acrossWordHintFields,
+  downWordHintFields,
+  setAcrossHints,
+  setDownHints,
+}) => {
+  return new Promise((resolve, reject) => {
+    setAcrossHints(acrossWordHintFields);
+    setDownHints(downWordHintFields);
+    setTimeout(() => {
+      resolve();
+    }, 300);
+  });
+};
 
-//   );
-// };
+const redirectToGameView = () => {
+  console.log("Redirect!");
+};
 
 const HintingFormContainer = ({ grid }) => {
+  const { setAcrossHints, setDownHints, acrossHints, downHints } =
+    useCrosswordContext();
   const { startCellsWordsAcross, startCellsWordsDown } = grid;
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.table(acrossWordHintFields);
-    console.table(downWordHintFields);
+    saveData({
+      acrossWordHintFields,
+      downWordHintFields,
+      setAcrossHints,
+      setDownHints,
+    }).then(() => {
+      console.table(acrossHints);
+      console.table(downHints);
+    });
   };
   const [acrossWordHintFields, setAcrossWordHintFields] = useState([]);
   const [downWordHintFields, setDownWordHintFields] = useState([]);
