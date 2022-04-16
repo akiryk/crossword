@@ -1,111 +1,41 @@
-import React, { useState, useEffect } from "react";
-import { Button } from "./Common";
-import Grid from "./Grid";
-import CrosswordContainer from "./CrosswordContainer";
-import "./CrosswordMaker.scss";
-import {
-  PHASE_TITLES,
-  ANSWER_PHASE,
-  PHASE_DESCRIPTIONS,
-  SPAN,
-} from "../utils/constants";
-import HintingForm from "./HintingForm";
-import CrosswordContextProvider from "../context/CrosswordContextProvider";
+import React from "react";
+import CellForMaker from "./CellForMaker";
+import { SPAN } from "../utils/constants";
 
-function CrosswordMaker() {
-  const [shouldShowHintingForm, setShouldShowHintingForm] = useState(false);
-
-  // const [toggleRerender, setToggleRender] = useState(false);
-  const [grid, setGrid] = useState(null);
-
-  useEffect(() => {
-    const grid = new Grid({
-      crossSpan: SPAN,
-      downSpan: SPAN,
-    });
-    setGrid(grid);
-  }, []);
-
-  function handleClearPuzzle() {
-    grid.clear();
-    setShouldShowHintingForm(false);
+export default function CrosswordMaker({ grid, goToNextCell }) {
+  if (!grid) {
+    return null;
   }
 
-  function makeHints() {
-    const { cellsArray, cellsObject } = grid;
-    let word;
-    let cellDisplayNumber = 1;
-    let x;
-    let y;
-    let shouldIncrementCount;
-    cellsArray.forEach((cell) => {
-      shouldIncrementCount = false;
-      if (cell.value) {
-        x = cell.x;
-        y = cell.y;
+  // get array of Cells from the Grid class
+  const { cellsArray } = grid;
+  const rows = [];
 
-        // Check if it starts a horizontal word
-        // The cell starts a word if the previous cell does not have value
-        // and the next cell does have value
-        if (
-          !cellsObject[`${x - 1}:${y}`]?.value &&
-          cellsObject[`${x + 1}:${y}`]?.value
-        ) {
-          let value = cell.value;
-          word = "";
-          let currentX = x;
-          // get the complete horizontal word
-          while (value) {
-            word = `${word}${value}`;
-            currentX++;
-            value = cellsObject[`${currentX}:${y}`]?.value;
-          }
-          cellsObject[`${x}:${y}`].acrossWord = word;
-          grid.addAcrossWordStartCell(cell);
-          shouldIncrementCount = true;
-        }
-
-        // Check if it starts a vertical word
-        if (
-          !cellsObject[`${x}:${y - 1}`]?.value &&
-          cellsObject[`${x}:${y + 1}`]?.value
-        ) {
-          let value = cell.value;
-          word = "";
-          let currentY = y;
-          // get the complete vertical word
-          while (value) {
-            word = `${word}${value}`;
-            currentY++;
-            value = cellsObject[`${x}:${currentY}`]?.value;
-          }
-          cellsObject[`${x}:${y}`].downWord = word;
-          grid.addDownWordStartCell(cell);
-          shouldIncrementCount = true;
-        }
-      }
-      if (shouldIncrementCount) {
-        cell.setDisplayNumber(cellDisplayNumber);
-        cellDisplayNumber++;
-      }
-    });
-    grid.finalizeAnswers();
-    setShouldShowHintingForm(true);
+  // Create an array of rows, then use a loop to add groups of Cells
+  // equal to the puzzle's span to a row group. E.g. if the SPAN is 10,
+  // we will create 10 rows of 10 Cells each.
+  for (let i = 0; i < cellsArray.length; i += SPAN) {
+    const row = [];
+    for (let j = i; j < i + SPAN; j++) {
+      const cell = cellsArray[j];
+      row.push(
+        <CellForMaker
+          row={cell.y}
+          column={cell.x}
+          goToNextCell={goToNextCell}
+          cell={cell}
+          grid={grid}
+          key={cell.id}
+        />
+      );
+    }
+    rows.push(row);
   }
   return (
-    <div className="CrosswordMaker">
-      <CrosswordContextProvider>
-        <h2>{PHASE_TITLES[ANSWER_PHASE]}</h2>
-        <p>{PHASE_DESCRIPTIONS[ANSWER_PHASE]}</p>
-        <div className="Wrapper">
-          <CrosswordContainer grid={grid} />
-          <Button onClick={makeHints}>Make Hints</Button>
-          <Button onClick={handleClearPuzzle}>Clear</Button>
-          {shouldShowHintingForm && <HintingForm grid={grid} />}
-        </div>
-      </CrosswordContextProvider>
+    <div className="Crossword">
+      {rows.map((row) => {
+        return <div className="Row">{row}</div>;
+      })}
     </div>
   );
 }
-
-export default CrosswordMaker;

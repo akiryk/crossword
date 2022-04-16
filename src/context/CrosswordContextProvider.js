@@ -3,13 +3,10 @@ import React, { createContext, useContext, useState } from "react";
 const CrosswordContext = createContext();
 
 const CrosswordContextProvider = ({ children }) => {
-  const [acrossHints, setAcrossHints] = useState([]);
-  const [downHints, setDownHints] = useState([]);
+  const [grid, setGrid] = useState(null);
 
   return (
-    <CrosswordContext.Provider
-      value={{ acrossHints, setAcrossHints, downHints, setDownHints }}
-    >
+    <CrosswordContext.Provider value={{ grid, setGrid }}>
       {children}
     </CrosswordContext.Provider>
   );

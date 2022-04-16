@@ -18,6 +18,6 @@ export const PHASE_DESCRIPTIONS = {
   [ANSWER_PHASE]: "Enter words and set dead areas",
   [HINT_PHASE]: "Enter for each of your answers",
 };
-export const SPAN = 7;
+export const SPAN = 5;
 export const WHITE_CELL = "LIVE"; // a cell that you can make a guess about
 export const BLACK_CELL = "DEAD"; // a "black" cell -- you can't guess it

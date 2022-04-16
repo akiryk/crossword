@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import Cell from "./Cell";
 import {
   GO_TOP_TO_BOTTOM,
   GO_LEFT_TO_RIGHT,
@@ -16,17 +17,7 @@ const DELETE_KEY = 8;
 const SHIFT_KEY = 16;
 const SPACEBAR_KEY = 32;
 
-const NATIVE_DELETE_EVENT = "deleteContentBackward";
-
-function CellUI({
-  row,
-  column,
-  goToNextCell,
-  goToPreviousCell,
-  cell,
-  grid,
-  isCellEditingDisabled,
-}) {
+function CellForMaker({ row, column, goToNextCell, cell, grid }) {
   const inputRef = useRef();
   const [displayNumber, setDisplayNumber] = useState(null);
   const [value, setValue] = useState(cell?.value);
@@ -49,6 +40,7 @@ function CellUI({
 
   function handleChange(event) {
     const value = event.target.value?.trim();
+    console.log("Change", value);
     if (value) {
       cell.setValue(value.slice(-1).toUpperCase());
       goToNextCell({ row, column });
@@ -111,7 +103,7 @@ function CellUI({
     }
   }
 
-  function handleCellHasFocus() {
+  function handleFocus() {
     grid.setCellWithFocus(cell.id);
     grid.highlightDirection(cell);
   }
@@ -129,25 +121,19 @@ function CellUI({
   } else if (cellDisplayState === WHITE_CELL) {
     inputClasses += " cell--live";
   }
-  // use wrapperClasses for the cell number only
-  let wrapperClasses = "cellWrapper";
 
   return (
-    <div className={wrapperClasses}>
-      <input
-        className={inputClasses}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        value={value}
-        ref={inputRef}
-        onClick={handleClick}
-        onFocus={handleCellHasFocus}
-      />
-      {!!displayNumber && (
-        <span className="displayNumber">{displayNumber}</span>
-      )}
-    </div>
+    <Cell
+      inputClasses={inputClasses}
+      inputRef={inputRef}
+      value={value}
+      onChange={handleChange}
+      onKeyDown={handleKeyDown}
+      onClick={handleClick}
+      onFocus={handleFocus}
+      displayNumber={displayNumber}
+    />
   );
 }
 
-export default CellUI;
+export default CellForMaker;

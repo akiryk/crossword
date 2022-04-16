@@ -1,42 +1,29 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Grid from "./Grid";
+import { SPAN } from "../utils/constants";
 import { useCrosswordContext } from "../context/CrosswordContextProvider";
+
 const HINT_SIZE = "50";
 
-const saveData = ({
-  acrossWordHintFields,
-  downWordHintFields,
-  setAcrossHints,
-  setDownHints,
-}) => {
-  return new Promise((resolve, reject) => {
-    setAcrossHints(acrossWordHintFields);
-    setDownHints(downWordHintFields);
-    setTimeout(() => {
-      resolve();
-    }, 300);
-  });
-};
-
-const redirectToGameView = () => {
-  console.log("Redirect!");
-};
-
 const HintingFormContainer = ({ grid }) => {
-  const { setAcrossHints, setDownHints, acrossHints, downHints } =
-    useCrosswordContext();
   const { startCellsWordsAcross, startCellsWordsDown } = grid;
+  const { setGrid } = useCrosswordContext();
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    saveData({
-      acrossWordHintFields,
-      downWordHintFields,
-      setAcrossHints,
-      setDownHints,
-    }).then(() => {
-      console.table(acrossHints);
-      console.table(downHints);
-    });
+    console.log(startCellsWordsAcross);
+    Promise.resolve()
+      .then(() => {
+        const gameGrid = new Grid({
+          crossSpan: SPAN,
+          downSpan: SPAN,
+          liveCellKeys: [],
+        });
+        return setGrid(grid);
+      })
+      .then(() => navigate("/player"));
   };
   const [acrossWordHintFields, setAcrossWordHintFields] = useState([]);
   const [downWordHintFields, setDownWordHintFields] = useState([]);

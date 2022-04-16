@@ -6,16 +6,16 @@ import {
   BLACK_CELL,
 } from "../utils/constants";
 class Cell {
-  constructor({ x, y, isActive = true, value = "", gridParent }) {
+  constructor({ x, y, isActive = true, value = "" }) {
     this.x = x;
     this.y = y;
     this.id = `${x}:${y}`;
     this.isActive = isActive;
     this.value = value;
+    this.correctValue = "";
     this.displayState = null;
     this.displayNumber = 0;
     this.cellHasFocus = false;
-    this.gridParent = gridParent;
     this.isInSelectedRowOrColumn = false;
   }
 
@@ -26,6 +26,12 @@ class Cell {
   setValue(value = "") {
     this.value = value;
     this.update();
+  }
+
+  // unset value without updating. This should be performed once,
+  // at the start of creating the player's puzzle
+  unsetValue() {
+    this.value = "";
   }
 
   clear() {
@@ -52,6 +58,7 @@ class Cell {
 
   setFinalValue() {
     this.displayState = this.value ? WHITE_CELL : BLACK_CELL;
+    this.correctValue = this.value || "";
     this.update();
   }
 
@@ -76,6 +83,7 @@ export default class Grid {
     this.crossSpan = crossSpan;
     this.downSpan = downSpan;
     this.cellsArray = [];
+    this.cellsObject = {};
     this.startCellsWordsAcross = [];
     this.startCellsWordsDown = [];
     this.cellWithFocus = null;
@@ -83,14 +91,13 @@ export default class Grid {
     this.highlightedCells = [];
     this.currentRow = -1;
     this.currentColumn = -1;
+    this.liveCellKeys = [];
 
     for (let y = 0; y < crossSpan; y++) {
       for (let x = 0; x < downSpan; x++) {
         const cell = new Cell({
           x,
           y,
-          isActive: true,
-          gridParent: this,
         });
 
         this.cellsArray.push(cell);
@@ -101,12 +108,19 @@ export default class Grid {
     return this;
   }
 
-  cellsObject = {};
+  unsetValues() {
+    this.cellsArray.forEach((cell) => {
+      cell.unsetValue();
+    });
+  }
 
   finalizeAnswers() {
     this.cellsArray.forEach((cell) => {
       // Set the cell to white or black, depending on if it has a value
       cell.setFinalValue();
+      if (cell.displayState === WHITE_CELL) {
+        this.liveCellKeys.push(this.cellsObject[cell.id]);
+      }
     });
     // reset the currently highlighted row or column
     this.unhighlightCells();

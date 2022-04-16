@@ -1,7 +1,7 @@
 $span: 30;
 $maxTotalCells: $span * $span;
 
-.CrosswordMaker {
+.CrosswordWrapper {
   font-family: sans-serif;
   text-align: center;
 }
@@ -71,6 +71,7 @@ $maxTotalCells: $span * $span;
 
 .cell--dead {
   background-color: #000;
+  cursor: default;
 }
 
 .cell:focus {
