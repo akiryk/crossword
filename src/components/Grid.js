@@ -24,7 +24,14 @@ class Cell {
   }
 
   setValue(value = "") {
-    this.value = value;
+    const lastLetter = value.slice(-1).toUpperCase();
+    if (lastLetter === this.previousValue) {
+      // use the second to last letter if there is one
+      this.value = value.slice(-2, -1).toUpperCase() || this.previousValue;
+    } else {
+      this.value = value.slice(-1).toUpperCase();
+    }
+    this.previousValue = this.value;
     this.update();
   }
 

@@ -40,9 +40,8 @@ function CellForMaker({ row, column, goToNextCell, cell, grid }) {
 
   function handleChange(event) {
     const value = event.target.value?.trim();
-    console.log("Change", value);
     if (value) {
-      cell.setValue(value.slice(-1).toUpperCase());
+      cell.setValue(value);
       goToNextCell({ row, column });
     }
   }
