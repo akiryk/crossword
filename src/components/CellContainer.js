@@ -111,7 +111,7 @@ function CellContainer({
   }
 
   const cellInputClasses =
-    "caret-transparent cursor-pointer focus:bg-cyan-300 selection:transparent";
+    "caret-transparent cursor-pointer focus:bg-cyan-300 selection:bg-transparent";
   const cellAppearanceClasses =
     "w-10 h-10 outline outline-1 outline-slate-400 border-none";
   const cellTextClasses = "text-center text-xl uppercase";
