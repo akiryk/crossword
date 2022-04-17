@@ -64,7 +64,7 @@ const Crossword = ({
     const row = [];
     for (let j = i; j < i + SPAN; j++) {
       const cell = cellsArray[j];
-      if (cell.isActive) {
+      if (cell.isInPlay) {
         row.push(
           <CellContainer
             row={cell.y}

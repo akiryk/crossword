@@ -1,10 +1,10 @@
 import { SPAN, GO_TOP_TO_BOTTOM, GO_LEFT_TO_RIGHT } from "../utils/constants";
 class Cell {
-  constructor({ x, y, isActive = true, value = "" }) {
+  constructor({ x, y, isInPlay = true, value = "" }) {
     this.x = x;
     this.y = y;
     this.id = `${x}:${y}`;
-    this.isActive = isActive;
+    this.isInPlay = isInPlay;
     this.value = value;
     this.correctValue = "";
     this.displayNumber = 0;
@@ -13,7 +13,7 @@ class Cell {
   }
 
   toggleActive() {
-    this.isActive = !this.isActive;
+    this.isInPlay = !this.isInPlay;
   }
 
   setValue(value = "") {
@@ -36,7 +36,7 @@ class Cell {
 
   clear() {
     this.value = "";
-    this.isActive = true;
+    this.isInPlay = true;
     this.displayNumber = null;
     this.cellHasFocus = null;
     this.update();
@@ -56,7 +56,7 @@ class Cell {
   }
 
   setFinalValue() {
-    this.isActive = !!this.value;
+    this.isInPlay = !!this.value;
     this.correctValue = this.value;
     this.update();
   }
@@ -172,7 +172,6 @@ export default class Grid {
     }
     // user is in a different row or column, so de-highlight the existing cells
     this.unhighlightCells();
-
     this.currentRow = y;
     this.currentColumn = x;
     let cell;
@@ -182,8 +181,12 @@ export default class Grid {
       } else if (this.gridDirection === GO_TOP_TO_BOTTOM) {
         cell = this.cellsObject[`${x}:${i}`];
       }
-      cell.toggleIsInSelectedRowOrColumn(true);
-      this.highlightedCells.push(cell);
+      if (cell.isInPlay) {
+        cell.toggleIsInSelectedRowOrColumn(true);
+        this.highlightedCells.push(cell);
+      } else {
+        break;
+      }
     }
   }
 }

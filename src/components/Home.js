@@ -6,8 +6,8 @@ const CNavLink = ({ children, to }) => {
   return (
     <NavLink
       to={to}
-      className={({ isActive }) =>
-        isActive ? "text-black font-bold" : "text-blue-500 hover:text-blue-800"
+      className={({ isInPlay }) =>
+        isInPlay ? "text-black font-bold" : "text-blue-500 hover:text-blue-800"
       }
     >
       {children}

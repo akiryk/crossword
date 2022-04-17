@@ -112,17 +112,17 @@ function CellContainer({
 
   let bgColor = "bg-white";
 
-  if (cell.isActive) {
+  if (cell.isInPlay) {
     bgColor = "bg-neutral-200";
-  }
-  if (isInSelectedRowOrColumn) {
-    bgColor = "bg-cyan-100";
   }
 
   if (cell.correctValue || cell.value) {
     bgColor = "bg-white";
   }
-  if (!cell.isActive) {
+  if (isInSelectedRowOrColumn) {
+    bgColor = "bg-cyan-100";
+  }
+  if (!cell.isInPlay) {
     inputClasses += " cursor-default";
     bgColor = "bg-black";
   }
