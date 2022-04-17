@@ -1,10 +1,4 @@
-import {
-  SPAN,
-  GO_TOP_TO_BOTTOM,
-  GO_LEFT_TO_RIGHT,
-  WHITE_CELL,
-  BLACK_CELL,
-} from "../utils/constants";
+import { SPAN, GO_TOP_TO_BOTTOM, GO_LEFT_TO_RIGHT } from "../utils/constants";
 class Cell {
   constructor({ x, y, isActive = true, value = "" }) {
     this.x = x;
@@ -13,7 +7,6 @@ class Cell {
     this.isActive = isActive;
     this.value = value;
     this.correctValue = "";
-    this.displayState = null;
     this.displayNumber = 0;
     this.cellHasFocus = false;
     this.isInSelectedRowOrColumn = false;
@@ -45,7 +38,6 @@ class Cell {
     this.value = "";
     this.isActive = true;
     this.displayNumber = null;
-    this.displayState = null;
     this.cellHasFocus = null;
     this.update();
   }
@@ -64,8 +56,8 @@ class Cell {
   }
 
   setFinalValue() {
-    this.displayState = this.value ? WHITE_CELL : BLACK_CELL;
-    this.correctValue = this.value || "";
+    this.isActive = !!this.value;
+    this.correctValue = this.value;
     this.update();
   }
 
@@ -125,9 +117,6 @@ export default class Grid {
     this.cellsArray.forEach((cell) => {
       // Set the cell to white or black, depending on if it has a value
       cell.setFinalValue();
-      if (cell.displayState === WHITE_CELL) {
-        this.liveCellKeys.push(this.cellsObject[cell.id]);
-      }
     });
     // reset the currently highlighted row or column
     this.unhighlightCells();
@@ -187,7 +176,7 @@ export default class Grid {
     this.currentRow = y;
     this.currentColumn = x;
     let cell;
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < SPAN; i++) {
       if (this.gridDirection === GO_LEFT_TO_RIGHT) {
         cell = this.cellsObject[`${i}:${y}`];
       } else if (this.gridDirection === GO_TOP_TO_BOTTOM) {

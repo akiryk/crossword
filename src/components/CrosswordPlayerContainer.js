@@ -1,39 +1,95 @@
-import React, { useEffect } from "react";
-import CrosswordPlayer from "./CrosswordPlayer";
+import React from "react";
+import Crossword from "./Crossword";
+import { SPAN } from "../utils/constants";
 import { useCrosswordContext } from "../context/CrosswordContextProvider";
-import { BLACK_CELL } from "../utils/constants";
+import "./Crossword.scss";
 
-function CrosswordPlayerContainer() {
-  const { grid } = useCrosswordContext();
-  useEffect(() => {
-    grid.unsetValues();
-  }, [grid]);
+const CrosswordPlayerContainer = () => {
+  const { grid, acrossHints, downHints } = useCrosswordContext();
 
-  const goToNextCell = ({ row, column }) => {
-    const current = grid.cellsObject[`${column}:${row}`];
-    let i = 1;
-    let next = grid.cellsObject[`${column + i}:${row}`];
-    // while (next.displayState === BLACK_CELL) {
-    //   i++;
-    //   next = grid.cellsObject[`${column + i}:${row}`];
-    // }
-    if (!next) {
-      // go to the next column or row
-    } else if (next?.displayState === BLACK_CELL) {
-      console.log("next", next);
-    } else {
-      console.log(next);
+  console.table(acrossHints);
+  console.table(downHints);
+
+  function getCellBelow({ currentRow, currentColumn }) {
+    let newRow = currentRow;
+    if (currentRow < SPAN - 1) {
+      newRow = currentRow + 1;
     }
-  };
+    return { row: newRow, column: currentColumn };
+  }
+
+  function getCellAbove({ currentRow, currentColumn }) {
+    let newRow = SPAN;
+    if (currentRow > 0) {
+      newRow = currentRow - 1;
+    }
+    return { row: newRow, column: currentColumn };
+  }
+
+  function getCellToTheRight({ currentRow, currentColumn }) {
+    let newColumn = currentColumn;
+    if (currentColumn < SPAN - 1) {
+      newColumn = currentColumn + 1;
+    }
+    return { row: currentRow, column: newColumn };
+  }
+
+  function getCellToTheLeft({ currentRow, currentColumn }) {
+    let newColumn = SPAN;
+    if (currentColumn > 0) {
+      newColumn = currentColumn - 1;
+    }
+    return { row: currentRow, column: newColumn };
+  }
+
+  function setCellWithFocus({ grid, id }) {
+    grid?.setCellWithFocus(id);
+  }
+
   return (
     <div className="CrosswordWrapper">
       <h2>Play the game</h2>
       <p>it's cool</p>
       <div className="Wrapper">
-        {grid && <CrosswordPlayer goToNextCell={goToNextCell} grid={grid} />}
+        {grid && (
+          <Crossword
+            getCellAbove={getCellAbove}
+            getCellBelow={getCellBelow}
+            getCellToTheLeft={getCellToTheLeft}
+            getCellToTheRight={getCellToTheRight}
+            setCellWithFocus={setCellWithFocus}
+            grid={grid}
+          />
+        )}
+        <div className="acrossHints">
+          {acrossHints && (
+            <ul>
+              {acrossHints.map((hint) => {
+                return (
+                  <li>
+                    <span>{hint.displayNumber}</span>: <span>{hint.hint}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+        <div className="downHints">
+          {downHints && (
+            <ul>
+              {downHints.map((hint) => {
+                return (
+                  <li>
+                    <span>{hint.displayNumber}</span>: <span>{hint.hint}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
       </div>
     </div>
   );
-}
+};
 
 export default CrosswordPlayerContainer;

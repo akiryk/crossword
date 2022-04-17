@@ -1,7 +1,9 @@
 import React from "react";
 import { Outlet, Link } from "react-router-dom";
+import { useCrosswordContext } from "../context/CrosswordContextProvider";
 
 const Home = () => {
+  const { grid } = useCrosswordContext();
   return (
     <div>
       <h1>Game Maker and Player!</h1>
@@ -12,7 +14,11 @@ const Home = () => {
         }}
       >
         <Link to="/">Welcome!</Link> | <Link to="/maker">Make a Crossword</Link>{" "}
-        | <Link to="/player">Play the Crossword</Link>
+        {grid && (
+          <>
+            | <Link to="/player">Play the Crossword</Link>
+          </>
+        )}
       </nav>
       <Outlet />
     </div>

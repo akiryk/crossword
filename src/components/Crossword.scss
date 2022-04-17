@@ -49,7 +49,7 @@ $maxTotalCells: $span * $span;
   font-size: 22px;
   text-transform: uppercase;
   caret-color: transparent;
-  background-color: #eee;
+  background-color: #fff;
   cursor: pointer;
 }
 
@@ -58,7 +58,7 @@ $maxTotalCells: $span * $span;
 }
 
 .cell--active {
-  background-color: #fff;
+  background-color: #eee;
 }
 
 .cell--live {

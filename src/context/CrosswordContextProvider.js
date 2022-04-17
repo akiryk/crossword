@@ -4,9 +4,20 @@ const CrosswordContext = createContext();
 
 const CrosswordContextProvider = ({ children }) => {
   const [grid, setGrid] = useState(null);
+  const [acrossHints, setAcrossHints] = useState([]);
+  const [downHints, setDownHints] = useState([]);
 
   return (
-    <CrosswordContext.Provider value={{ grid, setGrid }}>
+    <CrosswordContext.Provider
+      value={{
+        grid,
+        setGrid,
+        downHints,
+        acrossHints,
+        setDownHints,
+        setAcrossHints,
+      }}
+    >
       {children}
     </CrosswordContext.Provider>
   );

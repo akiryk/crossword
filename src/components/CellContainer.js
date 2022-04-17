@@ -5,8 +5,6 @@ import {
   GO_LEFT_TO_RIGHT,
   GO_RIGHT_TO_LEFT,
   GO_BOTTOM_TO_TOP,
-  WHITE_CELL,
-  BLACK_CELL,
 } from "../utils/constants";
 
 const LEFT_ARROW_KEY = 37;
@@ -17,17 +15,22 @@ const DELETE_KEY = 8;
 const SHIFT_KEY = 16;
 const SPACEBAR_KEY = 32;
 
-function CellForMaker({ row, column, goToNextCell, cell, grid }) {
+function CellContainer({
+  row,
+  column,
+  goToNextCell,
+  cell,
+  grid,
+  displayNumber,
+}) {
   const inputRef = useRef();
-  const [displayNumber, setDisplayNumber] = useState(null);
+  // const [displayNumber, setDisplayNumber] = useState(null);
   const [value, setValue] = useState(cell?.value);
-  const [cellDisplayState, setCellDisplayState] = useState("");
   const [isInSelectedRowOrColumn, setIsInSelectedRowOrColumn] = useState(false);
 
   useEffect(() => {
     cell.subscribe((newCellData) => {
-      setDisplayNumber(newCellData.displayNumber);
-      setCellDisplayState(newCellData.displayState);
+      // setDisplayNumber(newCellData.displayNumber);
       setValue(newCellData.value);
       setIsInSelectedRowOrColumn(newCellData.isInSelectedRowOrColumn);
       if (newCellData.cellHasFocus) {
@@ -109,16 +112,18 @@ function CellForMaker({ row, column, goToNextCell, cell, grid }) {
 
   let inputClasses = "cell";
 
-  if (cell.isActive && cell.value) {
+  if (cell.isActive) {
     inputClasses += " cell--active";
   }
   if (isInSelectedRowOrColumn) {
     inputClasses += " cell--inSelectedRowOrColumn";
   }
-  if (cellDisplayState === BLACK_CELL) {
-    inputClasses += " cell--dead";
-  } else if (cellDisplayState === WHITE_CELL) {
+
+  if (cell.correctValue || cell.value) {
     inputClasses += " cell--live";
+  }
+  if (!cell.isActive) {
+    inputClasses += " cell--dead";
   }
 
   return (
@@ -135,4 +140,4 @@ function CellForMaker({ row, column, goToNextCell, cell, grid }) {
   );
 }
 
-export default CellForMaker;
+export default CellContainer;

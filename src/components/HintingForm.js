@@ -8,31 +8,17 @@ const HINT_SIZE = "50";
 
 const HintingFormContainer = ({ grid }) => {
   const { startCellsWordsAcross, startCellsWordsDown } = grid;
-  const { setGrid } = useCrosswordContext();
-  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(startCellsWordsAcross);
-    Promise.resolve()
-      .then(() => {
-        const gameGrid = new Grid({
-          crossSpan: SPAN,
-          downSpan: SPAN,
-          liveCellKeys: [],
-        });
-        return setGrid(grid);
-      })
-      .then(() => navigate("/player"));
-  };
+  const { setGrid, setAcrossHints, setDownHints } = useCrosswordContext();
+  const navigate = useNavigate();
   const [acrossWordHintFields, setAcrossWordHintFields] = useState([]);
   const [downWordHintFields, setDownWordHintFields] = useState([]);
 
   useEffect(() => {
     startCellsWordsAcross.forEach(({ acrossWord, displayNumber }) => {
-      setAcrossWordHintFields((c) => {
+      setAcrossWordHintFields((currentValue) => {
         return [
-          ...c,
+          ...currentValue,
           {
             displayNumber: displayNumber.toString(),
             hint: "",
@@ -45,9 +31,9 @@ const HintingFormContainer = ({ grid }) => {
 
   useEffect(() => {
     startCellsWordsDown.forEach(({ downWord, displayNumber }) => {
-      setDownWordHintFields((c) => {
+      setDownWordHintFields((currentValue) => {
         return [
-          ...c,
+          ...currentValue,
           {
             displayNumber: displayNumber.toString(),
             hint: "",
@@ -57,6 +43,23 @@ const HintingFormContainer = ({ grid }) => {
       });
     });
   }, [startCellsWordsDown]);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    Promise.resolve()
+      .then(() => {
+        const gameGrid = new Grid({
+          crossSpan: SPAN,
+          downSpan: SPAN,
+          liveCellKeys: [],
+        });
+        grid.unsetValues();
+        setGrid(grid);
+        setAcrossHints(acrossWordHintFields);
+        setDownHints(downWordHintFields);
+      })
+      .then(() => navigate("/player"));
+  };
 
   const handleChangeAcrossWordHint = (event, index) => {
     const data = [...acrossWordHintFields];

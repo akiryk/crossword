@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "./Common";
 import Grid from "./Grid";
-import CrosswordMaker from "./CrosswordMaker";
-import {
-  GO_TOP_TO_BOTTOM,
-  GO_LEFT_TO_RIGHT,
-  GO_BOTTOM_TO_TOP,
-  GO_RIGHT_TO_LEFT,
-  SPAN,
-} from "../utils/constants";
+import Crossword from "./Crossword";
+import { SPAN } from "../utils/constants";
 import HintingForm from "./HintingForm";
-import "./CrosswordMaker.scss";
+import "./Crossword.scss";
 
 function CrosswordMakerContainer() {
   const [shouldShowHintingForm, setShouldShowHintingForm] = useState(false);
@@ -129,70 +123,17 @@ function CrosswordMakerContainer() {
     grid?.setCellWithFocus(id);
   }
 
-  function goToNextCell({ row, column, overrideDirectionMode }) {
-    const nextCellMode = overrideDirectionMode
-      ? overrideDirectionMode
-      : grid.gridDirection;
-    let nextCellFunction = () => {};
-    switch (nextCellMode) {
-      case GO_RIGHT_TO_LEFT:
-        nextCellFunction = getCellToTheLeft;
-        break;
-      case GO_LEFT_TO_RIGHT:
-        nextCellFunction = getCellToTheRight;
-        break;
-      case GO_BOTTOM_TO_TOP:
-        nextCellFunction = getCellAbove;
-        break;
-      case GO_TOP_TO_BOTTOM:
-        nextCellFunction = getCellBelow;
-        break;
-      default:
-        break;
-    }
-    const nextCell = nextCellFunction({
-      currentRow: row,
-      currentColumn: column,
-    });
-
-    setCellWithFocus({ grid, id: `${nextCell.column}:${nextCell.row}` });
-  }
-
-  function goToPreviousCell({ row, column, overrideDirectionMode }) {
-    const nextCellMode = overrideDirectionMode
-      ? overrideDirectionMode
-      : grid.gridDirection;
-    let nextCellFunction = () => {};
-    switch (nextCellMode) {
-      case GO_RIGHT_TO_LEFT:
-        nextCellFunction = getCellToTheRight;
-        break;
-      case GO_LEFT_TO_RIGHT:
-        nextCellFunction = getCellToTheLeft;
-        break;
-      case GO_BOTTOM_TO_TOP:
-        nextCellFunction = getCellBelow;
-        break;
-      case GO_TOP_TO_BOTTOM:
-        nextCellFunction = getCellAbove;
-        break;
-      default:
-        break;
-    }
-    const nextCell = nextCellFunction({
-      currentRow: row,
-      currentColumn: column,
-    });
-    setCellWithFocus(grid, nextCell);
-  }
   return (
     <div className="CrosswordWrapper">
       <h2>Make yer xword</h2>
       <p>it's be cool</p>
       <div className="Wrapper">
-        <CrosswordMaker
-          goToNextCell={goToNextCell}
-          goToPreviousCell={goToPreviousCell}
+        <Crossword
+          getCellAbove={getCellAbove}
+          getCellBelow={getCellBelow}
+          getCellToTheLeft={getCellToTheLeft}
+          getCellToTheRight={getCellToTheRight}
+          setCellWithFocus={setCellWithFocus}
           grid={grid}
         />
         <Button onClick={makeHints}>Make Hints</Button>
