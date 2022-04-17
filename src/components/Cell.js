@@ -11,7 +11,7 @@ const Cell = ({
   displayNumber,
 }) => {
   return (
-    <div className="cellWrapper">
+    <div className="relative">
       <input
         className={inputClasses}
         onChange={onChange}
@@ -22,7 +22,9 @@ const Cell = ({
         onFocus={onFocus}
       />
       {!!displayNumber && (
-        <span className="displayNumber">{displayNumber}</span>
+        <span className="absolute left-0.5 top-px text-xs text-slate-600">
+          {displayNumber}
+        </span>
       )}
     </div>
   );

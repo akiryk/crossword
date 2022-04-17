@@ -2,7 +2,6 @@ import React from "react";
 import Crossword from "./Crossword";
 import { SPAN } from "../utils/constants";
 import { useCrosswordContext } from "../context/CrosswordContextProvider";
-import "./Crossword.scss";
 
 const CrosswordPlayerContainer = () => {
   const { grid, acrossHints, downHints } = useCrosswordContext();

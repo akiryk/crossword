@@ -4,7 +4,6 @@ import Grid from "./Grid";
 import Crossword from "./Crossword";
 import { SPAN } from "../utils/constants";
 import HintingForm from "./HintingForm";
-import "./Crossword.scss";
 
 function CrosswordMakerContainer() {
   const [shouldShowHintingForm, setShouldShowHintingForm] = useState(false);
@@ -124,10 +123,10 @@ function CrosswordMakerContainer() {
   }
 
   return (
-    <div className="CrosswordWrapper">
+    <div className="text-center">
       <h2>Make yer xword</h2>
       <p>it's be cool</p>
-      <div className="Wrapper">
+      <div className="m-auto">
         <Crossword
           getCellAbove={getCellAbove}
           getCellBelow={getCellBelow}

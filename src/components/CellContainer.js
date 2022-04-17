@@ -110,21 +110,31 @@ function CellContainer({
     grid.highlightDirection(cell);
   }
 
-  let inputClasses = "cell";
+  const cellInputClasses =
+    "caret-transparent cursor-pointer focus:bg-cyan-300 selection:transparent";
+  const cellAppearanceClasses =
+    "w-10 h-10 outline outline-1 outline-slate-400 border-none";
+  const cellTextClasses = "text-center text-xl uppercase";
+  let inputClasses = `${cellInputClasses} ${cellTextClasses} ${cellAppearanceClasses}`;
+
+  let bgColor = "bg-white";
 
   if (cell.isActive) {
-    inputClasses += " cell--active";
+    bgColor = "bg-neutral-200";
   }
   if (isInSelectedRowOrColumn) {
-    inputClasses += " cell--inSelectedRowOrColumn";
+    bgColor = "bg-cyan-100";
   }
 
   if (cell.correctValue || cell.value) {
-    inputClasses += " cell--live";
+    bgColor = "bg-white";
   }
   if (!cell.isActive) {
-    inputClasses += " cell--dead";
+    inputClasses += " cursor-default";
+    bgColor = "bg-black";
   }
+
+  inputClasses = `${inputClasses} ${bgColor}`;
 
   return (
     <Cell

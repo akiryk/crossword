@@ -8,7 +8,9 @@ import {
   SPAN,
 } from "../utils/constants";
 
-const DeadCell = () => <div className="cell cell--dead" />;
+const DeadCell = () => (
+  <div className="w-10 h-10 bg-black outline outline-1 outline-slate-400" />
+);
 
 const Crossword = ({
   grid,
@@ -81,10 +83,10 @@ const Crossword = ({
     rows.push(row);
   }
   return (
-    <div className="Crossword">
+    <div className="relative">
       {rows.map((row, i) => {
         return (
-          <div key={i} className="Row">
+          <div key={i} className="flex justify-center flex-wrap">
             {row}
           </div>
         );
