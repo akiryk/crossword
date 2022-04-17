@@ -92,16 +92,9 @@ function CellContainer({
   }
 
   function handleClick(event) {
-    // highlight the row or the column, depending on direction
-    // grid.setCellWithFocus(cell.id);
-    // grid.highlightDirection(cell);
-    switch (event.detail) {
-      case 2: {
-        grid.toggleGridDirection(cell);
-        break;
-      }
-      default:
-        break;
+    // If it's a double click, highlight the row or the column
+    if (event.detail === 2) {
+      grid.toggleGridDirection(cell);
     }
   }
 
