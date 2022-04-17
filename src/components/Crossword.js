@@ -12,16 +12,45 @@ const DeadCell = () => (
   <div className="w-10 h-10 bg-black outline outline-1 outline-slate-400" />
 );
 
-const Crossword = ({
-  grid,
-  getCellToTheLeft,
-  getCellToTheRight,
-  getCellAbove,
-  getCellBelow,
-  setCellWithFocus,
-}) => {
+const Crossword = ({ grid }) => {
   if (!grid) {
     return null;
+  }
+
+  function getCellBelow({ currentRow, currentColumn }) {
+    let newRow = currentRow;
+    if (currentRow < SPAN - 1) {
+      newRow = currentRow + 1;
+    }
+    return { row: newRow, column: currentColumn };
+  }
+
+  function getCellAbove({ currentRow, currentColumn }) {
+    let newRow = SPAN;
+    if (currentRow > 0) {
+      newRow = currentRow - 1;
+    }
+    return { row: newRow, column: currentColumn };
+  }
+
+  function getCellToTheRight({ currentRow, currentColumn }) {
+    let newColumn = currentColumn;
+    if (currentColumn < SPAN - 1) {
+      newColumn = currentColumn + 1;
+    }
+    return { row: currentRow, column: newColumn };
+  }
+
+  function getCellToTheLeft({ currentRow, currentColumn }) {
+    let newColumn = SPAN;
+    if (currentColumn > 0) {
+      newColumn = currentColumn - 1;
+    }
+    return { row: currentRow, column: newColumn };
+  }
+
+  function setCellWithFocus({ grid, id }) {
+    grid?.setCellWithFocus(id);
   }
 
   function goToNextCell({ row, column, overrideDirectionMode }) {
@@ -53,41 +82,28 @@ const Crossword = ({
     setCellWithFocus({ grid, id: `${nextCell.column}:${nextCell.row}` });
   }
 
-  // get array of Cells from the Grid class
-  const { cellsArray } = grid;
-  const rows = [];
-
-  // Create an array of rows, then use a loop to add groups of Cells
-  // equal to the puzzle's span to a row group. E.g. if the SPAN is 10,
-  // we will create 10 rows of 10 Cells each.
-  for (let i = 0; i < cellsArray.length; i += SPAN) {
-    const row = [];
-    for (let j = i; j < i + SPAN; j++) {
-      const cell = cellsArray[j];
-      if (cell.isInPlay) {
-        row.push(
-          <CellContainer
-            row={cell.y}
-            column={cell.x}
-            goToNextCell={goToNextCell}
-            cell={cell}
-            grid={grid}
-            key={cell.id}
-            displayNumber={cell.displayNumber}
-          />
-        );
-      } else {
-        row.push(<DeadCell key={cell.id} />);
-      }
-    }
-    rows.push(row);
-  }
   return (
     <div className="relative">
-      {rows.map((row, i) => {
+      {grid.cellRows.map((row, i) => {
         return (
           <div key={i} className="flex justify-center flex-wrap">
-            {row}
+            {row.map((cell) => {
+              if (cell.isInPlay) {
+                return (
+                  <CellContainer
+                    row={cell.y}
+                    column={cell.x}
+                    goToNextCell={goToNextCell}
+                    cell={cell}
+                    grid={grid}
+                    key={cell.id}
+                    displayNumber={cell.displayNumber}
+                  />
+                );
+              } else {
+                return <DeadCell key={cell.id} />;
+              }
+            })}
           </div>
         );
       })}

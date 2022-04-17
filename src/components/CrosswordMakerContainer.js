@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "./Common";
-import Grid from "./Grid";
+import Grid from "./GridClass";
 import Crossword from "./Crossword";
 import { SPAN } from "../utils/constants";
 import HintingForm from "./HintingForm";
@@ -86,55 +86,12 @@ function CrosswordMakerContainer() {
     setShouldShowHintingForm(true);
   }
 
-  function getCellBelow({ currentRow, currentColumn }) {
-    let newRow = currentRow;
-    if (currentRow < SPAN - 1) {
-      newRow = currentRow + 1;
-    }
-    return { row: newRow, column: currentColumn };
-  }
-
-  function getCellAbove({ currentRow, currentColumn }) {
-    let newRow = SPAN;
-    if (currentRow > 0) {
-      newRow = currentRow - 1;
-    }
-    return { row: newRow, column: currentColumn };
-  }
-
-  function getCellToTheRight({ currentRow, currentColumn }) {
-    let newColumn = currentColumn;
-    if (currentColumn < SPAN - 1) {
-      newColumn = currentColumn + 1;
-    }
-    return { row: currentRow, column: newColumn };
-  }
-
-  function getCellToTheLeft({ currentRow, currentColumn }) {
-    let newColumn = SPAN;
-    if (currentColumn > 0) {
-      newColumn = currentColumn - 1;
-    }
-    return { row: currentRow, column: newColumn };
-  }
-
-  function setCellWithFocus({ grid, id }) {
-    grid?.setCellWithFocus(id);
-  }
-
   return (
     <div className="text-center">
       <h2>Make yer xword</h2>
       <p>it's be cool</p>
       <div className="m-auto">
-        <Crossword
-          getCellAbove={getCellAbove}
-          getCellBelow={getCellBelow}
-          getCellToTheLeft={getCellToTheLeft}
-          getCellToTheRight={getCellToTheRight}
-          setCellWithFocus={setCellWithFocus}
-          grid={grid}
-        />
+        <Crossword grid={grid} />
         <Button onClick={makeHints}>Make Hints</Button>
         <Button onClick={handleClearPuzzle}>Clear</Button>
         {shouldShowHintingForm && <HintingForm grid={grid} />}

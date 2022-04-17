@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Grid from "./Grid";
+import Grid from "./GridClass";
 import { SPAN } from "../utils/constants";
 import { useCrosswordContext } from "../context/CrosswordContextProvider";
 
