@@ -4,6 +4,7 @@ import { useCrosswordContext } from "../context/CrosswordContextProvider";
 
 const CrosswordPlayerContainer = () => {
   const { grid, acrossHints, downHints } = useCrosswordContext();
+  console.log(grid);
 
   return (
     <div>

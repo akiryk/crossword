@@ -32,8 +32,6 @@ export default class Grid {
       this.cellRows.push(cells);
     }
 
-    console.log(this.cellRows);
-
     return this;
   }
 

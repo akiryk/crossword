@@ -47,13 +47,25 @@ function CrosswordMakerContainer() {
           let value = cell.value;
           word = "";
           let currentX = x;
-          // get the complete horizontal word
+          // First, get the complete horizontal word
           while (value) {
             word = `${word}${value}`;
             currentX++;
             value = cellsObject[`${currentX}:${y}`]?.value;
           }
-          cellsObject[`${x}:${y}`].acrossWord = word;
+
+          // Now we know the first and last cells in the word
+          const startX = cell.x;
+          const endX = currentX; // last cell is actually currentX
+          // reset currentX and the value, and loop through the word again,
+          // this time so we can give each cell context about where it is in the word
+          for (let x = startX; x < endX; x++) {
+            cellsObject[`${x}:${y}`].setAcrossWordData({
+              firstCellInAcrossWordXCoord: startX,
+              lastCellInAcrossWordXCoord: endX,
+              acrossWord: word,
+            });
+          }
           grid.addAcrossWordStartCell(cell);
           shouldIncrementCount = true;
         }
@@ -72,7 +84,20 @@ function CrosswordMakerContainer() {
             currentY++;
             value = cellsObject[`${x}:${currentY}`]?.value;
           }
-          cellsObject[`${x}:${y}`].downWord = word;
+
+          // Now we know the first and last cells in the down word
+          const startY = cell.y;
+          const endY = currentY; // last cell is actually currentY
+          // reset currentY and the value, and loop through the word again,
+          // this time so we can give each cell context about where it is in the word
+          for (let y = startY; y < endY; y++) {
+            cellsObject[`${x}:${y}`].setDownWordData({
+              firstCellInDownWordXCoord: startY,
+              lastCellInDownWordXCoord: endY,
+              downWord: word,
+            });
+          }
+
           grid.addDownWordStartCell(cell);
           shouldIncrementCount = true;
         }

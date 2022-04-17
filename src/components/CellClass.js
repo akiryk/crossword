@@ -9,6 +9,12 @@ export default class Cell {
     this.displayNumber = 0;
     this.cellHasFocus = false;
     this.isInSelectedRowOrColumn = false;
+    this.acrossWord = "";
+    this.downWord = "";
+    this.firstCellInAcrossWordXCoord = -1;
+    this.lastCellInAcrossWordXCoord = -1;
+    this.firstCellInDownWordXCoord = -1;
+    this.lastCellInDownWordXCoord = -1;
   }
 
   toggleActive() {
@@ -73,5 +79,25 @@ export default class Cell {
   toggleIsInSelectedRowOrColumn(isSelected) {
     this.isInSelectedRowOrColumn = isSelected;
     this.update();
+  }
+
+  setAcrossWordData({
+    firstCellInAcrossWordXCoord,
+    lastCellInAcrossWordXCoord,
+    acrossWord,
+  }) {
+    this.lastCellInAcrossWordXCoord = lastCellInAcrossWordXCoord;
+    this.firstCellInAcrossWordXCoord = firstCellInAcrossWordXCoord;
+    this.acrossWord = acrossWord;
+  }
+
+  setDownWordData({
+    firstCellInDownWordXCoord,
+    lastCellInDownWordXCoord,
+    downWord,
+  }) {
+    this.lastCellInDownWordXCoord = lastCellInDownWordXCoord;
+    this.firstCellInDownWordXCoord = firstCellInDownWordXCoord;
+    this.downWord = downWord;
   }
 }
