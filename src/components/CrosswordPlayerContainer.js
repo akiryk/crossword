@@ -7,9 +7,6 @@ import "./Crossword.scss";
 const CrosswordPlayerContainer = () => {
   const { grid, acrossHints, downHints } = useCrosswordContext();
 
-  console.table(acrossHints);
-  console.table(downHints);
-
   function getCellBelow({ currentRow, currentColumn }) {
     let newRow = currentRow;
     if (currentRow < SPAN - 1) {
