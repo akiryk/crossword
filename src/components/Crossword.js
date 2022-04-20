@@ -109,7 +109,7 @@ const Crossword = ({ grid }) => {
   }
 
   return (
-    <div className="relative" ref={wrapperRef}>
+    <div className="relative w-fit m-auto" ref={wrapperRef}>
       {grid.cellRows.map((row, i) => {
         return (
           <div key={i} className="flex justify-center flex-wrap">

@@ -115,12 +115,10 @@ function CrosswordMakerContainer() {
     <div className="text-center">
       <h2>Make yer xword</h2>
       <p>it's be cool</p>
-      <div className="m-auto">
-        <Crossword grid={grid} />
-        <Button onClick={makeHints}>Make Hints</Button>
-        <Button onClick={handleClearPuzzle}>Clear</Button>
-        {shouldShowHintingForm && <HintingForm grid={grid} />}
-      </div>
+      <Crossword grid={grid} />
+      <Button onClick={makeHints}>Make Hints</Button>
+      <Button onClick={handleClearPuzzle}>Clear</Button>
+      {shouldShowHintingForm && <HintingForm grid={grid} />}
     </div>
   );
 }
