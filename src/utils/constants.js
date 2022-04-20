@@ -19,3 +19,9 @@ export const PHASE_DESCRIPTIONS = {
   [HINT_PHASE]: "Enter for each of your answers",
 };
 export const SPAN = 5;
+
+// Cell Modes
+export const EDIT_MODE = "EDIT_MODE";
+export const PLAY_MODE = "PLAY_MODE";
+export const VIEW_ONLY_MODE = "VIEW_ONLY_MODE";
+export const DEAD_CELL_MODE = "DEAD_CELL_MODE";

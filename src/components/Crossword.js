@@ -1,18 +1,40 @@
-import React, { useState } from "react";
+import React from "react";
 import CellContainer from "./CellContainer";
+import { DeadCell, ViewOnlyCell } from "./Cell";
 import {
   GO_TOP_TO_BOTTOM,
   GO_LEFT_TO_RIGHT,
   GO_BOTTOM_TO_TOP,
   GO_RIGHT_TO_LEFT,
   SPAN,
+  EDIT_MODE,
+  PLAY_MODE,
+  VIEW_ONLY_MODE,
 } from "../utils/constants";
 
-const DeadCell = () => (
-  <div className="w-10 h-10 bg-black outline outline-1 outline-slate-400" />
-);
+function useOutsideAlerter(ref) {
+  React.useEffect(() => {
+    /**
+     * Alert if clicked on outside of element
+     */
+    function handleClickOutside(event) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        console.log("outside");
+      }
+    }
+    // Bind the event listener
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [ref]);
+}
 
-const Crossword = ({ grid, mode }) => {
+const Crossword = ({ grid }) => {
+  const wrapperRef = React.useRef(null);
+  useOutsideAlerter(wrapperRef);
+
   if (!grid) {
     return null;
   }
@@ -87,12 +109,12 @@ const Crossword = ({ grid, mode }) => {
   }
 
   return (
-    <div className="relative">
+    <div className="relative" ref={wrapperRef}>
       {grid.cellRows.map((row, i) => {
         return (
           <div key={i} className="flex justify-center flex-wrap">
             {row.map((cell) => {
-              if (cell.isInPlay) {
+              if (cell.mode === PLAY_MODE || cell.mode === EDIT_MODE) {
                 return (
                   <CellContainer
                     row={cell.y}
@@ -104,8 +126,17 @@ const Crossword = ({ grid, mode }) => {
                     displayNumber={cell.displayNumber}
                     setCellWithFocus={setCellWithFocus}
                     highlightDirection={highlightDirection}
-                    mode={mode}
+                    cellIsInteractive
                   />
+                );
+              } else if (cell.mode === VIEW_ONLY_MODE) {
+                return (
+                  <ViewOnlyCell
+                    key={cell.id}
+                    displayNumber={cell.displayNumber}
+                  >
+                    {cell.value}
+                  </ViewOnlyCell>
                 );
               } else {
                 return <DeadCell key={cell.id} />;

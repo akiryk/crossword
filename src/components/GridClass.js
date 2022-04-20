@@ -35,9 +35,9 @@ export default class Grid {
     return this;
   }
 
-  setForPlayerMode() {
+  setCellsForPlayerMode() {
     this.cellsArray.forEach((cell) => {
-      cell.unsetValue();
+      cell.setForPlayerMode();
     });
   }
 
@@ -100,7 +100,7 @@ export default class Grid {
       } else if (this.gridDirection === GO_TOP_TO_BOTTOM) {
         cell = this.cellsObject[`${x}:${i}`];
       }
-      if (cell.isInPlay) {
+      if (cell.mode === "EDIT_MODE" || cell.mode === "PLAY_MODE") {
         cell.toggleIsInSelectedRowOrColumn(true);
         this.highlightedCells.push(cell);
       } else {

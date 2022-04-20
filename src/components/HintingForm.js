@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Grid from "./GridClass";
-import { SPAN } from "../utils/constants";
 import { useCrosswordContext } from "../context/CrosswordContextProvider";
 
 const HINT_SIZE = "50";
@@ -48,7 +46,7 @@ const HintingFormContainer = ({ grid }) => {
     event.preventDefault();
     Promise.resolve()
       .then(() => {
-        grid.setForPlayerMode();
+        grid.setCellsForPlayerMode();
         setGrid(grid);
         setAcrossHints(acrossWordHintFields);
         setDownHints(downWordHintFields);

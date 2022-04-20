@@ -1,3 +1,11 @@
+// Cell Modes
+import {
+  EDIT_MODE,
+  PLAY_MODE,
+  VIEW_ONLY_MODE,
+  DEAD_CELL_MODE,
+} from "../utils/constants";
+
 export default class Cell {
   constructor({ x, y }) {
     this.x = x;
@@ -7,9 +15,7 @@ export default class Cell {
     this.initStartValues();
   }
 
-  toggleActive() {
-    this.isInPlay = !this.isInPlay;
-  }
+  toggleActive() {}
 
   setValue(value = "") {
     const lastLetter = value.slice(-1).toUpperCase();
@@ -25,9 +31,8 @@ export default class Cell {
 
   // unset value without updating. This should be performed once,
   // at the start of creating the player's puzzle
-  unsetValue() {
-    this.isEditable = false;
-    this.isInPlay = !!this.value;
+  setForPlayerMode() {
+    this.mode = !!this.value ? PLAY_MODE : DEAD_CELL_MODE;
     this.value = "";
   }
 
@@ -35,8 +40,7 @@ export default class Cell {
     this.value = "";
     this.correctValue = "";
     this.previousValue = "";
-    this.isInPlay = true;
-    this.isEditable = true;
+    this.mode = EDIT_MODE;
     this.displayNumber = 0;
     this.cellHasFocus = null;
     this.isInSelectedRowOrColumn = false;
@@ -69,7 +73,7 @@ export default class Cell {
 
   setFinalValue() {
     this.correctValue = this.value;
-    this.isEditable = false;
+    this.mode = this.value ? VIEW_ONLY_MODE : DEAD_CELL_MODE;
     this.update();
   }
 

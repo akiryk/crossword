@@ -1,10 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
-import Cell from "./Cell";
+import Cell, { SHARED_CELL_STYLES, SHARED_CELL_FONT_STYLES } from "./Cell";
 import {
   GO_TOP_TO_BOTTOM,
   GO_LEFT_TO_RIGHT,
   GO_RIGHT_TO_LEFT,
   GO_BOTTOM_TO_TOP,
+  EDIT_MODE,
+  PLAY_MODE,
+  VIEW_ONLY_MODE,
+  DEAD_CELL_MODE,
 } from "../utils/constants";
 
 const LEFT_ARROW_KEY = 37;
@@ -24,7 +28,7 @@ function CellContainer({
   displayNumber,
   setCellWithFocus,
   highlightDirection,
-  mode,
+  cellIsInteractive,
 }) {
   const inputRef = useRef();
   // const [displayNumber, setDisplayNumber] = useState(null);
@@ -32,32 +36,32 @@ function CellContainer({
   const [isInSelectedRowOrColumn, setIsInSelectedRowOrColumn] = useState(false);
 
   useEffect(() => {
-    cell.subscribe((newCellData) => {
-      // setDisplayNumber(newCellData.displayNumber);
-      setValue(newCellData.value);
-      setIsInSelectedRowOrColumn(newCellData.isInSelectedRowOrColumn);
-      if (newCellData.cellHasFocus) {
-        inputRef.current.focus();
-        inputRef.current.select();
-        highlightDirection(cell);
-      }
-    });
-  }, [cell, highlightDirection]);
+    if (cellIsInteractive) {
+      cell.subscribe((newCellData) => {
+        // setDisplayNumber(newCellData.displayNumber);
+        setValue(newCellData.value);
+        setIsInSelectedRowOrColumn(newCellData.isInSelectedRowOrColumn);
+        if (newCellData.cellHasFocus) {
+          inputRef.current.focus();
+          inputRef.current.select();
+          highlightDirection(cell);
+        }
+      });
+    }
+  }, [cell, highlightDirection, cellIsInteractive]);
 
   function handleChange(event) {
-    console.log("hello?", cell);
-    if (!cell.isEditable && !cell.isInPlay) {
-      return;
-    }
-    const value = event.target.value?.trim();
-    if (value) {
-      cell.setValue(value);
-      goToNextCell({ row, column });
+    if (cellIsInteractive) {
+      const value = event.target.value?.trim();
+      if (value) {
+        cell.setValue(value);
+        goToNextCell({ row, column });
+      }
     }
   }
 
   function handleKeyDown(event) {
-    if (!cell.isEditable && !cell.isInPlay) {
+    if (!cellIsInteractive) {
       return;
     }
     const code = event?.keyCode;
@@ -102,18 +106,16 @@ function CellContainer({
   }
 
   function handleClick(event) {
-    if (!cell.isEditable && !cell.isInPlay) {
-      return;
-    }
-    // If it's a double click, highlight the row or the column
-    if (event.detail === 2) {
-      grid.toggleGridDirection(cell);
+    if (cellIsInteractive) {
+      // If it's a double click, highlight the row or the column
+      if (event.detail === 2) {
+        grid.toggleGridDirection(cell);
+      }
     }
   }
 
   function handleFocus() {
-    console.log(cell.id);
-    if (!cell.isEditable || !cell.isInPlay) {
+    if (!cellIsInteractive) {
       return;
     }
     setCellWithFocus(cell.id);
@@ -121,33 +123,37 @@ function CellContainer({
   }
   let cellInputClasses =
     "caret-transparent cursor-pointer selection:bg-transparent ";
-  if (
-    (cell.isEditable && mode === "EDITING_MODE") ||
-    (cell.isInPlay && mode === "PLAYING_MODE")
-  ) {
+  if (cellIsInteractive) {
     cellInputClasses += " focus:bg-cyan-300";
   }
 
-  const cellAppearanceClasses =
-    "w-10 h-10 outline outline-1 outline-slate-400 border-none";
-  const cellTextClasses = "text-center text-xl uppercase";
+  const cellAppearanceClasses = SHARED_CELL_STYLES;
+  const cellTextClasses = SHARED_CELL_FONT_STYLES;
   let inputClasses = `${cellInputClasses} ${cellTextClasses} ${cellAppearanceClasses}`;
 
-  let bgColor = "bg-white";
+  let bgColor;
 
-  if (cell.isInPlay) {
-    bgColor = "bg-neutral-200";
-  }
-
-  if (cell.correctValue || cell.value) {
-    bgColor = "bg-white";
-  }
-  if (isInSelectedRowOrColumn) {
-    bgColor = "bg-cyan-100";
-  }
-  if (!cell.isInPlay) {
-    inputClasses += " cursor-default";
-    bgColor = "bg-black";
+  switch (cell.mode) {
+    case EDIT_MODE:
+      if (isInSelectedRowOrColumn) {
+        bgColor = "bg-cyan-100";
+      } else if (cell.value) {
+        bgColor = "bg-white";
+      } else {
+        bgColor = "bg-neutral-200";
+      }
+      break;
+    // eslint ignore no-fallthrough
+    case PLAY_MODE:
+    case VIEW_ONLY_MODE:
+      bgColor = isInSelectedRowOrColumn ? "bg-cyan-100" : "bg-white";
+      break;
+    case DEAD_CELL_MODE:
+      inputClasses += " cursor-default";
+      bgColor = "bg-black";
+      break;
+    default:
+      bgColor = "bg-neutral-200";
   }
 
   inputClasses = `${inputClasses} ${bgColor}`;
@@ -163,6 +169,7 @@ function CellContainer({
       onFocus={handleFocus}
       displayNumber={displayNumber}
       id={cell.id}
+      mode={cell.mode}
     />
   );
 }

@@ -116,7 +116,7 @@ function CrosswordMakerContainer() {
       <h2>Make yer xword</h2>
       <p>it's be cool</p>
       <div className="m-auto">
-        <Crossword grid={grid} mode="EDITING_MODE" />
+        <Crossword grid={grid} />
         <Button onClick={makeHints}>Make Hints</Button>
         <Button onClick={handleClearPuzzle}>Clear</Button>
         {shouldShowHintingForm && <HintingForm grid={grid} />}
