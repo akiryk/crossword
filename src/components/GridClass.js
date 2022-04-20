@@ -35,12 +35,6 @@ export default class Grid {
     return this;
   }
 
-  unsetValues() {
-    this.cellsArray.forEach((cell) => {
-      cell.unsetValue();
-    });
-  }
-
   setForPlayerMode() {
     this.cellsArray.forEach((cell) => {
       cell.unsetValue();
@@ -51,7 +45,7 @@ export default class Grid {
     this.cellsArray.forEach((cell) => {
       this.startCellsWordsAcross = [];
       this.startCellsWordsDown = [];
-      cell.clearEditorView();
+      cell.reset();
     });
   }
 

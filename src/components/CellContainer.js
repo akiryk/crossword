@@ -45,7 +45,8 @@ function CellContainer({
   }, [cell, highlightDirection]);
 
   function handleChange(event) {
-    if (!cell.isEditable || !cell.isInPlay) {
+    console.log("hello?", cell);
+    if (!cell.isEditable && !cell.isInPlay) {
       return;
     }
     const value = event.target.value?.trim();
@@ -101,8 +102,7 @@ function CellContainer({
   }
 
   function handleClick(event) {
-    console.log(cell);
-    if (!cell.isEditable || !cell.isInPlay) {
+    if (!cell.isEditable && !cell.isInPlay) {
       return;
     }
     // If it's a double click, highlight the row or the column
@@ -125,7 +125,6 @@ function CellContainer({
     (cell.isEditable && mode === "EDITING_MODE") ||
     (cell.isInPlay && mode === "PLAYING_MODE")
   ) {
-    console.log("yo", cell.id);
     cellInputClasses += " focus:bg-cyan-300";
   }
 

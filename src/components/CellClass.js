@@ -28,10 +28,13 @@ export default class Cell {
   unsetValue() {
     this.isEditable = false;
     this.isInPlay = !!this.value;
+    this.value = "";
   }
 
   initStartValues() {
     this.value = "";
+    this.correctValue = "";
+    this.previousValue = "";
     this.isInPlay = true;
     this.isEditable = true;
     this.displayNumber = 0;
@@ -46,7 +49,7 @@ export default class Cell {
     this.lastCellInDownWordXCoord = -1;
   }
 
-  clearEditorView() {
+  reset() {
     this.initStartValues();
     this.update();
   }

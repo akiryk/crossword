@@ -48,7 +48,7 @@ const HintingFormContainer = ({ grid }) => {
     event.preventDefault();
     Promise.resolve()
       .then(() => {
-        grid.unsetValues();
+        grid.setForPlayerMode();
         setGrid(grid);
         setAcrossHints(acrossWordHintFields);
         setDownHints(downWordHintFields);
