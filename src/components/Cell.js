@@ -9,6 +9,7 @@ const Cell = ({
   onClick,
   onFocus,
   displayNumber,
+  id,
 }) => {
   return (
     <div className="relative">
@@ -22,7 +23,7 @@ const Cell = ({
         onFocus={onFocus}
       />
       {!!displayNumber && (
-        <span className="absolute left-0.5 top-px text-xs text-slate-600">
+        <span className="absolute left-0.5 top-px text-xs text-slate-600 pointer-events-none">
           {displayNumber}
         </span>
       )}

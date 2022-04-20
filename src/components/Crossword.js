@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import CellContainer from "./CellContainer";
 import {
   GO_TOP_TO_BOTTOM,
@@ -12,7 +12,7 @@ const DeadCell = () => (
   <div className="w-10 h-10 bg-black outline outline-1 outline-slate-400" />
 );
 
-const Crossword = ({ grid }) => {
+const Crossword = ({ grid, mode }) => {
   if (!grid) {
     return null;
   }
@@ -49,8 +49,12 @@ const Crossword = ({ grid }) => {
     return { row: currentRow, column: newColumn };
   }
 
-  function setCellWithFocus({ grid, id }) {
-    grid?.setCellWithFocus(id);
+  function setCellWithFocus(id) {
+    grid.setCellWithFocus(id);
+  }
+
+  function highlightDirection(cell) {
+    grid.highlightDirection(cell);
   }
 
   function goToNextCell({ row, column, overrideDirectionMode }) {
@@ -79,7 +83,7 @@ const Crossword = ({ grid }) => {
       currentColumn: column,
     });
 
-    setCellWithFocus({ grid, id: `${nextCell.column}:${nextCell.row}` });
+    setCellWithFocus(`${nextCell.column}:${nextCell.row}`);
   }
 
   return (
@@ -98,6 +102,9 @@ const Crossword = ({ grid }) => {
                     grid={grid}
                     key={cell.id}
                     displayNumber={cell.displayNumber}
+                    setCellWithFocus={setCellWithFocus}
+                    highlightDirection={highlightDirection}
+                    mode={mode}
                   />
                 );
               } else {

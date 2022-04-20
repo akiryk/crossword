@@ -22,6 +22,9 @@ function CellContainer({
   cell,
   grid,
   displayNumber,
+  setCellWithFocus,
+  highlightDirection,
+  mode,
 }) {
   const inputRef = useRef();
   // const [displayNumber, setDisplayNumber] = useState(null);
@@ -36,12 +39,15 @@ function CellContainer({
       if (newCellData.cellHasFocus) {
         inputRef.current.focus();
         inputRef.current.select();
-        grid.highlightDirection(cell);
+        highlightDirection(cell);
       }
     });
-  }, [cell, grid]);
+  }, [cell, highlightDirection]);
 
   function handleChange(event) {
+    if (!cell.isEditable || !cell.isInPlay) {
+      return;
+    }
     const value = event.target.value?.trim();
     if (value) {
       cell.setValue(value);
@@ -50,6 +56,9 @@ function CellContainer({
   }
 
   function handleKeyDown(event) {
+    if (!cell.isEditable && !cell.isInPlay) {
+      return;
+    }
     const code = event?.keyCode;
     const directionMode = grid.gridDirection;
     switch (code) {
@@ -92,6 +101,10 @@ function CellContainer({
   }
 
   function handleClick(event) {
+    console.log(cell);
+    if (!cell.isEditable || !cell.isInPlay) {
+      return;
+    }
     // If it's a double click, highlight the row or the column
     if (event.detail === 2) {
       grid.toggleGridDirection(cell);
@@ -99,12 +112,23 @@ function CellContainer({
   }
 
   function handleFocus() {
-    grid.setCellWithFocus(cell.id);
-    grid.highlightDirection(cell);
+    console.log(cell.id);
+    if (!cell.isEditable || !cell.isInPlay) {
+      return;
+    }
+    setCellWithFocus(cell.id);
+    highlightDirection(cell);
+  }
+  let cellInputClasses =
+    "caret-transparent cursor-pointer selection:bg-transparent ";
+  if (
+    (cell.isEditable && mode === "EDITING_MODE") ||
+    (cell.isInPlay && mode === "PLAYING_MODE")
+  ) {
+    console.log("yo", cell.id);
+    cellInputClasses += " focus:bg-cyan-300";
   }
 
-  const cellInputClasses =
-    "caret-transparent cursor-pointer focus:bg-cyan-300 selection:bg-transparent";
   const cellAppearanceClasses =
     "w-10 h-10 outline outline-1 outline-slate-400 border-none";
   const cellTextClasses = "text-center text-xl uppercase";
@@ -139,6 +163,7 @@ function CellContainer({
       onClick={handleClick}
       onFocus={handleFocus}
       displayNumber={displayNumber}
+      id={cell.id}
     />
   );
 }

@@ -41,20 +41,17 @@ export default class Grid {
     });
   }
 
-  finalizeAnswers() {
+  setForPlayerMode() {
     this.cellsArray.forEach((cell) => {
-      // Set the cell to white or black, depending on if it has a value
-      cell.setFinalValue();
+      cell.unsetValue();
     });
-    // reset the currently highlighted row or column
-    this.unhighlightCells();
   }
 
-  clear() {
+  clearEditorView() {
     this.cellsArray.forEach((cell) => {
       this.startCellsWordsAcross = [];
       this.startCellsWordsDown = [];
-      cell.clear();
+      cell.clearEditorView();
     });
   }
 

@@ -20,7 +20,7 @@ function CrosswordMakerContainer() {
   }, []);
 
   function handleClearPuzzle() {
-    grid.clear();
+    grid.clearEditorView();
     setShouldShowHintingForm(false);
   }
 
@@ -106,8 +106,8 @@ function CrosswordMakerContainer() {
         cell.setDisplayNumber(cellDisplayNumber);
         cellDisplayNumber++;
       }
+      cell.setFinalValue();
     });
-    grid.finalizeAnswers();
     setShouldShowHintingForm(true);
   }
 
@@ -116,7 +116,7 @@ function CrosswordMakerContainer() {
       <h2>Make yer xword</h2>
       <p>it's be cool</p>
       <div className="m-auto">
-        <Crossword grid={grid} />
+        <Crossword grid={grid} mode="EDITING_MODE" />
         <Button onClick={makeHints}>Make Hints</Button>
         <Button onClick={handleClearPuzzle}>Clear</Button>
         {shouldShowHintingForm && <HintingForm grid={grid} />}

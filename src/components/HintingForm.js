@@ -48,11 +48,6 @@ const HintingFormContainer = ({ grid }) => {
     event.preventDefault();
     Promise.resolve()
       .then(() => {
-        const gameGrid = new Grid({
-          crossSpan: SPAN,
-          downSpan: SPAN,
-          liveCellKeys: [],
-        });
         grid.unsetValues();
         setGrid(grid);
         setAcrossHints(acrossWordHintFields);

@@ -4,13 +4,12 @@ import { useCrosswordContext } from "../context/CrosswordContextProvider";
 
 const CrosswordPlayerContainer = () => {
   const { grid, acrossHints, downHints } = useCrosswordContext();
-  console.log(grid);
 
   return (
     <div>
       <h2>Play the game</h2>
       <p>it's cool</p>
-      {grid && <Crossword grid={grid} />}
+      {grid && <Crossword grid={grid} mode="PLAYING_MODE" />}
       <div className="max-w-5xl m-auto p-5 shadow-md">
         <h3 className="font-bold">Across</h3>
         {acrossHints && (

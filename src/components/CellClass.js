@@ -1,20 +1,10 @@
 export default class Cell {
-  constructor({ x, y, isInPlay = true, value = "" }) {
+  constructor({ x, y }) {
     this.x = x;
     this.y = y;
     this.id = `${x}:${y}`;
-    this.isInPlay = isInPlay;
-    this.value = value;
     this.correctValue = "";
-    this.displayNumber = 0;
-    this.cellHasFocus = false;
-    this.isInSelectedRowOrColumn = false;
-    this.acrossWord = "";
-    this.downWord = "";
-    this.firstCellInAcrossWordXCoord = -1;
-    this.lastCellInAcrossWordXCoord = -1;
-    this.firstCellInDownWordXCoord = -1;
-    this.lastCellInDownWordXCoord = -1;
+    this.initStartValues();
   }
 
   toggleActive() {
@@ -36,14 +26,28 @@ export default class Cell {
   // unset value without updating. This should be performed once,
   // at the start of creating the player's puzzle
   unsetValue() {
-    this.value = "";
+    this.isEditable = false;
+    this.isInPlay = !!this.value;
   }
 
-  clear() {
+  initStartValues() {
     this.value = "";
     this.isInPlay = true;
-    this.displayNumber = null;
+    this.isEditable = true;
+    this.displayNumber = 0;
     this.cellHasFocus = null;
+    this.isInSelectedRowOrColumn = false;
+    this.acrossWord = "";
+    this.downWord = "";
+    this.cellHasFocus = false;
+    this.firstCellInAcrossWordXCoord = -1;
+    this.lastCellInAcrossWordXCoord = -1;
+    this.firstCellInDownWordXCoord = -1;
+    this.lastCellInDownWordXCoord = -1;
+  }
+
+  clearEditorView() {
+    this.initStartValues();
     this.update();
   }
 
@@ -61,24 +65,30 @@ export default class Cell {
   }
 
   setFinalValue() {
-    this.isInPlay = !!this.value;
     this.correctValue = this.value;
+    this.isEditable = false;
     this.update();
   }
 
   enableFocus() {
-    this.cellHasFocus = true;
-    this.update();
+    if (!this.cellHasFocus) {
+      this.cellHasFocus = true;
+      this.update();
+    }
   }
 
   disableFocus() {
-    this.cellHasFocus = false;
-    this.update();
+    if (this.cellHasFocus) {
+      this.cellHasFocus = false;
+      this.update();
+    }
   }
 
   toggleIsInSelectedRowOrColumn(isSelected) {
-    this.isInSelectedRowOrColumn = isSelected;
-    this.update();
+    if (this.isInSelectedRowOrColumn !== isSelected) {
+      this.isInSelectedRowOrColumn = isSelected;
+      this.update();
+    }
   }
 
   setAcrossWordData({
