@@ -1,70 +1,75 @@
-# Getting Started with Create React App
+# Crossword Puzzle
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Get started
 
-## Available Scripts
+```sh
+git clone https://github.com/akiryk/crossword.git
+cd crossword
+npm install
 
-In the project directory, you can run:
+# start the app!
+npm start
+```
 
-### `npm start`
-
-Runs the app in the development directionMode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+This app is created with create react app, so all the usual commands apply
 
-### `npm test`
+```sh
+# Launch a test runner
+npm test
 
-Launches the test runner in the interactive watch directionMode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Builds the app for production to the `build` folder.
+npm run build
+```
 
-### `npm run build`
+## Make it better
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production directionMode and optimizes the build for the best performance.
+### Site and App structure
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The app is built with React Router, and there are three pages
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Welcome
+- Create - where you create a new puzzle or continue working on one that's in progress
+- Play - play a crossword
 
-### `npm run eject`
+The app is structured such that each page is its own route.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+#### Create
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+In the Create route, the parent is CrosswordMakerContainer, which keeps track of whether the
+puzzle or the hints are being edited. When a user is filling in cells to make words, I call that
+editing the puzzle. When the user is adding hints for the across and down directions, I call that
+editing the hints.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+These two states — puzzle-making and hint-making — are kept distinct: you can only do one at a time.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+#### Play
 
-## Learn More
+Not done yet...
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### State management
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The app needs to manage state in a few ways, and which is used depends on the current "mode" of game creation or play.
 
-### Code Splitting
+When creating a puzzle — that is, filling in each cell with a letter or empty space — state is handled locally.
+Each cell tracks its own value and doesn't care about the value of other cells. When you click on a cell and enter a letter, say, "C", the
+cell calls its change handler, which uses `React.useState()` to keep track of the value: `setValue('C')`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+The cell does need need access to some state that is higher in the tree. It needs to know whether the user is typing in a left/right direction
+or a top/down direction.
 
-### Analyzing the Bundle Size
+#### Cell state
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+#### Grid state
 
-### Making a Progressive Web App
+The grid keeps track of every cell, but only for the purpose of enabling hint-making
+and playing. During the course of creating or editing your puzzle, the grid state remains static.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+One your puzzle is complete — that is, every cell is filled in the way you'd like — you're ready to create hints. At this point, when you click the "Make Hints" button, the grid state is populated with information
+about cell values and words, both across and down words.
 
-### Advanced Configuration
+### To Dos
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- create the Play route
+- enable user to toggle between puzzle-making and hint-making

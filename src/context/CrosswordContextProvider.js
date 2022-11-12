@@ -1,3 +1,10 @@
+/**
+ * Manage global state with Context
+ *
+ * Does not cause re-render of the entire puzzle because none of
+ * this context changes when you add or modify a letter in a cell
+ */
+
 import React, { createContext, useContext, useState } from "react";
 
 const CrosswordContext = createContext();
