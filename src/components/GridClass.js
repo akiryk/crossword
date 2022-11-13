@@ -1,6 +1,11 @@
-import { SPAN, GO_TOP_TO_BOTTOM, GO_LEFT_TO_RIGHT } from "../utils/constants";
+import {
+  SPAN,
+  GO_TOP_TO_BOTTOM,
+  GO_LEFT_TO_RIGHT,
+  EDIT_MODE,
+  PLAY_MODE,
+} from "../utils/constants";
 import Cell from "./CellClass";
-
 export default class Grid {
   constructor({ crossSpan = SPAN, downSpan = SPAN } = {}) {
     this.crossSpan = crossSpan;
@@ -31,8 +36,6 @@ export default class Grid {
       }
       this.cellRows.push(cells);
     }
-
-    return this;
   }
 
   setCellsForPlayerMode() {
@@ -77,7 +80,7 @@ export default class Grid {
 
   unhighlightCells() {
     while (this.highlightedCells.length) {
-      this.highlightedCells.pop().toggleIsInSelectedRowOrColumn(false);
+      this.highlightedCells.pop().setIsInSelectedRowOrColumn(false);
     }
   }
 
@@ -86,6 +89,7 @@ export default class Grid {
       (this.gridDirection === GO_LEFT_TO_RIGHT && y === this.currentRow) ||
       (this.gridDirection === GO_TOP_TO_BOTTOM && x === this.currentColumn)
     ) {
+      console.log(x, y);
       // user is in the currently highlighted row or column so no need to re-style cells
       return;
     }
@@ -93,15 +97,45 @@ export default class Grid {
     this.unhighlightCells();
     this.currentRow = y;
     this.currentColumn = x;
+
+    let start;
+    // get the first active cell
+    if (this.gridDirection === GO_LEFT_TO_RIGHT) {
+      start = x;
+      let leftValue = x - 1;
+      if (leftValue >= 0) {
+        while (
+          this.cellsObject?.[`${leftValue}:${y}`]?.mode === PLAY_MODE ||
+          this.cellsObject?.[`${leftValue}:${y}`]?.mode === EDIT_MODE
+        ) {
+          start = leftValue;
+          leftValue -= 1;
+        }
+      }
+    }
+    if (this.gridDirection === GO_TOP_TO_BOTTOM) {
+      start = y;
+      let aboveValue = y - 1;
+      if (aboveValue >= 0) {
+        while (
+          this.cellsObject?.[`${x}:${aboveValue}`]?.mode === PLAY_MODE ||
+          this.cellsObject?.[`${x}:${aboveValue}`]?.mode === EDIT_MODE
+        ) {
+          start = aboveValue;
+          aboveValue -= 1;
+        }
+      }
+    }
+
     let cell;
-    for (let i = 0; i < SPAN; i++) {
+    for (let i = start; i < SPAN; i++) {
       if (this.gridDirection === GO_LEFT_TO_RIGHT) {
         cell = this.cellsObject[`${i}:${y}`];
       } else if (this.gridDirection === GO_TOP_TO_BOTTOM) {
         cell = this.cellsObject[`${x}:${i}`];
       }
-      if (cell.mode === "EDIT_MODE" || cell.mode === "PLAY_MODE") {
-        cell.toggleIsInSelectedRowOrColumn(true);
+      if (cell.mode === EDIT_MODE || cell.mode === PLAY_MODE) {
+        cell.setIsInSelectedRowOrColumn(true);
         this.highlightedCells.push(cell);
       } else {
         break;

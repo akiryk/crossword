@@ -91,11 +91,13 @@ export default class Cell {
     }
   }
 
-  toggleIsInSelectedRowOrColumn(isSelected) {
-    if (this.isInSelectedRowOrColumn !== isSelected) {
-      this.isInSelectedRowOrColumn = isSelected;
-      this.update();
-    }
+  /**
+   *
+   * @param {boolean} isSelected
+   */
+  setIsInSelectedRowOrColumn(isSelected) {
+    this.isInSelectedRowOrColumn = isSelected;
+    this.update();
   }
 
   setAcrossWordData({

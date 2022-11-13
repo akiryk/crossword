@@ -68,5 +68,5 @@ about cell values and words, both across and down words.
 
 ### To Dos
 
-- create the Play route
+- when in PLAY mode, you should be able to select a new word in the same row and column; that row or column word should highlight; other cells in the row or column should de-highlight
 - enable user to toggle between puzzle-making and hint-making
