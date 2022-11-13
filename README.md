@@ -56,10 +56,7 @@ When creating a puzzle — that is, filling in each cell with a letter or empty
 Each cell tracks its own value and doesn't care about the value of other cells. When you click on a cell and enter a letter, say, "C", the
 cell calls its change handler, which uses `React.useState()` to keep track of the value: `setValue('C')`.
 
-The cell does need need access to some state that is higher in the tree. It needs to know whether the user is typing in a left/right direction
-or a top/down direction.
-
-#### Cell state
+The cell _does_ need access to some global state - or, at least, state maintained higher in the tree. It needs to know whether the user is typing in a left/right direction or a top/down direction. This information is kept in
 
 #### Grid state
 
