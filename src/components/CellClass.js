@@ -49,8 +49,8 @@ export default class Cell {
     this.cellHasFocus = false;
     this.firstCellInAcrossWordXCoord = -1;
     this.lastCellInAcrossWordXCoord = -1;
-    this.firstCellInDownWordXCoord = -1;
-    this.lastCellInDownWordXCoord = -1;
+    this.firstCellInDownWordYCoord = -1;
+    this.lastCellInDownWordYCoord = -1;
   }
 
   reset() {
@@ -96,8 +96,12 @@ export default class Cell {
    * @param {boolean} isSelected
    */
   setIsInSelectedRowOrColumn(isSelected) {
-    this.isInSelectedRowOrColumn = isSelected;
-    this.update();
+    // Don'e call update unless the value changes; otherwise, we get
+    // into an infinite loop!
+    if (isSelected !== this.isInSelectedRowOrColumn) {
+      this.isInSelectedRowOrColumn = isSelected;
+      this.update();
+    }
   }
 
   setAcrossWordData({
@@ -111,12 +115,12 @@ export default class Cell {
   }
 
   setDownWordData({
-    firstCellInDownWordXCoord,
-    lastCellInDownWordXCoord,
+    firstCellInDownWordYCoord,
+    lastCellInDownWordYCoord,
     downWord,
   }) {
-    this.lastCellInDownWordXCoord = lastCellInDownWordXCoord;
-    this.firstCellInDownWordXCoord = firstCellInDownWordXCoord;
+    this.lastCellInDownWordYCoord = lastCellInDownWordYCoord;
+    this.firstCellInDownWordYCoord = firstCellInDownWordYCoord;
     this.downWord = downWord;
   }
 }

@@ -39,6 +39,7 @@ export default class Grid {
   }
 
   setCellsForPlayerMode() {
+    this.cellWithFocus.disableFocus();
     this.cellsArray.forEach((cell) => {
       cell.setForPlayerMode();
     });
@@ -50,6 +51,10 @@ export default class Grid {
       this.startCellsWordsDown = [];
       cell.reset();
     });
+  }
+
+  clearHighlightedCells() {
+    this.highlightedCells = [];
   }
 
   setCellWithFocus(id) {
@@ -84,12 +89,34 @@ export default class Grid {
     }
   }
 
-  highlightDirection({ x, y }) {
+  highlightDirection(cell) {
+    if (cell.mode === PLAY_MODE) {
+      this.highlightWord(cell);
+    } else if (cell.mode === EDIT_MODE) {
+      this.highlightColumnOrRow(cell);
+    }
+  }
+
+  highlightWord(cell) {
+    this.unhighlightCells();
+    if (this.gridDirection === GO_LEFT_TO_RIGHT) {
+      for (
+        let i = cell.firstCellInAcrossWordXCoord;
+        i < cell.lastCellInAcrossWordXCoord;
+        i++
+      ) {
+        cell = this.cellsObject[`${i}:${cell.y}`];
+        this.highlightedCells.push(cell);
+        cell.setIsInSelectedRowOrColumn(true);
+      }
+    }
+  }
+
+  highlightColumnOrRow({ x, y }) {
     if (
       (this.gridDirection === GO_LEFT_TO_RIGHT && y === this.currentRow) ||
       (this.gridDirection === GO_TOP_TO_BOTTOM && x === this.currentColumn)
     ) {
-      console.log(x, y);
       // user is in the currently highlighted row or column so no need to re-style cells
       return;
     }
@@ -98,43 +125,14 @@ export default class Grid {
     this.currentRow = y;
     this.currentColumn = x;
 
-    let start;
-    // get the first active cell
-    if (this.gridDirection === GO_LEFT_TO_RIGHT) {
-      start = x;
-      let leftValue = x - 1;
-      if (leftValue >= 0) {
-        while (
-          this.cellsObject?.[`${leftValue}:${y}`]?.mode === PLAY_MODE ||
-          this.cellsObject?.[`${leftValue}:${y}`]?.mode === EDIT_MODE
-        ) {
-          start = leftValue;
-          leftValue -= 1;
-        }
-      }
-    }
-    if (this.gridDirection === GO_TOP_TO_BOTTOM) {
-      start = y;
-      let aboveValue = y - 1;
-      if (aboveValue >= 0) {
-        while (
-          this.cellsObject?.[`${x}:${aboveValue}`]?.mode === PLAY_MODE ||
-          this.cellsObject?.[`${x}:${aboveValue}`]?.mode === EDIT_MODE
-        ) {
-          start = aboveValue;
-          aboveValue -= 1;
-        }
-      }
-    }
-
     let cell;
-    for (let i = start; i < SPAN; i++) {
+    for (let i = 0; i < SPAN; i++) {
       if (this.gridDirection === GO_LEFT_TO_RIGHT) {
         cell = this.cellsObject[`${i}:${y}`];
       } else if (this.gridDirection === GO_TOP_TO_BOTTOM) {
         cell = this.cellsObject[`${x}:${i}`];
       }
-      if (cell.mode === EDIT_MODE || cell.mode === PLAY_MODE) {
+      if (cell.mode === EDIT_MODE) {
         cell.setIsInSelectedRowOrColumn(true);
         this.highlightedCells.push(cell);
       } else {

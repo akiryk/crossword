@@ -44,7 +44,7 @@ function CellContainer({
         if (newCellData.cellHasFocus) {
           inputRef.current.focus();
           inputRef.current.select();
-          highlightDirection(cell);
+          // highlightDirection(cell);
         }
       });
     }
@@ -119,6 +119,23 @@ function CellContainer({
       return;
     }
     setCellWithFocus(cell.id);
+    if (cell.mode === PLAY_MODE) {
+      let focusIsInWordAtIndex = null;
+      if (grid.gridDirection === GO_LEFT_TO_RIGHT) {
+      } else {
+        grid.startCellsWordsDown.forEach((word) => {
+          if (word.x === cell.x) {
+            if (
+              cell.y >= word.firstCellInDownWordYCoord &&
+              cell.y <= word.lastCellInDownWordYCoord
+            ) {
+              // we found the word!
+              focusIsInWordAtIndex = word;
+            }
+          }
+        });
+      }
+    }
     highlightDirection(cell);
   }
   let cellInputClasses =
@@ -144,7 +161,7 @@ function CellContainer({
       }
       break;
     // eslint ignore no-fallthrough
-    case PLAY_MODE:
+    // case PLAY_MODE:
     case VIEW_ONLY_MODE:
       bgColor = isInSelectedRowOrColumn ? "bg-cyan-100" : "bg-white";
       break;
@@ -170,6 +187,7 @@ function CellContainer({
       displayNumber={displayNumber}
       id={cell.id}
       mode={cell.mode}
+      isInSelectedRowOrColumn={isInSelectedRowOrColumn}
     />
   );
 }

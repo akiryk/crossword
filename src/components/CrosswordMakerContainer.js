@@ -7,7 +7,7 @@ import HintingForm from "./HintingForm";
 
 function CrosswordMakerContainer() {
   const [shouldShowHintingForm, setShouldShowHintingForm] = useState(false);
-
+  const [isHintButtonDisabled, setIsHintButtonDisabled] = useState(false);
   // const [toggleRerender, setToggleRender] = useState(false);
   const [grid, setGrid] = useState(null);
 
@@ -25,6 +25,7 @@ function CrosswordMakerContainer() {
   }
 
   function makeHints() {
+    setIsHintButtonDisabled(true);
     const { cellsArray, cellsObject } = grid;
     let word;
     let cellDisplayNumber = 1;
@@ -92,8 +93,8 @@ function CrosswordMakerContainer() {
           // this time so we can give each cell context about where it is in the word
           for (let y = startY; y < endY; y++) {
             cellsObject[`${x}:${y}`].setDownWordData({
-              firstCellInDownWordXCoord: startY,
-              lastCellInDownWordXCoord: endY,
+              firstCellInDownWordYCoord: startY,
+              lastCellInDownWordYCoord: endY,
               downWord: word,
             });
           }
@@ -108,6 +109,7 @@ function CrosswordMakerContainer() {
       }
       cell.setFinalValue();
     });
+    grid.clearHighlightedCells();
     setShouldShowHintingForm(true);
   }
 
@@ -116,7 +118,9 @@ function CrosswordMakerContainer() {
       <h2>Make yer xword</h2>
       <p>it's be cool</p>
       <Crossword grid={grid} />
-      <Button onClick={makeHints}>Make Hints</Button>
+      <Button onClick={makeHints} disabled={isHintButtonDisabled}>
+        Make Hints
+      </Button>
       <Button onClick={handleClearPuzzle}>Clear</Button>
       {shouldShowHintingForm && <HintingForm grid={grid} />}
     </div>
