@@ -10,6 +10,8 @@ import {
   EDIT_MODE,
   PLAY_MODE,
   VIEW_ONLY_MODE,
+  DEAD_CELL_MODE,
+  HIGHEST_INDEX,
 } from "../utils/constants";
 
 function useOutsideAlerter(ref) {
@@ -56,18 +58,42 @@ const Crossword = ({ grid }) => {
 
   function getCellToTheRight({ currentRow, currentColumn }) {
     let newColumn = currentColumn;
+    let newRow = currentRow;
     if (currentColumn < SPAN - 1) {
       newColumn = currentColumn + 1;
+    } else {
+      newColumn = 0;
+      newRow = currentRow + 1 === SPAN ? 0 : currentRow + 1;
     }
-    return { row: currentRow, column: newColumn };
+    const possibleNextCell = grid.cellsObject[`${newColumn}:${newRow}`];
+    while (possibleNextCell.mode === DEAD_CELL_MODE) {
+      newColumn = currentColumn + 1;
+      return getCellToTheRight({
+        currentRow: newRow,
+        currentColumn: newColumn,
+      });
+    }
+    return { row: newRow, column: newColumn };
   }
 
   function getCellToTheLeft({ currentRow, currentColumn }) {
-    let newColumn = SPAN;
+    let nextColumn = currentColumn;
+    let nextRow = currentRow;
     if (currentColumn > 0) {
-      newColumn = currentColumn - 1;
+      nextColumn = currentColumn - 1;
+    } else {
+      nextColumn = HIGHEST_INDEX; // HIGHEST_INDEX = SPAN - 1;
+      nextRow = currentRow - 1 < 0 ? HIGHEST_INDEX : currentRow - 1;
     }
-    return { row: currentRow, column: newColumn };
+    while (
+      grid.cellsObject[`${nextColumn}:${nextRow}`].mode === DEAD_CELL_MODE
+    ) {
+      return getCellToTheLeft({
+        currentRow: nextRow,
+        currentColumn: nextColumn,
+      });
+    }
+    return { row: nextRow, column: nextColumn };
   }
 
   function setCellWithFocus(id) {
@@ -126,6 +152,7 @@ const Crossword = ({ grid }) => {
                     setCellWithFocus={setCellWithFocus}
                     highlightDirection={highlightDirection}
                     cellIsInteractive
+                    setCellValue
                   />
                 );
               } else if (cell.mode === VIEW_ONLY_MODE) {

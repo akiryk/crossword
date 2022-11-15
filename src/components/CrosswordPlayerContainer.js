@@ -1,9 +1,14 @@
 import React from "react";
 import Crossword from "./Crossword";
+import { Button } from "./Common";
 import { useCrosswordContext } from "../context/CrosswordContextProvider";
 
 const CrosswordPlayerContainer = () => {
   const { grid, acrossHints, downHints } = useCrosswordContext();
+
+  function handleSubmit(e) {
+    e.preventDefault();
+  }
 
   return (
     <div>
@@ -38,6 +43,7 @@ const CrosswordPlayerContainer = () => {
           </ul>
         )}
       </div>
+      <Button onClick={handleSubmit}>Submit</Button>
     </div>
   );
 };

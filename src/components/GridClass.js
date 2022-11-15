@@ -20,6 +20,9 @@ export default class Grid {
     this.currentRow = -1;
     this.currentColumn = -1;
     this.cellRows = [];
+    this.highlightedPlayCells = [];
+    this.answerKey = {};
+    this.workingAnswersKey = {};
 
     let cells;
     for (let y = 0; y < crossSpan; y++) {
@@ -40,9 +43,19 @@ export default class Grid {
 
   setCellsForPlayerMode() {
     this.cellWithFocus.disableFocus();
+    this.answerKey = [];
+    this.workingAnswersKey = [];
     this.cellsArray.forEach((cell) => {
+      if (cell.value) {
+        this.answerKey[cell.id] = cell.value;
+        this.workingAnswersKey[cell.id] = null;
+      }
       cell.setForPlayerMode();
     });
+  }
+
+  updateWorkingAnswers(cell) {
+    this.workingAnswersKey[cell.id] = cell.value;
   }
 
   clearEditorView() {
@@ -80,7 +93,9 @@ export default class Grid {
         : GO_LEFT_TO_RIGHT;
     this.currentColumn = -1;
     this.currentRow = -1;
-    this.highlightDirection(cell);
+
+    // TODO: Fix this, it's kind of hacky.
+    this.highlightDirection(cell, true);
   }
 
   unhighlightCells() {
@@ -89,16 +104,28 @@ export default class Grid {
     }
   }
 
-  highlightDirection(cell) {
+  highlightDirection(cell, directionIsChanged = false) {
     if (cell.mode === PLAY_MODE) {
-      this.highlightWord(cell);
+      this.highlightWord(cell, directionIsChanged);
     } else if (cell.mode === EDIT_MODE) {
       this.highlightColumnOrRow(cell);
     }
   }
 
-  highlightWord(cell) {
-    this.unhighlightCells();
+  highlightWord(cell, directionIsChanged = false) {
+    // the cell is in the existing list of highlighted cells
+    // AND the direction is unchanged, then just return.
+    if (
+      !directionIsChanged &&
+      this.highlightedPlayCells.includes(`${cell.x}:${cell.y}`)
+    ) {
+      return;
+    }
+    // clear all the currently highlighted cells
+    while (this.highlightedPlayCells.length) {
+      const id = this.highlightedPlayCells.pop();
+      this.cellsObject[id].setIsInSelectedRowOrColumn(false);
+    }
     if (this.gridDirection === GO_LEFT_TO_RIGHT) {
       for (
         let i = cell.firstCellInAcrossWordXCoord;
@@ -106,7 +133,17 @@ export default class Grid {
         i++
       ) {
         cell = this.cellsObject[`${i}:${cell.y}`];
-        this.highlightedCells.push(cell);
+        this.highlightedPlayCells.push(`${cell.x}:${cell.y}`);
+        cell.setIsInSelectedRowOrColumn(true);
+      }
+    } else if (this.gridDirection === GO_TOP_TO_BOTTOM) {
+      for (
+        let i = cell.firstCellInDownWordYCoord;
+        i < cell.lastCellInDownWordYCoord;
+        i++
+      ) {
+        cell = this.cellsObject[`${cell.x}:${i}`];
+        this.highlightedPlayCells.push(`${cell.x}:${cell.y}`);
         cell.setIsInSelectedRowOrColumn(true);
       }
     }

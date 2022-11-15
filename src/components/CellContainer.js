@@ -31,24 +31,21 @@ function CellContainer({
   cellIsInteractive,
 }) {
   const inputRef = useRef();
-  // const [displayNumber, setDisplayNumber] = useState(null);
   const [value, setValue] = useState(cell?.value);
   const [isInSelectedRowOrColumn, setIsInSelectedRowOrColumn] = useState(false);
 
   useEffect(() => {
     if (cellIsInteractive) {
       cell.subscribe((newCellData) => {
-        // setDisplayNumber(newCellData.displayNumber);
         setValue(newCellData.value);
         setIsInSelectedRowOrColumn(newCellData.isInSelectedRowOrColumn);
         if (newCellData.cellHasFocus) {
           inputRef.current.focus();
           inputRef.current.select();
-          // highlightDirection(cell);
         }
       });
     }
-  }, [cell, highlightDirection, cellIsInteractive]);
+  }, [cell, cellIsInteractive]);
 
   function handleChange(event) {
     if (cellIsInteractive) {
@@ -56,6 +53,9 @@ function CellContainer({
       if (value) {
         cell.setValue(value);
         goToNextCell({ row, column });
+        if (cell.mode === PLAY_MODE) {
+          grid.updateWorkingAnswers(cell);
+        }
       }
     }
   }
@@ -67,7 +67,6 @@ function CellContainer({
     const code = event?.keyCode;
     const directionMode = grid.gridDirection;
     switch (code) {
-      case SHIFT_KEY:
       case SPACEBAR_KEY:
         grid.toggleGridDirection(cell);
         break;
@@ -119,23 +118,6 @@ function CellContainer({
       return;
     }
     setCellWithFocus(cell.id);
-    if (cell.mode === PLAY_MODE) {
-      let focusIsInWordAtIndex = null;
-      if (grid.gridDirection === GO_LEFT_TO_RIGHT) {
-      } else {
-        grid.startCellsWordsDown.forEach((word) => {
-          if (word.x === cell.x) {
-            if (
-              cell.y >= word.firstCellInDownWordYCoord &&
-              cell.y <= word.lastCellInDownWordYCoord
-            ) {
-              // we found the word!
-              focusIsInWordAtIndex = word;
-            }
-          }
-        });
-      }
-    }
     highlightDirection(cell);
   }
   let cellInputClasses =
@@ -161,7 +143,7 @@ function CellContainer({
       }
       break;
     // eslint ignore no-fallthrough
-    // case PLAY_MODE:
+    case PLAY_MODE:
     case VIEW_ONLY_MODE:
       bgColor = isInSelectedRowOrColumn ? "bg-cyan-100" : "bg-white";
       break;

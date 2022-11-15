@@ -32,6 +32,7 @@ export default class Cell {
   // unset value without updating. This should be performed once,
   // at the start of creating the player's puzzle
   setForPlayerMode() {
+    this.isInSelectedRowOrColumn = false;
     this.mode = !!this.value ? PLAY_MODE : DEAD_CELL_MODE;
     this.value = "";
   }
