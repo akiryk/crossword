@@ -1,13 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Crossword from "./Crossword";
 import { Button } from "./Common";
 import { useCrosswordContext } from "../context/CrosswordContextProvider";
 
 const CrosswordPlayerContainer = () => {
   const { grid, acrossHints, downHints } = useCrosswordContext();
+  const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
+  useEffect(() => {
+    const unsubscribe = grid.subscribe((isGridComplete) => {
+      setIsSubmitButtonEnabled(isGridComplete);
+    });
+    return () => unsubscribe();
+  }, [grid]);
 
   function handleSubmit(e) {
     e.preventDefault();
+    const wrongAnswers = grid.getIsSubmissionCorrect();
+    if (wrongAnswers.length === 0) {
+      alert("You did it!");
+    } else {
+      alert("Sorry, try again...");
+    }
   }
 
   return (
@@ -43,7 +56,9 @@ const CrosswordPlayerContainer = () => {
           </ul>
         )}
       </div>
-      <Button onClick={handleSubmit}>Submit</Button>
+      <Button onClick={handleSubmit} disabled={!isSubmitButtonEnabled}>
+        Submit
+      </Button>
     </div>
   );
 };

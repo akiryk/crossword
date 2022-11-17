@@ -23,6 +23,7 @@ export default class Grid {
     this.highlightedPlayCells = [];
     this.answerKey = {};
     this.workingAnswersKey = {};
+    this.listeners = new Set();
 
     let cells;
     for (let y = 0; y < crossSpan; y++) {
@@ -43,8 +44,8 @@ export default class Grid {
 
   setCellsForPlayerMode() {
     this.cellWithFocus.disableFocus();
-    this.answerKey = [];
-    this.workingAnswersKey = [];
+    this.answerKey = {};
+    this.workingAnswersKey = {};
     this.cellsArray.forEach((cell) => {
       if (cell.value) {
         this.answerKey[cell.id] = cell.value;
@@ -56,6 +57,40 @@ export default class Grid {
 
   updateWorkingAnswers(cell) {
     this.workingAnswersKey[cell.id] = cell.value;
+    const nullValues = Object.values(this.workingAnswersKey).filter(
+      (v) => v === null || v === ""
+    );
+    console.log(nullValues.length);
+    this.updateSubscribers(nullValues.length === 0);
+  }
+
+  updateSubscribers(isGridComplete) {
+    this.listeners.forEach((listener) => {
+      listener(isGridComplete);
+    });
+  }
+
+  subscribe(update) {
+    this.listeners.add(update);
+    return () => this.listeners.delete(update);
+  }
+
+  getIsSubmissionCorrect() {
+    const keys = Object.keys(this.answerKey);
+    let i = 0;
+    let keepChecking = true;
+    const wrongAnswers = [];
+    while (keepChecking) {
+      if (i > keys.length) {
+        keepChecking = false;
+      } else {
+        if (this.workingAnswersKey[keys[i]] !== this.answerKey[keys[i]]) {
+          wrongAnswers.push(keys[i]);
+        }
+        i = i + 1;
+      }
+    }
+    return wrongAnswers;
   }
 
   clearEditorView() {

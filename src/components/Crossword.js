@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CellContainer from "./CellContainer";
 import { DeadCell, ViewOnlyCell } from "./Cell";
 import {

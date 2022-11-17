@@ -72,6 +72,9 @@ function CellContainer({
         break;
       case DELETE_KEY:
         cell.setValue("");
+        if (cell.mode === PLAY_MODE) {
+          grid.updateWorkingAnswers(cell);
+        }
         if (directionMode === GO_LEFT_TO_RIGHT) {
           goToNextCell({
             row,
