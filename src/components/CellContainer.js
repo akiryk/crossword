@@ -31,21 +31,24 @@ function CellContainer({
   cellIsInteractive,
 }) {
   const inputRef = useRef();
+  // const [displayNumber, setDisplayNumber] = useState(null);
   const [value, setValue] = useState(cell?.value);
   const [isInSelectedRowOrColumn, setIsInSelectedRowOrColumn] = useState(false);
 
   useEffect(() => {
     if (cellIsInteractive) {
       cell.subscribe((newCellData) => {
+        // setDisplayNumber(newCellData.displayNumber);
         setValue(newCellData.value);
         setIsInSelectedRowOrColumn(newCellData.isInSelectedRowOrColumn);
         if (newCellData.cellHasFocus) {
           inputRef.current.focus();
           inputRef.current.select();
+          highlightDirection(cell);
         }
       });
     }
-  }, [cell, cellIsInteractive]);
+  }, [cell, highlightDirection, cellIsInteractive]);
 
   function handleChange(event) {
     if (cellIsInteractive) {
@@ -53,9 +56,6 @@ function CellContainer({
       if (value) {
         cell.setValue(value);
         goToNextCell({ row, column });
-        if (cell.mode === PLAY_MODE) {
-          grid.updateWorkingAnswers(cell);
-        }
       }
     }
   }
@@ -67,14 +67,12 @@ function CellContainer({
     const code = event?.keyCode;
     const directionMode = grid.gridDirection;
     switch (code) {
+      case SHIFT_KEY:
       case SPACEBAR_KEY:
         grid.toggleGridDirection(cell);
         break;
       case DELETE_KEY:
         cell.setValue("");
-        if (cell.mode === PLAY_MODE) {
-          grid.updateWorkingAnswers(cell);
-        }
         if (directionMode === GO_LEFT_TO_RIGHT) {
           goToNextCell({
             row,
@@ -172,7 +170,6 @@ function CellContainer({
       displayNumber={displayNumber}
       id={cell.id}
       mode={cell.mode}
-      isInSelectedRowOrColumn={isInSelectedRowOrColumn}
     />
   );
 }

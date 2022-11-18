@@ -5,6 +5,7 @@ import CrosswordMakerContainer from "./components/CrosswordMakerContainer";
 import CrosswordPlayerContainer from "./components/CrosswordPlayerContainer";
 import LandingPage from "./components/LandingPage";
 import CrosswordContextProvider from "./context/CrosswordContextProvider";
+import PlayHardcodedGame from "./components/PlayHardcodedGame";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Route index element={<LandingPage />} />
             <Route path="maker" element={<CrosswordMakerContainer />} />
             <Route path="player" element={<CrosswordPlayerContainer />} />
+            <Route path="game" element={<PlayHardcodedGame />} />
           </Route>
         </Routes>
       </CrosswordContextProvider>

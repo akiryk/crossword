@@ -1,0 +1,54 @@
+{
+  "answers": {
+    "9:2": "I",
+    "2:3": "O",
+    "3:3": "N",
+    "4:3": "C",
+    "5:3": "E",
+    "6:3": "U",
+    "7:3": "P",
+    "8:3": "O",
+    "9:3": "N",
+    "10:3": "A",
+    "11:3": "T",
+    "12:3": "I",
+    "13:3": "M",
+    "14:3": "E",
+    "9:4": "M",
+    "9:5": "A",
+    "10:5": "T",
+    "11:5": "M",
+    "9:6": "T",
+    "11:6": "E",
+    "3:7": "C",
+    "4:7": "I",
+    "5:7": "N",
+    "6:7": "D",
+    "7:7": "E",
+    "8:7": "R",
+    "9:7": "E",
+    "10:7": "L",
+    "11:7": "L",
+    "12:7": "A",
+    "11:8": "T",
+    "11:9": "D",
+    "11:10": "O",
+    "11:11": "W",
+    "11:12": "N"
+  },
+  "hints": {
+    "across": [
+      {
+        "displayNumber": "2",
+        "hint": "opening words",
+        "answer": "ONCEUPONATIME"
+      },
+      { "displayNumber": "3", "hint": "bank machine", "answer": "ATM" },
+      { "displayNumber": "5", "hint": "slippers", "answer": "CINDERELLA" }
+    ],
+    "down": [
+      { "displayNumber": "1", "hint": "cellmate", "answer": "INMATE" },
+      { "displayNumber": "4", "hint": "whatever", "answer": "MELTDOWN" }
+    ]
+  }
+}
