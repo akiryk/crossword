@@ -31,14 +31,12 @@ function CellContainer({
   cellIsInteractive,
 }) {
   const inputRef = useRef();
-  // const [displayNumber, setDisplayNumber] = useState(null);
   const [value, setValue] = useState(cell?.value);
   const [isInSelectedRowOrColumn, setIsInSelectedRowOrColumn] = useState(false);
 
   useEffect(() => {
     if (cellIsInteractive) {
       cell.subscribe((newCellData) => {
-        // setDisplayNumber(newCellData.displayNumber);
         setValue(newCellData.value);
         setIsInSelectedRowOrColumn(newCellData.isInSelectedRowOrColumn);
         if (newCellData.cellHasFocus) {
@@ -69,7 +67,6 @@ function CellContainer({
     switch (code) {
       case SHIFT_KEY:
       case SPACEBAR_KEY:
-        console.log("cpacebar");
         grid.toggleGridDirection(cell);
         break;
       case DELETE_KEY:
