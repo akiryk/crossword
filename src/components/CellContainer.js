@@ -16,7 +16,7 @@ const RIGHT_ARROW_KEY = 39;
 const UP_ARROW_KEY = 38;
 const DOWN_ARROW_KEY = 40;
 const DELETE_KEY = 8;
-const SHIFT_KEY = 16;
+// const SHIFT_KEY = 16;
 const SPACEBAR_KEY = 32;
 
 function CellContainer({
@@ -42,17 +42,20 @@ function CellContainer({
         if (newCellData.cellHasFocus) {
           inputRef.current.focus();
           inputRef.current.select();
-          highlightDirection(cell);
         }
       });
     }
-  }, [cell, highlightDirection, cellIsInteractive]);
+  }, [cell, cellIsInteractive]);
 
   function handleChange(event) {
     if (cellIsInteractive) {
       const value = event.target.value?.trim();
       if (value) {
         cell.setValue(value);
+        if (cell.mode === PLAY_MODE) {
+          grid.updateWorkingAnswers(cell);
+        }
+        // don't go to next cell until after updating working answers!
         goToNextCell({ row, column });
       }
     }
@@ -65,17 +68,19 @@ function CellContainer({
     const code = event?.keyCode;
     const directionMode = grid.gridDirection;
     switch (code) {
-      case SHIFT_KEY:
       case SPACEBAR_KEY:
         grid.toggleGridDirection(cell);
         break;
       case DELETE_KEY:
         cell.setValue("");
+        if (cell.mode === PLAY_MODE) {
+          grid.updateWorkingAnswers(cell);
+        }
         if (directionMode === GO_LEFT_TO_RIGHT) {
           goToNextCell({
             row,
             column,
-            overrideDirectionMode: GO_RIGHT_TO_LEFT,
+            // overrideDirectionMode: GO_RIGHT_TO_LEFT,
           });
         }
         if (directionMode === GO_TOP_TO_BOTTOM) {
@@ -168,6 +173,7 @@ function CellContainer({
       displayNumber={displayNumber}
       id={cell.id}
       mode={cell.mode}
+      isInSelectedRowOrColumn={isInSelectedRowOrColumn}
     />
   );
 }

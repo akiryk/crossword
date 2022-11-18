@@ -100,7 +100,6 @@ export default class Grid {
     const nullValues = Object.values(this.workingAnswersKey).filter(
       (v) => v === null || v === ""
     );
-    console.log(nullValues.length);
     this.updateSubscribers(nullValues.length === 0);
   }
 
@@ -162,7 +161,6 @@ export default class Grid {
   }
 
   toggleGridDirection(cell) {
-    console.log("grid class toggle", this.gridDirection);
     this.gridDirection =
       this.gridDirection === GO_LEFT_TO_RIGHT
         ? GO_TOP_TO_BOTTOM
@@ -181,7 +179,6 @@ export default class Grid {
   }
 
   highlightDirection(cell, directionIsChanged = false) {
-    console.log("highlight!", cell.mode);
     if (cell.mode === PLAY_MODE) {
       this.highlightWord(cell, directionIsChanged);
     } else if (cell.mode === EDIT_MODE) {

@@ -42,10 +42,23 @@ const Crossword = ({ grid }) => {
 
   function getCellBelow({ currentRow, currentColumn }) {
     let newRow = currentRow;
+    let newColumn = currentColumn;
     if (currentRow < SPAN - 1) {
       newRow = currentRow + 1;
+    } else {
+      newRow = 0;
+      newColumn = currentColumn + 1 === SPAN ? 0 : currentColumn + 1;
     }
-    return { row: newRow, column: currentColumn };
+
+    const possibleNextCell = grid.cellsObject[`${newColumn}:${newRow}`];
+    while (shouldSkipNextCell(possibleNextCell)) {
+      newRow = currentRow + 1;
+      return getCellBelow({
+        currentRow: newRow,
+        currentColumn: newColumn,
+      });
+    }
+    return { row: newRow, column: newColumn };
   }
 
   function getCellAbove({ currentRow, currentColumn }) {
@@ -56,18 +69,26 @@ const Crossword = ({ grid }) => {
     return { row: newRow, column: currentColumn };
   }
 
+  function shouldSkipNextCell(cell) {
+    if (cell.mode === PLAY_MODE) {
+      const emptyCellsRemain = Object.values(grid.workingAnswersKey).includes(
+        null
+      );
+      console.log(Object.values(grid.workingAnswersKey));
+      return cell.mode === DEAD_CELL_MODE || (!!cell.value && emptyCellsRemain);
+    }
+    return cell.mode === DEAD_CELL_MODE;
+  }
+
   function getCellToTheRight({ currentRow, currentColumn }) {
-    let newColumn = currentColumn;
+    let newColumn = currentColumn + 1;
     let newRow = currentRow;
-    if (currentColumn < SPAN - 1) {
-      newColumn = currentColumn + 1;
-    } else {
+    if (newColumn >= SPAN) {
       newColumn = 0;
       newRow = currentRow + 1 === SPAN ? 0 : currentRow + 1;
     }
     const possibleNextCell = grid.cellsObject[`${newColumn}:${newRow}`];
-    while (possibleNextCell.mode === DEAD_CELL_MODE) {
-      newColumn = currentColumn + 1;
+    while (shouldSkipNextCell(possibleNextCell)) {
       return getCellToTheRight({
         currentRow: newRow,
         currentColumn: newColumn,
@@ -85,9 +106,8 @@ const Crossword = ({ grid }) => {
       nextColumn = HIGHEST_INDEX; // HIGHEST_INDEX = SPAN - 1;
       nextRow = currentRow - 1 < 0 ? HIGHEST_INDEX : currentRow - 1;
     }
-    while (
-      grid.cellsObject[`${nextColumn}:${nextRow}`].mode === DEAD_CELL_MODE
-    ) {
+    const possibleNextCell = grid.cellsObject[`${nextColumn}:${nextRow}`];
+    while (shouldSkipNextCell(possibleNextCell)) {
       return getCellToTheLeft({
         currentRow: nextRow,
         currentColumn: nextColumn,
@@ -132,6 +152,7 @@ const Crossword = ({ grid }) => {
 
     setCellWithFocus(`${nextCell.column}:${nextCell.row}`);
   }
+
   return (
     <div className="relative w-fit m-auto" ref={wrapperRef}>
       {grid.cellRows.map((row, i) => {
