@@ -132,7 +132,6 @@ const Crossword = ({ grid }) => {
 
     setCellWithFocus(`${nextCell.column}:${nextCell.row}`);
   }
-
   return (
     <div className="relative w-fit m-auto" ref={wrapperRef}>
       {grid.cellRows.map((row, i) => {

@@ -69,6 +69,7 @@ function CellContainer({
     switch (code) {
       case SHIFT_KEY:
       case SPACEBAR_KEY:
+        console.log("cpacebar");
         grid.toggleGridDirection(cell);
         break;
       case DELETE_KEY:

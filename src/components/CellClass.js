@@ -18,6 +18,7 @@ export default class Cell {
   toggleActive() {}
 
   setValue(value = "") {
+    console.log("set value!", value);
     const lastLetter = value.slice(-1).toUpperCase();
     if (lastLetter === this.previousValue) {
       // use the second to last letter if there is one

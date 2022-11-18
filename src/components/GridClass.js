@@ -42,6 +42,46 @@ export default class Grid {
     }
   }
 
+  populate(data) {
+    // reset all the cells
+    this.cellsArray = [];
+    this.cellsObject = {};
+    this.cellRows = [];
+
+    this.answerKey = data.answerKey;
+    let cells;
+    for (let y = 0; y < this.crossSpan; y++) {
+      cells = [];
+      for (let x = 0; x < this.downSpan; x++) {
+        const cell = new Cell({
+          x,
+          y,
+        });
+        cell.correctValue = data.cellsObject[`${cell.id}`].correctValue;
+        cell.value = data.cellsObject[`${cell.id}`].value;
+        cell.mode = data.cellsObject[`${cell.id}`].mode;
+        cell.cellHasFocus = false;
+        cell.displayNumber = data.cellsObject[`${cell.id}`].displayNumber;
+        cell.acrossWord = data.cellsObject[`${cell.id}`].acrossWord;
+        cell.downWord = data.cellsObject[`${cell.id}`].downWord;
+        cell.firstCellInAcrossWordXCoord =
+          data.cellsObject[`${cell.id}`].firstCellInAcrossWordXCoord;
+        cell.lastCellInAcrossWordXCoord =
+          data.cellsObject[`${cell.id}`].lastCellInAcrossWordXCoord;
+        cell.firstCellInDownWordYCoord =
+          data.cellsObject[`${cell.id}`].firstCellInDownWordYCoord;
+        cell.lastCellInDownWordYCoord =
+          data.cellsObject[`${cell.id}`].lastCellInDownWordYCoord;
+        this.cellsArray.push(cell);
+        cells.push(cell);
+        this.cellsObject[`${cell.id}`] = cell;
+      }
+      this.cellRows.push(cells);
+    }
+    this.startCellsWordsAcross = data.startCellsWordsAcross;
+    this.startCellsWordsDown = data.startCellsWordsDown;
+  }
+
   setCellsForPlayerMode() {
     this.cellWithFocus.disableFocus();
     this.answerKey = {};
@@ -122,6 +162,7 @@ export default class Grid {
   }
 
   toggleGridDirection(cell) {
+    console.log("grid class toggle", this.gridDirection);
     this.gridDirection =
       this.gridDirection === GO_LEFT_TO_RIGHT
         ? GO_TOP_TO_BOTTOM
@@ -140,6 +181,7 @@ export default class Grid {
   }
 
   highlightDirection(cell, directionIsChanged = false) {
+    console.log("highlight!", cell.mode);
     if (cell.mode === PLAY_MODE) {
       this.highlightWord(cell, directionIsChanged);
     } else if (cell.mode === EDIT_MODE) {
