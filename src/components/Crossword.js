@@ -74,7 +74,6 @@ const Crossword = ({ grid }) => {
       const emptyCellsRemain = Object.values(grid.workingAnswersKey).includes(
         null
       );
-      console.log(Object.values(grid.workingAnswersKey));
       return cell.mode === DEAD_CELL_MODE || (!!cell.value && emptyCellsRemain);
     }
     return cell.mode === DEAD_CELL_MODE;
@@ -152,7 +151,6 @@ const Crossword = ({ grid }) => {
 
     setCellWithFocus(`${nextCell.column}:${nextCell.row}`);
   }
-
   return (
     <div className="relative w-fit m-auto" ref={wrapperRef}>
       {grid.cellRows.map((row, i) => {

@@ -80,7 +80,7 @@ function CellContainer({
           goToNextCell({
             row,
             column,
-            // overrideDirectionMode: GO_RIGHT_TO_LEFT,
+            overrideDirectionMode: GO_RIGHT_TO_LEFT,
           });
         }
         if (directionMode === GO_TOP_TO_BOTTOM) {
