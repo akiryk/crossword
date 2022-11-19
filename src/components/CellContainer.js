@@ -29,15 +29,20 @@ function CellContainer({
   setCellWithFocus,
   highlightDirection,
   showPreview,
+  cellValue,
+  cellSubscribe,
+  cellSetValue,
+  cellMode,
+  cellId,
+  updateWorkingAnswers,
 }) {
   const inputRef = useRef();
-  const [value, setValue] = useState(cell?.value);
+  const [value, setValue] = useState(cellValue);
   const [isInSelectedRowOrColumn, setIsInSelectedRowOrColumn] = useState(false);
   const [isSymmetrical, setIsSymmetrical] = useState(false);
 
   useEffect(() => {
-    // if (cellIsInteractive) {
-    cell.subscribe((newCellData) => {
+    cellSubscribe((newCellData) => {
       setValue(newCellData.value);
       setIsInSelectedRowOrColumn(newCellData.isInSelectedRowOrColumn);
       setIsSymmetrical(newCellData.isSymmetrical);
@@ -47,17 +52,17 @@ function CellContainer({
       }
     });
     // }
-  }, [cell]);
+  }, [cellSubscribe]);
 
   function handleChange(event) {
     // if (cellIsInteractive) {
     const value = event.target.value?.trim();
     if (value) {
-      cell.setValue(value);
-      if (cell.mode === PLAY_MODE) {
-        grid.updateWorkingAnswers(cell);
+      cellSetValue(value);
+      if (cellMode === PLAY_MODE) {
+        updateWorkingAnswers(cell);
       }
-      if (cell.mode === EDIT_MODE) {
+      if (cellMode === EDIT_MODE) {
         grid.ensureRotationalSymmetry(cell);
       }
       // don't go to next cell until after updating working answers!
@@ -71,33 +76,34 @@ function CellContainer({
     //   return;
     // }
     const code = event?.code.toUpperCase();
-    const directionMode = grid.gridDirection;
+    // const grid.directionMode = grid.gridDirection;
     switch (code) {
       case SPACEBAR_KEY:
         grid.toggleGridDirection(cell);
         break;
       case DELETE_KEY:
-        cell.setValue("");
-        if (cell.mode === PLAY_MODE) {
-          grid.updateWorkingAnswers(cell);
-        } else if (cell.mode === EDIT_MODE) {
+        cellSetValue("");
+        if (cellMode === PLAY_MODE) {
+          updateWorkingAnswers(cell);
+        } else if (cellMode === EDIT_MODE) {
           grid.ensureRotationalSymmetry(cell);
         }
-        // if (directionMode === GO_LEFT_TO_RIGHT) {
-        //   goToNextCell({
-        //     row,
-        //     column,
-        //     overrideDirectionMode: GO_RIGHT_TO_LEFT,
-        //     isDelete: true,
-        //   });
-        // }
-        // if (directionMode === GO_TOP_TO_BOTTOM) {
-        //   goToNextCell({
-        //     row,
-        //     column,
-        //     overrideDirectionMode: GO_BOTTOM_TO_TOP,
-        //   });
-        // }
+        if (grid.gridDirection === GO_LEFT_TO_RIGHT) {
+          goToNextCell({
+            row,
+            column,
+            overrideDirectionMode: GO_RIGHT_TO_LEFT,
+            isDelete: true,
+          });
+        }
+        if (grid.gridDirection === GO_TOP_TO_BOTTOM) {
+          goToNextCell({
+            row,
+            column,
+            overrideDirectionMode: GO_BOTTOM_TO_TOP,
+            isDelete: true,
+          });
+        }
         break;
       case LEFT_ARROW_KEY:
         goToNextCell({ row, column, overrideDirectionMode: GO_RIGHT_TO_LEFT });
@@ -129,7 +135,7 @@ function CellContainer({
     // if (!cellIsInteractive) {
     //   return;
     // }
-    setCellWithFocus(cell.id);
+    setCellWithFocus(cellId);
     highlightDirection(cell);
   }
   let cellInputClasses =
@@ -147,11 +153,11 @@ function CellContainer({
   const offColor = showPreview ? "bg-black" : "bg-gray-300";
   const outlineColor = showPreview ? "outline-gray-600" : "outline-gray-400";
 
-  switch (cell.mode) {
+  switch (cellMode) {
     case EDIT_MODE:
       if (isInSelectedRowOrColumn && !showPreview) {
         bgColor = isSymmetrical ? "bg-cyan-100" : "bg-gray-200";
-      } else if (cell.value) {
+      } else if (cellValue) {
         bgColor = "bg-white";
       } else {
         bgColor = isSymmetrical ? "bg-white" : offColor;
@@ -176,14 +182,14 @@ function CellContainer({
     <Cell
       inputClasses={inputClasses}
       inputRef={inputRef}
-      value={value}
+      value={showPreview ? "" : value}
       onChange={handleChange}
       onKeyDown={handleKeyDown}
       onClick={handleClick}
       onFocus={handleFocus}
       displayNumber={displayNumber}
-      id={cell.id}
-      mode={cell.mode}
+      id={cellId}
+      mode={cellMode}
       isInSelectedRowOrColumn={isInSelectedRowOrColumn}
     />
   );

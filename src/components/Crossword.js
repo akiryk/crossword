@@ -64,7 +64,7 @@ const Crossword = ({ grid }) => {
     return { row: newRow, column: newColumn };
   }
 
-  function getCellAbove({ currentRow, currentColumn }) {
+  function getCellAbove({ currentRow, currentColumn, overrideDirectionMode }) {
     let newRow = SPAN;
     if (currentRow > 0) {
       newRow = currentRow - 1;
@@ -144,6 +144,7 @@ const Crossword = ({ grid }) => {
     const nextCellMode = overrideDirectionMode
       ? overrideDirectionMode
       : grid.gridDirection;
+    console.log(nextCellMode);
     let nextCellFunction = () => {};
     switch (nextCellMode) {
       case GO_RIGHT_TO_LEFT:
@@ -194,8 +195,15 @@ const Crossword = ({ grid }) => {
                       displayNumber={cell.displayNumber}
                       setCellWithFocus={setCellWithFocus}
                       highlightDirection={highlightDirection}
-                      setCellValue
                       showPreview={togglePreview}
+                      cellValue={cell.value}
+                      cellSubscribe={cell.subscribe.bind(cell)}
+                      cellSetValue={cell.setValue.bind(cell)}
+                      cellMode={cell.mode}
+                      cellId={cell.id}
+                      updateWorkingAnswers={grid.updateWorkingAnswers.bind(
+                        grid
+                      )}
                     />
                   );
                 } else if (cell.mode === VIEW_ONLY_MODE) {
