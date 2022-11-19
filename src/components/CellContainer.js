@@ -11,13 +11,13 @@ import {
   DEAD_CELL_MODE,
 } from "../utils/constants";
 
-const LEFT_ARROW_KEY = 37;
-const RIGHT_ARROW_KEY = 39;
-const UP_ARROW_KEY = 38;
-const DOWN_ARROW_KEY = 40;
-const DELETE_KEY = 8;
+const LEFT_ARROW_KEY = "ARROWLEFT";
+const RIGHT_ARROW_KEY = "ARROWRIGHT";
+const UP_ARROW_KEY = "ARROWUP";
+const DOWN_ARROW_KEY = "ARROWDOWN";
+const DELETE_KEY = "BACKSPACE";
 // const SHIFT_KEY = 16;
-const SPACEBAR_KEY = 32;
+const SPACEBAR_KEY = "SPACE";
 
 function CellContainer({
   row,
@@ -70,7 +70,7 @@ function CellContainer({
     // if (!cellIsInteractive) {
     //   return;
     // }
-    const code = event?.keyCode;
+    const code = event?.code.toUpperCase();
     const directionMode = grid.gridDirection;
     switch (code) {
       case SPACEBAR_KEY:
