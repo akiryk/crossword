@@ -109,6 +109,15 @@ export default class Grid {
     });
   }
 
+  ensureRotationalSymmetry({ x: x1, y: y1, value }) {
+    const x2 = SPAN - x1 - 1;
+    const y2 = SPAN - y1 - 1;
+    const value1 = this.cellsObject[`${x1}:${y1}`].value;
+    const value2 = this.cellsObject[`${x2}:${y2}`].value;
+    this.cellsObject[`${x1}:${y1}`].toggleIsSymmetrical(!!value1 || !!value2);
+    this.cellsObject[`${x2}:${y2}`].toggleIsSymmetrical(!!value1 || !!value2);
+  }
+
   subscribe(update) {
     this.listeners.add(update);
     return () => this.listeners.delete(update);

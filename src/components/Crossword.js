@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import CellContainer from "./CellContainer";
 import { DeadCell, ViewOnlyCell } from "./Cell";
 import {
@@ -13,6 +13,7 @@ import {
   DEAD_CELL_MODE,
   HIGHEST_INDEX,
 } from "../utils/constants";
+import { Button } from "./Common";
 
 function useOutsideAlerter(ref) {
   React.useEffect(() => {
@@ -34,6 +35,8 @@ function useOutsideAlerter(ref) {
 
 const Crossword = ({ grid }) => {
   const wrapperRef = React.useRef(null);
+  const [togglePreview, setTogglePreview] = useState(false);
+
   useOutsideAlerter(wrapperRef);
 
   if (!grid) {
@@ -69,8 +72,8 @@ const Crossword = ({ grid }) => {
     return { row: newRow, column: currentColumn };
   }
 
-  function shouldSkipNextCell(cell) {
-    if (cell.mode === PLAY_MODE) {
+  function shouldSkipNextCell(cell, overrideDirectionMode) {
+    if (cell.mode === PLAY_MODE && !overrideDirectionMode) {
       const emptyCellsRemain = Object.values(grid.workingAnswersKey).includes(
         null
       );
@@ -79,7 +82,11 @@ const Crossword = ({ grid }) => {
     return cell.mode === DEAD_CELL_MODE;
   }
 
-  function getCellToTheRight({ currentRow, currentColumn }) {
+  function getCellToTheRight({
+    currentRow,
+    currentColumn,
+    overrideDirectionMode,
+  }) {
     let newColumn = currentColumn + 1;
     let newRow = currentRow;
     if (newColumn >= SPAN) {
@@ -87,7 +94,7 @@ const Crossword = ({ grid }) => {
       newRow = currentRow + 1 === SPAN ? 0 : currentRow + 1;
     }
     const possibleNextCell = grid.cellsObject[`${newColumn}:${newRow}`];
-    while (shouldSkipNextCell(possibleNextCell)) {
+    while (shouldSkipNextCell(possibleNextCell, overrideDirectionMode)) {
       return getCellToTheRight({
         currentRow: newRow,
         currentColumn: newColumn,
@@ -96,7 +103,12 @@ const Crossword = ({ grid }) => {
     return { row: newRow, column: newColumn };
   }
 
-  function getCellToTheLeft({ currentRow, currentColumn }) {
+  function getCellToTheLeft({
+    currentRow,
+    currentColumn,
+    isDelete,
+    overrideDirectionMode,
+  }) {
     let nextColumn = currentColumn;
     let nextRow = currentRow;
     if (currentColumn > 0) {
@@ -106,7 +118,7 @@ const Crossword = ({ grid }) => {
       nextRow = currentRow - 1 < 0 ? HIGHEST_INDEX : currentRow - 1;
     }
     const possibleNextCell = grid.cellsObject[`${nextColumn}:${nextRow}`];
-    while (shouldSkipNextCell(possibleNextCell)) {
+    while (shouldSkipNextCell(possibleNextCell, overrideDirectionMode)) {
       return getCellToTheLeft({
         currentRow: nextRow,
         currentColumn: nextColumn,
@@ -123,7 +135,12 @@ const Crossword = ({ grid }) => {
     grid.highlightDirection(cell);
   }
 
-  function goToNextCell({ row, column, overrideDirectionMode }) {
+  function goToNextCell({
+    row,
+    column,
+    overrideDirectionMode,
+    isDelete = false,
+  }) {
     const nextCellMode = overrideDirectionMode
       ? overrideDirectionMode
       : grid.gridDirection;
@@ -147,49 +164,59 @@ const Crossword = ({ grid }) => {
     const nextCell = nextCellFunction({
       currentRow: row,
       currentColumn: column,
+      isDelete,
+      overrideDirectionMode,
     });
 
     setCellWithFocus(`${nextCell.column}:${nextCell.row}`);
   }
+
+  function handleTogglePreview() {
+    setTogglePreview((showPreview) => !showPreview);
+  }
+
   return (
-    <div className="relative w-fit m-auto" ref={wrapperRef}>
-      {grid.cellRows.map((row, i) => {
-        return (
-          <div key={i} className="flex justify-center flex-wrap">
-            {row.map((cell) => {
-              if (cell.mode === PLAY_MODE || cell.mode === EDIT_MODE) {
-                return (
-                  <CellContainer
-                    row={cell.y}
-                    column={cell.x}
-                    goToNextCell={goToNextCell}
-                    cell={cell}
-                    grid={grid}
-                    key={cell.id}
-                    displayNumber={cell.displayNumber}
-                    setCellWithFocus={setCellWithFocus}
-                    highlightDirection={highlightDirection}
-                    cellIsInteractive
-                    setCellValue
-                  />
-                );
-              } else if (cell.mode === VIEW_ONLY_MODE) {
-                return (
-                  <ViewOnlyCell
-                    key={cell.id}
-                    displayNumber={cell.displayNumber}
-                  >
-                    {cell.value}
-                  </ViewOnlyCell>
-                );
-              } else {
-                return <DeadCell key={cell.id} />;
-              }
-            })}
-          </div>
-        );
-      })}
-    </div>
+    <>
+      <div className="relative w-fit m-auto" ref={wrapperRef}>
+        {grid.cellRows.map((row, i) => {
+          return (
+            <div key={i} className="flex justify-center flex-wrap">
+              {row.map((cell) => {
+                if (cell.mode === PLAY_MODE || cell.mode === EDIT_MODE) {
+                  return (
+                    <CellContainer
+                      row={cell.y}
+                      column={cell.x}
+                      goToNextCell={goToNextCell}
+                      cell={cell}
+                      grid={grid}
+                      key={cell.id}
+                      displayNumber={cell.displayNumber}
+                      setCellWithFocus={setCellWithFocus}
+                      highlightDirection={highlightDirection}
+                      setCellValue
+                      showPreview={togglePreview}
+                    />
+                  );
+                } else if (cell.mode === VIEW_ONLY_MODE) {
+                  return (
+                    <ViewOnlyCell
+                      key={cell.id}
+                      displayNumber={cell.displayNumber}
+                    >
+                      {cell.value}
+                    </ViewOnlyCell>
+                  );
+                } else {
+                  return <DeadCell key={cell.id} />;
+                }
+              })}
+            </div>
+          );
+        })}
+      </div>
+      <Button onClick={handleTogglePreview}>Preview</Button>
+    </>
   );
 };
 

@@ -28,43 +28,48 @@ function CellContainer({
   displayNumber,
   setCellWithFocus,
   highlightDirection,
-  cellIsInteractive,
+  showPreview,
 }) {
   const inputRef = useRef();
   const [value, setValue] = useState(cell?.value);
   const [isInSelectedRowOrColumn, setIsInSelectedRowOrColumn] = useState(false);
+  const [isSymmetrical, setIsSymmetrical] = useState(false);
 
   useEffect(() => {
-    if (cellIsInteractive) {
-      cell.subscribe((newCellData) => {
-        setValue(newCellData.value);
-        setIsInSelectedRowOrColumn(newCellData.isInSelectedRowOrColumn);
-        if (newCellData.cellHasFocus) {
-          inputRef.current.focus();
-          inputRef.current.select();
-        }
-      });
-    }
-  }, [cell, cellIsInteractive]);
+    // if (cellIsInteractive) {
+    cell.subscribe((newCellData) => {
+      setValue(newCellData.value);
+      setIsInSelectedRowOrColumn(newCellData.isInSelectedRowOrColumn);
+      setIsSymmetrical(newCellData.isSymmetrical);
+      if (newCellData.cellHasFocus) {
+        inputRef.current.focus();
+        inputRef.current.select();
+      }
+    });
+    // }
+  }, [cell]);
 
   function handleChange(event) {
-    if (cellIsInteractive) {
-      const value = event.target.value?.trim();
-      if (value) {
-        cell.setValue(value);
-        if (cell.mode === PLAY_MODE) {
-          grid.updateWorkingAnswers(cell);
-        }
-        // don't go to next cell until after updating working answers!
-        goToNextCell({ row, column });
+    // if (cellIsInteractive) {
+    const value = event.target.value?.trim();
+    if (value) {
+      cell.setValue(value);
+      if (cell.mode === PLAY_MODE) {
+        grid.updateWorkingAnswers(cell);
       }
+      if (cell.mode === EDIT_MODE) {
+        grid.ensureRotationalSymmetry(cell);
+      }
+      // don't go to next cell until after updating working answers!
+      goToNextCell({ row, column });
     }
   }
+  // }
 
   function handleKeyDown(event) {
-    if (!cellIsInteractive) {
-      return;
-    }
+    // if (!cellIsInteractive) {
+    //   return;
+    // }
     const code = event?.keyCode;
     const directionMode = grid.gridDirection;
     switch (code) {
@@ -75,21 +80,24 @@ function CellContainer({
         cell.setValue("");
         if (cell.mode === PLAY_MODE) {
           grid.updateWorkingAnswers(cell);
+        } else if (cell.mode === EDIT_MODE) {
+          grid.ensureRotationalSymmetry(cell);
         }
-        if (directionMode === GO_LEFT_TO_RIGHT) {
-          goToNextCell({
-            row,
-            column,
-            overrideDirectionMode: GO_RIGHT_TO_LEFT,
-          });
-        }
-        if (directionMode === GO_TOP_TO_BOTTOM) {
-          goToNextCell({
-            row,
-            column,
-            overrideDirectionMode: GO_BOTTOM_TO_TOP,
-          });
-        }
+        // if (directionMode === GO_LEFT_TO_RIGHT) {
+        //   goToNextCell({
+        //     row,
+        //     column,
+        //     overrideDirectionMode: GO_RIGHT_TO_LEFT,
+        //     isDelete: true,
+        //   });
+        // }
+        // if (directionMode === GO_TOP_TO_BOTTOM) {
+        //   goToNextCell({
+        //     row,
+        //     column,
+        //     overrideDirectionMode: GO_BOTTOM_TO_TOP,
+        //   });
+        // }
         break;
       case LEFT_ARROW_KEY:
         goToNextCell({ row, column, overrideDirectionMode: GO_RIGHT_TO_LEFT });
@@ -109,26 +117,26 @@ function CellContainer({
   }
 
   function handleClick(event) {
-    if (cellIsInteractive) {
-      // If it's a double click, highlight the row or the column
-      if (event.detail === 2) {
-        grid.toggleGridDirection(cell);
-      }
+    // if (cellIsInteractive) {
+    // If it's a double click, highlight the row or the column
+    if (event.detail === 2) {
+      grid.toggleGridDirection(cell);
     }
+    // }
   }
 
   function handleFocus() {
-    if (!cellIsInteractive) {
-      return;
-    }
+    // if (!cellIsInteractive) {
+    //   return;
+    // }
     setCellWithFocus(cell.id);
     highlightDirection(cell);
   }
   let cellInputClasses =
     "caret-transparent cursor-pointer selection:bg-transparent ";
-  if (cellIsInteractive) {
-    cellInputClasses += " focus:bg-cyan-300";
-  }
+  // if (cellIsInteractive) {
+  cellInputClasses += " focus:bg-cyan-300";
+  // }
 
   const cellAppearanceClasses = SHARED_CELL_STYLES;
   const cellTextClasses = SHARED_CELL_FONT_STYLES;
@@ -136,14 +144,17 @@ function CellContainer({
 
   let bgColor;
 
+  const offColor = showPreview ? "bg-black" : "bg-gray-300";
+  const outlineColor = showPreview ? "outline-gray-600" : "outline-gray-400";
+
   switch (cell.mode) {
     case EDIT_MODE:
-      if (isInSelectedRowOrColumn) {
-        bgColor = "bg-cyan-100";
+      if (isInSelectedRowOrColumn && !showPreview) {
+        bgColor = isSymmetrical ? "bg-cyan-100" : "bg-gray-200";
       } else if (cell.value) {
         bgColor = "bg-white";
       } else {
-        bgColor = "bg-neutral-200";
+        bgColor = isSymmetrical ? "bg-white" : offColor;
       }
       break;
     // eslint ignore no-fallthrough
@@ -159,7 +170,7 @@ function CellContainer({
       bgColor = "bg-neutral-200";
   }
 
-  inputClasses = `${inputClasses} ${bgColor}`;
+  inputClasses = `${inputClasses} ${bgColor} ${outlineColor}`;
 
   return (
     <Cell

@@ -2,7 +2,7 @@ import React from "react";
 
 export const SHARED_CELL_FONT_STYLES = "text-center text-xl uppercase";
 export const SHARED_CELL_STYLES =
-  "w-10 h-10 outline outline-1 outline-slate-400 border-none";
+  "w-10 h-10 outline outline-1 outline-gray-400 border-none";
 
 export const CellWrapper = ({ children, displayNumber }) => (
   <div className="relative">

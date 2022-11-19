@@ -52,6 +52,7 @@ export default class Cell {
     this.lastCellInAcrossWordXCoord = -1;
     this.firstCellInDownWordYCoord = -1;
     this.lastCellInDownWordYCoord = -1;
+    this.isSymmetrical = false;
   }
 
   reset() {
@@ -69,6 +70,11 @@ export default class Cell {
 
   setDisplayNumber(number) {
     this.displayNumber = number;
+    this.update();
+  }
+
+  toggleIsSymmetrical(isSymmetrical = false) {
+    this.isSymmetrical = isSymmetrical;
     this.update();
   }
 
