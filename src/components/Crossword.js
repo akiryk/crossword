@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import CellContainer from "./CellContainer";
+import { useGridContext } from "../context/GridProvider";
 import { DeadCell, ViewOnlyCell } from "./Cell";
 import {
   GO_TOP_TO_BOTTOM,
@@ -33,10 +34,10 @@ function useOutsideAlerter(ref) {
   }, [ref]);
 }
 
-const Crossword = ({ grid }) => {
+const Crossword = () => {
   const wrapperRef = React.useRef(null);
   const [togglePreview, setTogglePreview] = useState(false);
-
+  const grid = useGridContext();
   useOutsideAlerter(wrapperRef);
 
   if (!grid) {
@@ -175,7 +176,6 @@ const Crossword = ({ grid }) => {
   function handleTogglePreview() {
     setTogglePreview((showPreview) => !showPreview);
   }
-
   return (
     <>
       <div className="relative w-fit m-auto" ref={wrapperRef}>
@@ -190,7 +190,6 @@ const Crossword = ({ grid }) => {
                       column={cell.x}
                       goToNextCell={goToNextCell}
                       cell={cell}
-                      grid={grid}
                       key={cell.id}
                       displayNumber={cell.displayNumber}
                       setCellWithFocus={setCellWithFocus}
@@ -201,9 +200,6 @@ const Crossword = ({ grid }) => {
                       cellSetValue={cell.setValue.bind(cell)}
                       cellMode={cell.mode}
                       cellId={cell.id}
-                      updateWorkingAnswers={grid.updateWorkingAnswers.bind(
-                        grid
-                      )}
                     />
                   );
                 } else if (cell.mode === VIEW_ONLY_MODE) {

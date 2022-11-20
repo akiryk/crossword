@@ -10,6 +10,7 @@ import {
   VIEW_ONLY_MODE,
   DEAD_CELL_MODE,
 } from "../utils/constants";
+import { useGridContext } from "../context/GridProvider";
 
 const LEFT_ARROW_KEY = "ARROWLEFT";
 const RIGHT_ARROW_KEY = "ARROWRIGHT";
@@ -24,7 +25,6 @@ function CellContainer({
   column,
   goToNextCell,
   cell,
-  grid,
   displayNumber,
   setCellWithFocus,
   highlightDirection,
@@ -34,12 +34,12 @@ function CellContainer({
   cellSetValue,
   cellMode,
   cellId,
-  updateWorkingAnswers,
 }) {
   const inputRef = useRef();
   const [value, setValue] = useState(cellValue);
   const [isInSelectedRowOrColumn, setIsInSelectedRowOrColumn] = useState(false);
   const [isSymmetrical, setIsSymmetrical] = useState(false);
+  const grid = useGridContext();
 
   useEffect(() => {
     cellSubscribe((newCellData) => {
@@ -60,7 +60,7 @@ function CellContainer({
     if (value) {
       cellSetValue(value);
       if (cellMode === PLAY_MODE) {
-        updateWorkingAnswers(cell);
+        grid.updateWorkingAnswers(cell);
       }
       if (cellMode === EDIT_MODE) {
         grid.ensureRotationalSymmetry(cell);
@@ -84,7 +84,7 @@ function CellContainer({
       case DELETE_KEY:
         cellSetValue("");
         if (cellMode === PLAY_MODE) {
-          updateWorkingAnswers(cell);
+          grid.updateWorkingAnswers(cell);
         } else if (cellMode === EDIT_MODE) {
           grid.ensureRotationalSymmetry(cell);
         }

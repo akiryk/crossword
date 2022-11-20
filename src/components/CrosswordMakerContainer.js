@@ -114,11 +114,14 @@ function CrosswordMakerContainer() {
     setShouldShowHintingForm(true);
   }
 
+  if (!grid) {
+    return <p>loading...</p>;
+  }
   return (
-    <GridContextProvider value={grid}>
+    <GridContextProvider grid={grid}>
       <div className="text-center">
         <div className="m-5">
-          <Crossword grid={grid} />
+          <Crossword />
         </div>
         <div className="flex">
           <div className="">

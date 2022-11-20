@@ -176,8 +176,6 @@ export default class Grid {
         : GO_LEFT_TO_RIGHT;
     this.currentColumn = -1;
     this.currentRow = -1;
-
-    // TODO: Fix this, it's kind of hacky.
     this.highlightDirection(cell, true);
   }
 
