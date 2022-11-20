@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "./Common";
+import GridContextProvider from "../context/GridProvider";
 import Grid from "./GridClass";
 import Crossword from "./Crossword";
 import { SPAN } from "../utils/constants";
@@ -114,27 +115,29 @@ function CrosswordMakerContainer() {
   }
 
   return (
-    <div className="text-center">
-      <div className="m-5">
-        <Crossword grid={grid} />
-      </div>
-      <div className="flex">
-        <div className="">
-          <Button onClick={makeHints} disabled={isHintButtonDisabled}>
-            Make Hints
-          </Button>
+    <GridContextProvider value={grid}>
+      <div className="text-center">
+        <div className="m-5">
+          <Crossword grid={grid} />
         </div>
-        <div className="">
-          <Button onClick={handleClearPuzzle}>Clear</Button>
-        </div>
-
-        {shouldShowHintingForm && (
+        <div className="flex">
           <div className="">
-            <HintingForm grid={grid} />
+            <Button onClick={makeHints} disabled={isHintButtonDisabled}>
+              Make Hints
+            </Button>
           </div>
-        )}
+          <div className="">
+            <Button onClick={handleClearPuzzle}>Clear</Button>
+          </div>
+
+          {shouldShowHintingForm && (
+            <div className="">
+              <HintingForm grid={grid} />
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </GridContextProvider>
   );
 }
 
