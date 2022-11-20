@@ -22,28 +22,18 @@ const DELETE_KEY = "BACKSPACE";
 // const SHIFT_KEY = 16;
 const SPACEBAR_KEY = "SPACE";
 
-function CellContainer({
-  row,
-  column,
-  cell,
-  displayNumber,
-  setCellWithFocus,
-  highlightDirection,
-  showPreview,
-  cellValue,
-  cellSubscribe,
-  cellSetValue,
-  cellMode,
-  cellId,
-}) {
+function CellContainer({ cell, showPreview }) {
+  const { y: row, x: column, displayNumber, mode, id } = cell;
   const inputRef = useRef();
-  const [value, setValue] = useState(cellValue);
+  const [value, setValue] = useState(cell.value);
   const [isInSelectedRowOrColumn, setIsInSelectedRowOrColumn] = useState(false);
   const [isSymmetrical, setIsSymmetrical] = useState(false);
-  const grid = useGridContext();
+  const { grid } = useGridContext();
+
+  const subscribe = cell.subscribe.bind(cell);
 
   useEffect(() => {
-    cellSubscribe((newCellData) => {
+    subscribe((newCellData) => {
       setValue(newCellData.value);
       setIsInSelectedRowOrColumn(newCellData.isInSelectedRowOrColumn);
       setIsSymmetrical(newCellData.isSymmetrical);
@@ -53,7 +43,15 @@ function CellContainer({
       }
     });
     // }
-  }, [cellSubscribe]);
+  }, [subscribe]);
+
+  function setCellWithFocus(id) {
+    grid.setCellWithFocus(id);
+  }
+
+  function highlightDirection(cell) {
+    grid.highlightDirection(cell);
+  }
 
   function getCellBelow({ currentRow, currentColumn }) {
     let newRow = currentRow;
@@ -85,13 +83,13 @@ function CellContainer({
   }
 
   function shouldSkipNextCell(cell, overrideDirectionMode) {
-    if (cell.mode === PLAY_MODE && !overrideDirectionMode) {
+    if (mode === PLAY_MODE && !overrideDirectionMode) {
       const emptyCellsRemain = Object.values(grid.workingAnswersKey).includes(
         null
       );
-      return cell.mode === DEAD_CELL_MODE || (!!cell.value && emptyCellsRemain);
+      return mode === DEAD_CELL_MODE || (!!value && emptyCellsRemain);
     }
-    return cell.mode === DEAD_CELL_MODE;
+    return mode === DEAD_CELL_MODE;
   }
 
   function getCellToTheRight({
@@ -139,12 +137,7 @@ function CellContainer({
     return { row: nextRow, column: nextColumn };
   }
 
-  function goToNextCell({
-    row,
-    column,
-    isDelete = false,
-    overrideDirectionMode = "",
-  }) {
+  function goToNextCell({ isDelete = false, overrideDirectionMode = "" }) {
     let nextCellFunction = () => {};
     let direction = overrideDirectionMode
       ? overrideDirectionMode
@@ -176,7 +169,6 @@ function CellContainer({
       currentColumn: column,
       isDelete,
     });
-
     setCellWithFocus(`${nextCell.column}:${nextCell.row}`);
   }
 
@@ -184,15 +176,15 @@ function CellContainer({
     // if (cellIsInteractive) {
     const value = event.target.value?.trim();
     if (value) {
-      cellSetValue(value);
-      if (cellMode === PLAY_MODE) {
+      cell.setValue(value);
+      if (mode === PLAY_MODE) {
         grid.updateWorkingAnswers(cell);
       }
-      if (cellMode === EDIT_MODE) {
+      if (mode === EDIT_MODE) {
         grid.ensureRotationalSymmetry(cell);
       }
       // don't go to next cell until after updating working answers!
-      goToNextCell({ row, column });
+      goToNextCell(cell);
     }
   }
   // }
@@ -208,10 +200,10 @@ function CellContainer({
         grid.toggleGridDirection(cell);
         break;
       case DELETE_KEY:
-        cellSetValue("");
-        if (cellMode === PLAY_MODE) {
+        cell.setValue("");
+        if (mode === PLAY_MODE) {
           grid.updateWorkingAnswers(cell);
-        } else if (cellMode === EDIT_MODE) {
+        } else if (mode === EDIT_MODE) {
           grid.ensureRotationalSymmetry(cell);
         }
         goToNextCell({
@@ -250,7 +242,7 @@ function CellContainer({
     // if (!cellIsInteractive) {
     //   return;
     // }
-    setCellWithFocus(cellId);
+    setCellWithFocus(cell.id);
     highlightDirection(cell);
   }
   let cellInputClasses =
@@ -268,11 +260,11 @@ function CellContainer({
   const offColor = showPreview ? "bg-black" : "bg-gray-300";
   const outlineColor = showPreview ? "outline-gray-600" : "outline-gray-400";
 
-  switch (cellMode) {
+  switch (mode) {
     case EDIT_MODE:
       if (isInSelectedRowOrColumn && !showPreview) {
         bgColor = isSymmetrical ? "bg-cyan-100" : "bg-gray-200";
-      } else if (cellValue) {
+      } else if (value) {
         bgColor = "bg-white";
       } else {
         bgColor = isSymmetrical ? "bg-white" : offColor;
@@ -303,8 +295,8 @@ function CellContainer({
       onClick={handleClick}
       onFocus={handleFocus}
       displayNumber={displayNumber}
-      id={cellId}
-      mode={cellMode}
+      id={id}
+      mode={mode}
       isInSelectedRowOrColumn={isInSelectedRowOrColumn}
     />
   );
