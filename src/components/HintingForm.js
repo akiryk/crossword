@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCrosswordContext } from "../context/CrosswordContextProvider";
+import { useGridContext } from "../context/GridProvider";
 
 const HINT_SIZE = "50";
 
-const HintingFormContainer = ({ grid }) => {
-  const { startCellsWordsAcross, startCellsWordsDown } = grid;
-
-  const { setGrid, setAcrossHints, setDownHints } = useCrosswordContext();
+const HintingFormContainer = () => {
+  const {
+    grid,
+    setCellsForPlayerMode,
+    startCellsWordsAcross,
+    startCellsWordsDown,
+  } = useGridContext();
+  const { setAcrossHints, setDownHints } = useCrosswordContext();
   const navigate = useNavigate();
   const [acrossWordHintFields, setAcrossWordHintFields] = useState([]);
   const [downWordHintFields, setDownWordHintFields] = useState([]);
@@ -46,8 +51,7 @@ const HintingFormContainer = ({ grid }) => {
     event.preventDefault();
     Promise.resolve()
       .then(() => {
-        grid.setCellsForPlayerMode();
-        setGrid(grid);
+        setCellsForPlayerMode();
         setAcrossHints(acrossWordHintFields);
         setDownHints(downWordHintFields);
       })
@@ -68,6 +72,9 @@ const HintingFormContainer = ({ grid }) => {
     setDownWordHintFields(data);
   };
 
+  if (!grid) {
+    return <>loading...</>;
+  }
   return (
     <form onSubmit={handleSubmit}>
       {startCellsWordsAcross.map((cell, index) => {

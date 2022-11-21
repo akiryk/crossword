@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import gameData from "../data.json";
 import { useCrosswordContext } from "../context/CrosswordContextProvider";
-import Grid from "./GridClass";
+import Grid from "../data/GridClass";
 import { SPAN } from "../utils/constants";
 
 const LandingPage = () => {
@@ -11,16 +11,17 @@ const LandingPage = () => {
 
   const handlePlayHardCodedGame = (e) => {
     e.preventDefault();
+    navigate("/player2");
 
-    const grid = new Grid({
-      crossSpan: SPAN,
-      downSpan: SPAN,
-    });
-    grid.populate(gameData.grid);
-    setAcrossHints(gameData.acrossHints);
-    setDownHints(gameData.downHints);
-    setGrid(grid);
-    Promise.resolve().then(() => navigate("/player"));
+    // const grid = new Grid({
+    //   crossSpan: SPAN,
+    //   downSpan: SPAN,
+    // });
+    // grid.populate(gameData.grid);
+    // setAcrossHints(gameData.acrossHints);
+    // setDownHints(gameData.downHints);
+    // setGrid(grid);
+    // Promise.resolve().then(() => navigate("/player"));
   };
 
   return (

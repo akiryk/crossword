@@ -1,30 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button } from "./Common";
-import GridContextProvider from "../context/GridProvider";
-import Grid from "./GridClass";
+import { useGridContext } from "../context/GridProvider";
+
 import Crossword from "./Crossword";
-import { SPAN } from "../utils/constants";
 import HintingForm from "./HintingForm";
 
 function CrosswordMakerContainer() {
   const [shouldShowHintingForm, setShouldShowHintingForm] = useState(false);
   const [isHintButtonDisabled, setIsHintButtonDisabled] = useState(false);
-  // const [toggleRerender, setToggleRender] = useState(false);
-  const [grid, setGrid] = useState(null);
-
-  useEffect(() => {
-    const grid = new Grid({
-      crossSpan: SPAN,
-      downSpan: SPAN,
-    });
-    setGrid(grid);
-  }, []);
+  const { grid } = useGridContext();
 
   function handleClearPuzzle() {
     grid.clearEditorView();
     setShouldShowHintingForm(false);
   }
-
   function makeHints() {
     setIsHintButtonDisabled(true);
     const { cellsArray, cellsObject } = grid;
@@ -118,29 +107,27 @@ function CrosswordMakerContainer() {
     return <p>loading...</p>;
   }
   return (
-    <GridContextProvider grid={grid}>
-      <div className="text-center">
-        <div className="m-5">
-          <Crossword />
-        </div>
-        <div className="flex">
-          <div className="">
-            <Button onClick={makeHints} disabled={isHintButtonDisabled}>
-              Make Hints
-            </Button>
-          </div>
-          <div className="">
-            <Button onClick={handleClearPuzzle}>Clear</Button>
-          </div>
-
-          {shouldShowHintingForm && (
-            <div className="">
-              <HintingForm grid={grid} />
-            </div>
-          )}
-        </div>
+    <div className="text-center">
+      <div className="m-5">
+        <Crossword />
       </div>
-    </GridContextProvider>
+      <div className="flex">
+        <div className="">
+          <Button onClick={makeHints} disabled={isHintButtonDisabled}>
+            Make Hints
+          </Button>
+        </div>
+        <div className="">
+          <Button onClick={handleClearPuzzle}>Clear</Button>
+        </div>
+
+        {shouldShowHintingForm && (
+          <div className="">
+            <HintingForm />
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 

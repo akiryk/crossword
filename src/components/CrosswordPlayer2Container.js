@@ -1,13 +1,29 @@
 import React, { useEffect, useState } from "react";
+import gameData from "../data.json";
 import Crossword from "./Crossword";
 import { Button } from "./Common";
 import { useCrosswordContext } from "../context/CrosswordContextProvider";
 import { useGridContext } from "../context/GridProvider";
 
-const CrosswordPlayerContainer = () => {
-  const { acrossHints, downHints } = useCrosswordContext();
-  const { grid } = useGridContext();
+const CrosswordPlayer = ({
+  downHints,
+  acrossHints,
+  subscribe,
+  getIsSubmissionCorrect,
+  grid,
+  populate,
+  gameData,
+}) => {
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
+  useEffect(() => {
+    console.log("yo", gameData);
+    grid.populate(gameData.grid);
+    // setAcrossHints(gameData.acrossHints);
+    // setDownHints(gameData.downHints);
+    // setGrid(grid);
+    // console.log("yo!");
+    // populate(gameData);
+  }, [grid, gameData]);
   useEffect(() => {
     const unsubscribe = grid.subscribe((isGridComplete) => {
       setIsSubmitButtonEnabled(isGridComplete);
@@ -17,21 +33,18 @@ const CrosswordPlayerContainer = () => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const wrongAnswers = grid.getIsSubmissionCorrect();
+    const wrongAnswers = getIsSubmissionCorrect();
     if (wrongAnswers.length === 0) {
       alert("You did it!");
     } else {
       alert("Sorry, try again...");
     }
   }
-  if (!grid) {
-    return <></>;
-  }
   return (
     <div>
       <h2>Play the game</h2>
       <p>it's cool</p>
-      {grid && <Crossword grid={grid} mode="PLAYING_MODE" />}
+      {grid && <Crossword mode="PLAYING_MODE" />}
       <div className="max-w-5xl m-auto p-5 shadow-md">
         <h3 className="font-bold">Across</h3>
         {acrossHints && (
@@ -67,4 +80,22 @@ const CrosswordPlayerContainer = () => {
   );
 };
 
-export default CrosswordPlayerContainer;
+const CrosswordPlayer2Container = ({ gameData }) => {
+  const { acrossHints, downHints } = useCrosswordContext();
+  const { grid, populate } = useGridContext();
+
+  if (!grid) {
+    return <></>;
+  }
+  return (
+    <CrosswordPlayer
+      grid={grid}
+      acrossHints={acrossHints}
+      downHints={downHints}
+      gameData={gameData}
+      populate={populate}
+    />
+  );
+};
+
+export default CrosswordPlayer2Container;

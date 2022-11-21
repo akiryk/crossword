@@ -28,7 +28,12 @@ function CellContainer({ cell, showPreview }) {
   const [value, setValue] = useState(cell.value);
   const [isInSelectedRowOrColumn, setIsInSelectedRowOrColumn] = useState(false);
   const [isSymmetrical, setIsSymmetrical] = useState(false);
-  const { grid } = useGridContext();
+  const {
+    grid,
+    setCellWithFocus: setCellFocus,
+    highlightDirection: highlightGridDirection,
+    cellsObject,
+  } = useGridContext();
 
   const subscribe = cell.subscribe.bind(cell);
 
@@ -46,11 +51,12 @@ function CellContainer({ cell, showPreview }) {
   }, [subscribe]);
 
   function setCellWithFocus(id) {
-    grid.setCellWithFocus(id);
+    // grid.setCellWithFocus(id);
+    setCellFocus(id);
   }
 
   function highlightDirection(cell) {
-    grid.highlightDirection(cell);
+    highlightGridDirection(cell);
   }
 
   function getCellBelow({ currentRow, currentColumn }) {
@@ -63,7 +69,7 @@ function CellContainer({ cell, showPreview }) {
       newColumn = currentColumn + 1 === SPAN ? 0 : currentColumn + 1;
     }
 
-    const possibleNextCell = grid.cellsObject[`${newColumn}:${newRow}`];
+    const possibleNextCell = cellsObject[`${newColumn}:${newRow}`];
     while (shouldSkipNextCell(possibleNextCell)) {
       newRow = currentRow + 1;
       return getCellBelow({
@@ -103,7 +109,7 @@ function CellContainer({ cell, showPreview }) {
       newColumn = 0;
       newRow = currentRow + 1 === SPAN ? 0 : currentRow + 1;
     }
-    const possibleNextCell = grid.cellsObject[`${newColumn}:${newRow}`];
+    const possibleNextCell = cellsObject[`${newColumn}:${newRow}`];
     while (shouldSkipNextCell(possibleNextCell, overrideDirectionMode)) {
       return getCellToTheRight({
         currentRow: newRow,
@@ -127,7 +133,7 @@ function CellContainer({ cell, showPreview }) {
       nextColumn = HIGHEST_INDEX; // HIGHEST_INDEX = SPAN - 1;
       nextRow = currentRow - 1 < 0 ? HIGHEST_INDEX : currentRow - 1;
     }
-    const possibleNextCell = grid.cellsObject[`${nextColumn}:${nextRow}`];
+    const possibleNextCell = cellsObject[`${nextColumn}:${nextRow}`];
     while (shouldSkipNextCell(possibleNextCell, overrideDirectionMode)) {
       return getCellToTheLeft({
         currentRow: nextRow,

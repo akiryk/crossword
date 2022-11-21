@@ -24,11 +24,12 @@ const Crossword = () => {
           <div className="relative w-fit m-auto" ref={wrapperRef}>
             {grid.cellRows.map((row, i) => {
               return (
-                <div key={i} className="flex justify-center flex-wrap">
+                <div key={row[i].id} className="flex justify-center flex-wrap">
                   {row.map((cell) => {
                     if (cell.mode === PLAY_MODE || cell.mode === EDIT_MODE) {
                       return (
                         <CellContainer
+                          key={cell.id}
                           cell={cell}
                           showPreview={togglePreview}
                         />
