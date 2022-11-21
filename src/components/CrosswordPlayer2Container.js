@@ -5,25 +5,18 @@ import { Button } from "./Common";
 import { useCrosswordContext } from "../context/CrosswordContextProvider";
 import { useGridContext } from "../context/GridProvider";
 
-const CrosswordPlayer = ({
-  downHints,
-  acrossHints,
-  subscribe,
-  getIsSubmissionCorrect,
-  grid,
-  populate,
-  gameData,
-}) => {
+const CrosswordPlayer = ({ getIsSubmissionCorrect, grid }) => {
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
+  const [isGridPopulated, setIsGridPopulated] = useState(false);
+  const { acrossHints, downHints } = useCrosswordContext();
+
   useEffect(() => {
-    console.log("yo", gameData);
+    if (!gameData) {
+      return;
+    }
     grid.populate(gameData.grid);
-    // setAcrossHints(gameData.acrossHints);
-    // setDownHints(gameData.downHints);
-    // setGrid(grid);
-    // console.log("yo!");
-    // populate(gameData);
-  }, [grid, gameData]);
+    setIsGridPopulated(true);
+  }, [grid]);
   useEffect(() => {
     const unsubscribe = grid.subscribe((isGridComplete) => {
       setIsSubmitButtonEnabled(isGridComplete);
@@ -39,6 +32,10 @@ const CrosswordPlayer = ({
     } else {
       alert("Sorry, try again...");
     }
+  }
+
+  if (!isGridPopulated) {
+    return <>not populated</>;
   }
   return (
     <div>
@@ -80,9 +77,12 @@ const CrosswordPlayer = ({
   );
 };
 
-const CrosswordPlayer2Container = ({ gameData }) => {
-  const { acrossHints, downHints } = useCrosswordContext();
-  const { grid, populate } = useGridContext();
+const CrosswordPlayer2Container = () => {
+  const { setAcrossHints, setDownHints } = useCrosswordContext();
+  const { grid, getIsSubmissionCorrect } = useGridContext();
+
+  setAcrossHints(gameData.acrossHints);
+  setDownHints(gameData.downHints);
 
   if (!grid) {
     return <></>;
@@ -90,10 +90,7 @@ const CrosswordPlayer2Container = ({ gameData }) => {
   return (
     <CrosswordPlayer
       grid={grid}
-      acrossHints={acrossHints}
-      downHints={downHints}
-      gameData={gameData}
-      populate={populate}
+      getIsSubmissionCorrect={getIsSubmissionCorrect}
     />
   );
 };

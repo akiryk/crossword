@@ -21,6 +21,7 @@ const GridContextProvider = ({ children }) => {
   const setCellsForPlayerMode = grid?.setCellsForPlayerMode?.bind(grid);
   const subscribe = grid?.subscribe?.bind(grid);
   const populate = grid?.populate?.bind(grid);
+  const getIsSubmissionCorrect = grid?.getIsSubmissionCorrect?.bind(grid);
   const cellsObject = grid?.cellsObject;
   const startCellsWordsAcross = grid?.startCellsWordsAcross;
   const startCellsWordsDown = grid?.startCellsWordsDown;
@@ -37,6 +38,7 @@ const GridContextProvider = ({ children }) => {
     downHints: grid?.downHints,
     populate,
     subscribe,
+    getIsSubmissionCorrect,
   };
 
   return <GridContext.Provider value={values}>{children}</GridContext.Provider>;

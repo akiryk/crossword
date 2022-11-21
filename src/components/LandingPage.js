@@ -7,7 +7,6 @@ import { SPAN } from "../utils/constants";
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const { setGrid, setAcrossHints, setDownHints } = useCrosswordContext();
 
   const handlePlayHardCodedGame = (e) => {
     e.preventDefault();

@@ -57,21 +57,21 @@ export default class Grid {
           x,
           y,
         });
-        cell.correctValue = data.cellsObject[`${cell.id}`].correctValue;
-        cell.value = data.cellsObject[`${cell.id}`].value;
-        cell.mode = data.cellsObject[`${cell.id}`].mode;
+        cell.correctValue = data?.cellsObject[`${cell.id}`]?.correctValue;
+        cell.value = data.cellsObject[`${cell.id}`]?.value;
+        cell.mode = data.cellsObject[`${cell.id}`]?.mode;
         cell.cellHasFocus = false;
-        cell.displayNumber = data.cellsObject[`${cell.id}`].displayNumber;
-        cell.acrossWord = data.cellsObject[`${cell.id}`].acrossWord;
-        cell.downWord = data.cellsObject[`${cell.id}`].downWord;
+        cell.displayNumber = data.cellsObject[`${cell.id}`]?.displayNumber;
+        cell.acrossWord = data.cellsObject[`${cell.id}`]?.acrossWord;
+        cell.downWord = data.cellsObject[`${cell.id}`]?.downWord;
         cell.firstCellInAcrossWordXCoord =
-          data.cellsObject[`${cell.id}`].firstCellInAcrossWordXCoord;
+          data.cellsObject[`${cell.id}`]?.firstCellInAcrossWordXCoord;
         cell.lastCellInAcrossWordXCoord =
-          data.cellsObject[`${cell.id}`].lastCellInAcrossWordXCoord;
+          data.cellsObject[`${cell.id}`]?.lastCellInAcrossWordXCoord;
         cell.firstCellInDownWordYCoord =
-          data.cellsObject[`${cell.id}`].firstCellInDownWordYCoord;
+          data.cellsObject[`${cell.id}`]?.firstCellInDownWordYCoord;
         cell.lastCellInDownWordYCoord =
-          data.cellsObject[`${cell.id}`].lastCellInDownWordYCoord;
+          data.cellsObject[`${cell.id}`]?.lastCellInDownWordYCoord;
         this.cellsArray.push(cell);
         cells.push(cell);
         this.cellsObject[`${cell.id}`] = cell;
