@@ -7,6 +7,9 @@ import { useGridContext } from "../context/GridProvider";
 const CrosswordPlayerContainer = () => {
   const { acrossHints, downHints } = useCrosswordContext();
   const { grid } = useGridContext();
+  console.log(JSON.stringify(acrossHints));
+  console.log(JSON.stringify(downHints));
+  console.log(JSON.stringify(grid));
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
   useEffect(() => {
     const unsubscribe = grid.subscribe((isGridComplete) => {
