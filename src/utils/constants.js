@@ -18,7 +18,7 @@ export const PHASE_DESCRIPTIONS = {
   [ANSWER_PHASE]: "Enter words and set dead areas",
   [HINT_PHASE]: "Enter for each of your answers",
 };
-export const SPAN = 15;
+export const SPAN = 5;
 export const HIGHEST_INDEX = SPAN - 1;
 export const HIGHEST_X_INDEX = SPAN - 1;
 export const HIGHEST_Y_INDEX = SPAN - 1;

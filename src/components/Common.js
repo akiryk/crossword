@@ -6,4 +6,5 @@ export const Button = styled.button`
   :disabled {
     background: #ccc;
   }
+  margin: 24px;
 `;
