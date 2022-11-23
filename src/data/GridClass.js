@@ -25,9 +25,8 @@ export default class Grid {
     this.workingAnswersKey = {};
     this.listeners = new Set();
 
-    let cells;
     for (let y = 0; y < crossSpan; y++) {
-      cells = [];
+      const cells = [];
       for (let x = 0; x < downSpan; x++) {
         const cell = new Cell({
           x,
