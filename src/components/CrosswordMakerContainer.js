@@ -16,7 +16,7 @@ function CrosswordMakerContainer() {
   }
   function makeHints() {
     setIsHintButtonDisabled(true);
-    const { cellsArray, cellsObject } = grid;
+    const { cellsArray, cellsMap } = grid;
     let word;
     let cellDisplayNumber = 1;
     let x;
@@ -32,8 +32,8 @@ function CrosswordMakerContainer() {
         // The cell starts a word if the previous cell does not have value
         // and the next cell does have value
         if (
-          !cellsObject[`${x - 1}:${y}`]?.value &&
-          cellsObject[`${x + 1}:${y}`]?.value
+          !cellsMap[`${x - 1}:${y}`]?.value &&
+          cellsMap[`${x + 1}:${y}`]?.value
         ) {
           let value = cell.value;
           word = "";
@@ -42,7 +42,7 @@ function CrosswordMakerContainer() {
           while (value) {
             word = `${word}${value}`;
             currentX++;
-            value = cellsObject[`${currentX}:${y}`]?.value;
+            value = cellsMap[`${currentX}:${y}`]?.value;
           }
 
           // Now we know the first and last cells in the word
@@ -51,7 +51,7 @@ function CrosswordMakerContainer() {
           // reset currentX and the value, and loop through the word again,
           // this time so we can give each cell context about where it is in the word
           for (let x = startX; x < endX; x++) {
-            cellsObject[`${x}:${y}`].setAcrossWordData({
+            cellsMap[`${x}:${y}`].setAcrossWordData({
               firstCellInAcrossWordXCoord: startX,
               lastCellInAcrossWordXCoord: endX,
               acrossWord: word,
@@ -63,8 +63,8 @@ function CrosswordMakerContainer() {
 
         // Check if it starts a vertical word
         if (
-          !cellsObject[`${x}:${y - 1}`]?.value &&
-          cellsObject[`${x}:${y + 1}`]?.value
+          !cellsMap[`${x}:${y - 1}`]?.value &&
+          cellsMap[`${x}:${y + 1}`]?.value
         ) {
           let value = cell.value;
           word = "";
@@ -73,7 +73,7 @@ function CrosswordMakerContainer() {
           while (value) {
             word = `${word}${value}`;
             currentY++;
-            value = cellsObject[`${x}:${currentY}`]?.value;
+            value = cellsMap[`${x}:${currentY}`]?.value;
           }
 
           // Now we know the first and last cells in the down word
@@ -82,7 +82,7 @@ function CrosswordMakerContainer() {
           // reset currentY and the value, and loop through the word again,
           // this time so we can give each cell context about where it is in the word
           for (let y = startY; y < endY; y++) {
-            cellsObject[`${x}:${y}`].setDownWordData({
+            cellsMap[`${x}:${y}`].setDownWordData({
               firstCellInDownWordYCoord: startY,
               lastCellInDownWordYCoord: endY,
               downWord: word,

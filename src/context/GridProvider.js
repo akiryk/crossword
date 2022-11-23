@@ -22,7 +22,7 @@ const GridContextProvider = ({ children }) => {
   const subscribe = grid?.subscribe?.bind(grid);
   const populate = grid?.populate?.bind(grid);
   const getIsSubmissionCorrect = grid?.getIsSubmissionCorrect?.bind(grid);
-  const cellsObject = grid?.cellsObject;
+  const cellsMap = grid?.cellsMap;
   const startCellsWordsAcross = grid?.startCellsWordsAcross;
   const startCellsWordsDown = grid?.startCellsWordsDown;
 
@@ -31,7 +31,7 @@ const GridContextProvider = ({ children }) => {
     setCellWithFocus,
     setCellsForPlayerMode,
     highlightDirection,
-    cellsObject,
+    cellsMap,
     startCellsWordsAcross,
     startCellsWordsDown,
     acrossHints: grid?.acrossHints,

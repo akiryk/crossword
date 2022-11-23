@@ -11,7 +11,7 @@
 //     this.crossSpan = crossSpan;
 //     this.downSpan = downSpan;
 //     this.cellsArray = [];
-//     this.cellsObject = {};
+//     this.cellsMap = {};
 //     this.startCellsWordsAcross = [];
 //     this.startCellsWordsDown = [];
 //     this.cellWithFocus = null;
@@ -36,7 +36,7 @@
 
 //         this.cellsArray.push(cell);
 //         cells.push(cell);
-//         this.cellsObject[`${cell.id}`] = cell;
+//         this.cellsMap[`${cell.id}`] = cell;
 //       }
 //       this.cellRows.push(cells);
 //     }
@@ -45,7 +45,7 @@
 //   populate(data) {
 //     // reset all the cells
 //     this.cellsArray = [];
-//     this.cellsObject = {};
+//     this.cellsMap = {};
 //     this.cellRows = [];
 
 //     this.answerKey = data.answerKey;
@@ -57,24 +57,24 @@
 //           x,
 //           y,
 //         });
-//         cell.correctValue = data.cellsObject[`${cell.id}`].correctValue;
-//         cell.value = data.cellsObject[`${cell.id}`].value;
-//         cell.mode = data.cellsObject[`${cell.id}`].mode;
+//         cell.correctValue = data.cellsMap[`${cell.id}`].correctValue;
+//         cell.value = data.cellsMap[`${cell.id}`].value;
+//         cell.mode = data.cellsMap[`${cell.id}`].mode;
 //         cell.cellHasFocus = false;
-//         cell.displayNumber = data.cellsObject[`${cell.id}`].displayNumber;
-//         cell.acrossWord = data.cellsObject[`${cell.id}`].acrossWord;
-//         cell.downWord = data.cellsObject[`${cell.id}`].downWord;
+//         cell.displayNumber = data.cellsMap[`${cell.id}`].displayNumber;
+//         cell.acrossWord = data.cellsMap[`${cell.id}`].acrossWord;
+//         cell.downWord = data.cellsMap[`${cell.id}`].downWord;
 //         cell.firstCellInAcrossWordXCoord =
-//           data.cellsObject[`${cell.id}`].firstCellInAcrossWordXCoord;
+//           data.cellsMap[`${cell.id}`].firstCellInAcrossWordXCoord;
 //         cell.lastCellInAcrossWordXCoord =
-//           data.cellsObject[`${cell.id}`].lastCellInAcrossWordXCoord;
+//           data.cellsMap[`${cell.id}`].lastCellInAcrossWordXCoord;
 //         cell.firstCellInDownWordYCoord =
-//           data.cellsObject[`${cell.id}`].firstCellInDownWordYCoord;
+//           data.cellsMap[`${cell.id}`].firstCellInDownWordYCoord;
 //         cell.lastCellInDownWordYCoord =
-//           data.cellsObject[`${cell.id}`].lastCellInDownWordYCoord;
+//           data.cellsMap[`${cell.id}`].lastCellInDownWordYCoord;
 //         this.cellsArray.push(cell);
 //         cells.push(cell);
-//         this.cellsObject[`${cell.id}`] = cell;
+//         this.cellsMap[`${cell.id}`] = cell;
 //       }
 //       this.cellRows.push(cells);
 //     }
@@ -112,10 +112,10 @@
 //   ensureRotationalSymmetry({ x: x1, y: y1, value }) {
 //     const x2 = SPAN - x1 - 1;
 //     const y2 = SPAN - y1 - 1;
-//     const value1 = this.cellsObject[`${x1}:${y1}`].value;
-//     const value2 = this.cellsObject[`${x2}:${y2}`].value;
-//     this.cellsObject[`${x1}:${y1}`].toggleIsSymmetrical(!!value1 || !!value2);
-//     this.cellsObject[`${x2}:${y2}`].toggleIsSymmetrical(!!value1 || !!value2);
+//     const value1 = this.cellsMap[`${x1}:${y1}`].value;
+//     const value2 = this.cellsMap[`${x2}:${y2}`].value;
+//     this.cellsMap[`${x1}:${y1}`].toggleIsSymmetrical(!!value1 || !!value2);
+//     this.cellsMap[`${x2}:${y2}`].toggleIsSymmetrical(!!value1 || !!value2);
 //   }
 
 //   subscribe(update) {
@@ -157,7 +157,7 @@
 //     if (this.cellWithFocus) {
 //       this.cellWithFocus.disableFocus();
 //     }
-//     this.cellWithFocus = this.cellsObject[id];
+//     this.cellWithFocus = this.cellsMap[id];
 //     this.cellWithFocus.enableFocus();
 //   }
 
@@ -206,7 +206,7 @@
 //     // clear all the currently highlighted cells
 //     while (this.highlightedPlayCells.length) {
 //       const id = this.highlightedPlayCells.pop();
-//       this.cellsObject[id].setIsInSelectedRowOrColumn(false);
+//       this.cellsMap[id].setIsInSelectedRowOrColumn(false);
 //     }
 //     if (this.gridDirection === GO_LEFT_TO_RIGHT) {
 //       for (
@@ -214,7 +214,7 @@
 //         i < cell.lastCellInAcrossWordXCoord;
 //         i++
 //       ) {
-//         cell = this.cellsObject[`${i}:${cell.y}`];
+//         cell = this.cellsMap[`${i}:${cell.y}`];
 //         this.highlightedPlayCells.push(`${cell.x}:${cell.y}`);
 //         cell.setIsInSelectedRowOrColumn(true);
 //       }
@@ -224,7 +224,7 @@
 //         i < cell.lastCellInDownWordYCoord;
 //         i++
 //       ) {
-//         cell = this.cellsObject[`${cell.x}:${i}`];
+//         cell = this.cellsMap[`${cell.x}:${i}`];
 //         this.highlightedPlayCells.push(`${cell.x}:${cell.y}`);
 //         cell.setIsInSelectedRowOrColumn(true);
 //       }
@@ -247,9 +247,9 @@
 //     let cell;
 //     for (let i = 0; i < SPAN; i++) {
 //       if (this.gridDirection === GO_LEFT_TO_RIGHT) {
-//         cell = this.cellsObject[`${i}:${y}`];
+//         cell = this.cellsMap[`${i}:${y}`];
 //       } else if (this.gridDirection === GO_TOP_TO_BOTTOM) {
-//         cell = this.cellsObject[`${x}:${i}`];
+//         cell = this.cellsMap[`${x}:${i}`];
 //       }
 //       if (cell.mode === EDIT_MODE) {
 //         cell.setIsInSelectedRowOrColumn(true);

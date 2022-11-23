@@ -32,7 +32,7 @@ function CellContainer({ cell, showPreview }) {
     grid,
     setCellWithFocus: setCellFocus,
     highlightDirection: highlightGridDirection,
-    cellsObject,
+    cellsMap,
   } = useGridContext();
 
   const subscribe = cell.subscribe.bind(cell);
@@ -69,7 +69,7 @@ function CellContainer({ cell, showPreview }) {
       newColumn = currentColumn + 1 === SPAN ? 0 : currentColumn + 1;
     }
 
-    const possibleNextCell = cellsObject[`${newColumn}:${newRow}`];
+    const possibleNextCell = cellsMap[`${newColumn}:${newRow}`];
     while (shouldSkipNextCell(possibleNextCell)) {
       newRow = currentRow + 1;
       return getCellBelow({
@@ -109,7 +109,7 @@ function CellContainer({ cell, showPreview }) {
       newColumn = 0;
       newRow = currentRow + 1 === SPAN ? 0 : currentRow + 1;
     }
-    const possibleNextCell = cellsObject[`${newColumn}:${newRow}`];
+    const possibleNextCell = cellsMap[`${newColumn}:${newRow}`];
     while (shouldSkipNextCell(possibleNextCell, overrideDirectionMode)) {
       return getCellToTheRight({
         currentRow: newRow,
@@ -133,7 +133,7 @@ function CellContainer({ cell, showPreview }) {
       nextColumn = HIGHEST_INDEX; // HIGHEST_INDEX = SPAN - 1;
       nextRow = currentRow - 1 < 0 ? HIGHEST_INDEX : currentRow - 1;
     }
-    const possibleNextCell = cellsObject[`${nextColumn}:${nextRow}`];
+    const possibleNextCell = cellsMap[`${nextColumn}:${nextRow}`];
     while (shouldSkipNextCell(possibleNextCell, overrideDirectionMode)) {
       return getCellToTheLeft({
         currentRow: nextRow,
