@@ -8,7 +8,12 @@ import HintingForm from "./HintingForm";
 function CrosswordMakerContainer() {
   const [shouldShowHintingForm, setShouldShowHintingForm] = useState(false);
   const [isHintButtonDisabled, setIsHintButtonDisabled] = useState(false);
+  const [togglePreview, setTogglePreview] = useState(false);
   const { grid } = useGridContext();
+
+  function handleTogglePreview() {
+    setTogglePreview((showPreview) => !showPreview);
+  }
 
   function handleClearPuzzle() {
     grid.clearEditorView();
@@ -109,7 +114,10 @@ function CrosswordMakerContainer() {
   return (
     <div className="text-center">
       <div className="m-5">
-        <Crossword />
+        <Crossword
+          togglePreview={togglePreview}
+          onTogglePreview={handleTogglePreview}
+        />
       </div>
       <div className="flex">
         <div className="">

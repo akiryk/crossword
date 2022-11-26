@@ -1,20 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import CellContainer from "./CellContainer";
 import { useGridContext } from "../context/GridProvider";
 import { DeadCell, ViewOnlyCell } from "./Cell";
 import { EDIT_MODE, PLAY_MODE, VIEW_ONLY_MODE } from "../utils/constants";
-import { Button } from "./Common";
+import { StyledButton } from "./Common";
 import { useOutsideAlerter } from "../hooks/useOutside";
 
-const Crossword = () => {
-  const [togglePreview, setTogglePreview] = useState(false);
+const Crossword = ({ togglePreview, onTogglePreview }) => {
   const { grid } = useGridContext();
   const wrapperRef = React.useRef(null);
   useOutsideAlerter(wrapperRef);
 
-  function handleTogglePreview() {
-    setTogglePreview((showPreview) => !showPreview);
-  }
   return (
     <>
       {!grid ? (
@@ -51,7 +47,7 @@ const Crossword = () => {
               );
             })}
           </div>
-          <Button onClick={handleTogglePreview}>Preview</Button>
+          <StyledButton onClick={onTogglePreview}>Preview</StyledButton>
         </>
       )}
     </>

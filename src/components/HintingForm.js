@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCrosswordContext } from "../context/CrosswordContextProvider";
 import { useGridContext } from "../context/GridProvider";
+import { StyledButton } from "../components/Common";
 
 const HINT_SIZE = "50";
 
@@ -79,8 +80,13 @@ const HintingFormContainer = () => {
     <form onSubmit={handleSubmit}>
       {startCellsWordsAcross.map((cell, index) => {
         return (
-          <div key={cell.acrossWord}>
-            <span>{cell.displayNumber}: </span>
+          <div key={cell.acrossWord} className="flex items-center mr-5">
+            <label
+              for="first_name"
+              className="block text-sm font-medium text-gray-900 dark:text-black mr-5"
+            >
+              {cell.displayNumber}
+            </label>
             <input
               type="text"
               placeholder={`add hint: ${cell.acrossWord}`}
@@ -89,6 +95,7 @@ const HintingFormContainer = () => {
               onChange={(event) => {
                 handleChangeAcrossWordHint(event, index);
               }}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
             />
           </div>
         );
@@ -110,7 +117,7 @@ const HintingFormContainer = () => {
           </div>
         );
       })}
-      <button>Submit</button>
+      <StyledButton>Submit</StyledButton>
     </form>
   );
 };
