@@ -38,6 +38,8 @@ const Cell = ({
   onClick,
   onFocus,
   displayNumber,
+  onCompositionStart,
+  onCompositionEnd,
 }) => {
   return (
     <CellWrapper displayNumber={displayNumber}>
@@ -49,6 +51,8 @@ const Cell = ({
         ref={inputRef}
         onClick={onClick}
         onFocus={onFocus}
+        onCompositionStart={onCompositionStart}
+        onCompositionEnd={onCompositionEnd}
       />
     </CellWrapper>
   );

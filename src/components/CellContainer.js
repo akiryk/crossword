@@ -26,6 +26,7 @@ function CellContainer({ cell, showPreview }) {
   const { y: row, x: column, displayNumber, mode, id } = cell;
   const inputRef = useRef();
   const [value, setValue] = useState(cell.value);
+  const [isComposing, setIsComposing] = useState(false);
   const [isInSelectedRowOrColumn, setIsInSelectedRowOrColumn] = useState(false);
   const [isSymmetrical, setIsSymmetrical] = useState(false);
   const {
@@ -81,10 +82,23 @@ function CellContainer({ cell, showPreview }) {
   }
 
   function getCellAbove({ currentRow, currentColumn, overrideDirectionMode }) {
-    let newRow = SPAN;
+    let newRow = currentRow;
+    let newColumn = currentColumn;
     if (currentRow > 0) {
       newRow = currentRow - 1;
+    } else {
+      newRow = SPAN - 1;
+      currentColumn = currentColumn - 1 < 0 ? HIGHEST_INDEX : currentColumn - 1;
     }
+
+    const possibleNextCell = cellsMap[`${newColumn}:${newRow}`];
+    while (shouldSkipNextCell(possibleNextCell, overrideDirectionMode)) {
+      return getCellToTheLeft({
+        currentRow: newRow,
+        currentColumn: newColumn,
+      });
+    }
+
     return { row: newRow, column: currentColumn };
   }
 
@@ -179,9 +193,15 @@ function CellContainer({ cell, showPreview }) {
   }
 
   function handleChange(event) {
+    if (isComposing) {
+      console.log("isComposing!");
+    } else {
+      console.log("Not composing");
+    }
     // if (cellIsInteractive) {
     const value = event.target.value?.trim();
     if (value) {
+      console.log(value);
       cell.setValue(value);
       if (mode === PLAY_MODE) {
         grid.updateWorkingAnswers(cell);
@@ -189,11 +209,23 @@ function CellContainer({ cell, showPreview }) {
       if (mode === EDIT_MODE) {
         grid.ensureRotationalSymmetry(cell);
       }
+      // composing is true if user is composing a character, e.g. with option key for é
+      if (isComposing) {
+        return;
+      }
       // don't go to next cell until after updating working answers!
       goToNextCell(cell);
     }
   }
-  // }
+
+  function handleCompositionStart(event) {
+    setIsComposing(true);
+  }
+
+  function handleCompositionEnd(event) {
+    setIsComposing(false);
+    goToNextCell(cell);
+  }
 
   function handleKeyDown(event) {
     // if (!cellIsInteractive) {
@@ -299,6 +331,8 @@ function CellContainer({ cell, showPreview }) {
       onChange={handleChange}
       onKeyDown={handleKeyDown}
       onClick={handleClick}
+      onCompositionStart={handleCompositionStart}
+      onCompositionEnd={handleCompositionEnd}
       onFocus={handleFocus}
       displayNumber={displayNumber}
       id={id}
