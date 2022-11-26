@@ -3,10 +3,9 @@ import CellContainer from "./CellContainer";
 import { useGridContext } from "../context/GridProvider";
 import { DeadCell, ViewOnlyCell } from "./Cell";
 import { EDIT_MODE, PLAY_MODE, VIEW_ONLY_MODE } from "../utils/constants";
-import { StyledButton } from "./Common";
 import { useOutsideAlerter } from "../hooks/useOutside";
 
-const Crossword = ({ togglePreview, onTogglePreview }) => {
+const Crossword = ({ togglePreview }) => {
   const { grid } = useGridContext();
   const wrapperRef = React.useRef(null);
   useOutsideAlerter(wrapperRef);
@@ -47,7 +46,6 @@ const Crossword = ({ togglePreview, onTogglePreview }) => {
               );
             })}
           </div>
-          <StyledButton onClick={onTogglePreview}>Preview</StyledButton>
         </>
       )}
     </>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button } from "./Common";
+import { StyledButton } from "./Common";
 import { useGridContext } from "../context/GridProvider";
 
 import Crossword from "./Crossword";
@@ -114,19 +114,18 @@ function CrosswordMakerContainer() {
   return (
     <div className="text-center">
       <div className="m-5">
-        <Crossword
-          togglePreview={togglePreview}
-          onTogglePreview={handleTogglePreview}
-        />
+        <Crossword togglePreview={togglePreview} />
       </div>
-      <div className="flex">
+      <div className="flex  justify-center">
+        <StyledButton onClick={handleTogglePreview}>Preview</StyledButton>
+
         <div className="">
-          <Button onClick={makeHints} disabled={isHintButtonDisabled}>
+          <StyledButton onClick={makeHints} disabled={isHintButtonDisabled}>
             Make Hints
-          </Button>
+          </StyledButton>
         </div>
         <div className="">
-          <Button onClick={handleClearPuzzle}>Clear</Button>
+          <StyledButton onClick={handleClearPuzzle}>Clear</StyledButton>
         </div>
 
         {shouldShowHintingForm && (
