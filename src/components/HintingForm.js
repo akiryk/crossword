@@ -77,47 +77,64 @@ const HintingFormContainer = () => {
     return <>loading...</>;
   }
   return (
-    <form onSubmit={handleSubmit}>
-      {startCellsWordsAcross.map((cell, index) => {
-        return (
-          <div key={cell.acrossWord} className="flex items-center mr-5">
-            <label
-              for="first_name"
-              className="block text-sm font-medium text-gray-900 dark:text-black mr-5"
-            >
-              {cell.displayNumber}
-            </label>
-            <input
-              type="text"
-              placeholder={`add hint: ${cell.acrossWord}`}
-              size={HINT_SIZE}
-              name="hint"
-              onChange={(event) => {
-                handleChangeAcrossWordHint(event, index);
-              }}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-            />
+    <form onSubmit={handleSubmit} className="max-w-4xl  mx-auto">
+      <div className="flex justify-between">
+        <div className="">
+          <h2>Across Hints</h2>
+          <div>
+            {startCellsWordsAcross.map((cell, index) => {
+              return (
+                <div key={cell.acrossWord} className="flex items-center my-2">
+                  <label
+                    for={`acrossHintFor${cell.id}`}
+                    className="block text-sm font-medium text-gray-900 dark:text-black mr-5 w-2"
+                  >
+                    {cell.displayNumber}
+                  </label>
+                  <input
+                    type="text"
+                    placeholder={`add hint: ${cell.acrossWord}`}
+                    size={HINT_SIZE}
+                    name="hint"
+                    onChange={(event) => {
+                      handleChangeAcrossWordHint(event, index);
+                    }}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                  />
+                </div>
+              );
+            })}
           </div>
-        );
-      })}
-      <p>----------------</p>
-      {startCellsWordsDown.map((cell, index) => {
-        return (
-          <div key={cell.downWord}>
-            <span>{cell.displayNumber}: </span>
-            <input
-              type="text"
-              placeholder={`add hint: ${cell.downWord}`}
-              size={HINT_SIZE}
-              name="hint"
-              onChange={(event) => {
-                handleChangeDownWordHint(event, index);
-              }}
-            />
+        </div>
+        <div>
+          <h2>Down Hints</h2>
+          <div>
+            {startCellsWordsDown.map((cell, index) => {
+              return (
+                <div key={cell.downWord} className="flex items-center my-2">
+                  <label
+                    for={`downHintFor${cell.id}`}
+                    className="block text-sm font-medium text-gray-900 dark:text-black mr-5 w-2"
+                  >
+                    {cell.displayNumber}
+                  </label>
+                  <input
+                    type="text"
+                    placeholder={`add hint: ${cell.acrossWord}`}
+                    size={HINT_SIZE}
+                    name="hint"
+                    onChange={(event) => {
+                      handleChangeAcrossWordHint(event, index);
+                    }}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                  />
+                </div>
+              );
+            })}
           </div>
-        );
-      })}
-      <StyledButton>Submit</StyledButton>
+        </div>
+      </div>
+      <StyledButton>Play The Game!</StyledButton>
     </form>
   );
 };

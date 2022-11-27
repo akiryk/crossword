@@ -116,24 +116,28 @@ function CrosswordMakerContainer() {
       <div className="m-5">
         <Crossword togglePreview={togglePreview} />
       </div>
-      <div className="flex  justify-center">
-        <StyledButton onClick={handleTogglePreview}>Preview</StyledButton>
 
-        <div className="">
-          <StyledButton onClick={makeHints} disabled={isHintButtonDisabled}>
-            Make Hints
-          </StyledButton>
-        </div>
-        <div className="">
-          <StyledButton onClick={handleClearPuzzle}>Clear</StyledButton>
-        </div>
-
-        {shouldShowHintingForm && (
-          <div className="">
-            <HintingForm />
+      {!shouldShowHintingForm && (
+        <div className="flex  justify-center">
+          <div>
+            <StyledButton onClick={handleTogglePreview}>Preview</StyledButton>
           </div>
-        )}
-      </div>
+          <div>
+            <StyledButton onClick={makeHints} disabled={isHintButtonDisabled}>
+              Make Hints
+            </StyledButton>
+          </div>
+          <div>
+            <StyledButton onClick={handleClearPuzzle}>Clear</StyledButton>
+          </div>
+        </div>
+      )}
+
+      {shouldShowHintingForm && (
+        <div className="">
+          <HintingForm />
+        </div>
+      )}
     </div>
   );
 }
