@@ -141,7 +141,8 @@ export default class Grid {
   }
 
   clearEditorView() {
-    this.cellsArray.forEach((cell) => {
+    Object.keys(this.cellsMap).forEach((id) => {
+      const cell = this.cellsMap[id];
       this.startCellsWordsAcross = [];
       this.startCellsWordsDown = [];
       cell.reset();
