@@ -30,6 +30,7 @@ export default class Grid {
       const row = [];
       for (let x = 0; x < downSpan; x++) {
         const cell = new Cell({ x, y });
+        this.cellsArray.push(cell);
         row.push(cell);
         this.cellsMap[`${cell.id}`] = cell;
       }
@@ -141,8 +142,7 @@ export default class Grid {
   }
 
   clearEditorView() {
-    Object.keys(this.cellsMap).forEach((id) => {
-      const cell = this.cellsMap[id];
+    this.cellsArray.forEach((cell) => {
       this.startCellsWordsAcross = [];
       this.startCellsWordsDown = [];
       cell.reset();
