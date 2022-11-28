@@ -80,20 +80,20 @@ const HintingFormContainer = () => {
     <form onSubmit={handleSubmit} className="max-w-4xl  mx-auto">
       <div className="flex justify-between">
         <div className="">
-          <h2>Across Hints</h2>
+          <h2 className="font-bold text-left">Create Across Hints</h2>
           <div>
             {startCellsWordsAcross.map((cell, index) => {
               return (
                 <div key={cell.acrossWord} className="flex items-center my-2">
                   <label
-                    for={`acrossHintFor${cell.id}`}
+                    htmlFor={`acrossHintFor${cell.id}`}
                     className="block text-sm font-medium text-gray-900 dark:text-black mr-5 w-2"
                   >
                     {cell.displayNumber}
                   </label>
                   <input
                     type="text"
-                    placeholder={`add hint: ${cell.acrossWord}`}
+                    placeholder={`${cell.acrossWord}`}
                     size={HINT_SIZE}
                     name="hint"
                     onChange={(event) => {
@@ -107,24 +107,24 @@ const HintingFormContainer = () => {
           </div>
         </div>
         <div>
-          <h2>Down Hints</h2>
+          <h2 className="font-bold text-left">Create Down Hints</h2>
           <div>
             {startCellsWordsDown.map((cell, index) => {
               return (
                 <div key={cell.downWord} className="flex items-center my-2">
                   <label
-                    for={`downHintFor${cell.id}`}
+                    htmlFor={`downHintFor${cell.id}`}
                     className="block text-sm font-medium text-gray-900 dark:text-black mr-5 w-2"
                   >
                     {cell.displayNumber}
                   </label>
                   <input
                     type="text"
-                    placeholder={`add hint: ${cell.acrossWord}`}
+                    placeholder={`${cell.downWord}`}
                     size={HINT_SIZE}
                     name="hint"
                     onChange={(event) => {
-                      handleChangeAcrossWordHint(event, index);
+                      handleChangeDownWordHint(event, index);
                     }}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                   />
