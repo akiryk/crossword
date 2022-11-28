@@ -21,6 +21,8 @@ const DOWN_ARROW_KEY = "ARROWDOWN";
 const DELETE_KEY = "BACKSPACE";
 // const SHIFT_KEY = 16;
 const SPACEBAR_KEY = "SPACE";
+// dot for indicating a black square
+const PERIOD = "PERIOD";
 
 function CellContainer({ cell, showPreview }) {
   const { y: row, x: column, displayNumber, mode, id } = cell;
@@ -109,7 +111,9 @@ function CellContainer({ cell, showPreview }) {
       );
       return mode === DEAD_CELL_MODE || (!!value && emptyCellsRemain);
     }
-    return mode === DEAD_CELL_MODE;
+    // return false for all cases so that creator can navigate "through" a black cell
+    return false;
+    // return mode === DEAD_CELL_MODE;
   }
 
   function getCellToTheRight({
@@ -193,15 +197,8 @@ function CellContainer({ cell, showPreview }) {
   }
 
   function handleChange(event) {
-    if (isComposing) {
-      console.log("isComposing!");
-    } else {
-      console.log("Not composing");
-    }
-    // if (cellIsInteractive) {
     const value = event.target.value?.trim();
     if (value) {
-      console.log(value);
       cell.setValue(value);
       if (mode === PLAY_MODE) {
         grid.updateWorkingAnswers(cell);
@@ -261,6 +258,9 @@ function CellContainer({ cell, showPreview }) {
         break;
       case DOWN_ARROW_KEY:
         goToNextCell({ row, column, overrideDirectionMode: GO_TOP_TO_BOTTOM });
+        break;
+      case PERIOD:
+        cell.setMode(DEAD_CELL_MODE);
         break;
       default:
         break;

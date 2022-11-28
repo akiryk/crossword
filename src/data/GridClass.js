@@ -4,6 +4,7 @@ import {
   GO_LEFT_TO_RIGHT,
   EDIT_MODE,
   PLAY_MODE,
+  DEAD_CELL_MODE,
 } from "../utils/constants";
 import Cell from "../components/CellClass";
 export default class Grid {
@@ -26,18 +27,13 @@ export default class Grid {
     this.listeners = new Set();
 
     for (let y = 0; y < crossSpan; y++) {
-      const cells = [];
+      const row = [];
       for (let x = 0; x < downSpan; x++) {
-        const cell = new Cell({
-          x,
-          y,
-        });
-
-        this.cellsArray.push(cell);
-        cells.push(cell);
+        const cell = new Cell({ x, y });
+        row.push(cell);
         this.cellsMap[`${cell.id}`] = cell;
       }
-      this.cellRows.push(cells);
+      this.cellRows.push(row);
     }
   }
 
@@ -108,11 +104,15 @@ export default class Grid {
     });
   }
 
-  ensureRotationalSymmetry({ x: x1, y: y1, value }) {
+  ensureRotationalSymmetry({ x: x1, y: y1 }) {
     const x2 = SPAN - x1 - 1;
     const y2 = SPAN - y1 - 1;
     const value1 = this.cellsMap[`${x1}:${y1}`].value;
     const value2 = this.cellsMap[`${x2}:${y2}`].value;
+    if (value1 === ".") {
+      // cell should be black!
+      this.cellsMap[`${x2}:${y2}`].setMode(DEAD_CELL_MODE);
+    }
     this.cellsMap[`${x1}:${y1}`].toggleIsSymmetrical(!!value1 || !!value2);
     this.cellsMap[`${x2}:${y2}`].toggleIsSymmetrical(!!value1 || !!value2);
   }

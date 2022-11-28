@@ -18,25 +18,27 @@ const CNavLink = ({ children, to }) => {
 const Home = () => {
   const { grid } = useCrosswordContext();
   return (
-    <div>
-      <h1>Game Maker and Player!</h1>
-      <nav>
-        <ul className="flex">
-          <li className="mr-6">
-            <CNavLink to="/">Welcome!</CNavLink>
-          </li>
-          <li className="mr-6">
-            <CNavLink to="/maker">Create!</CNavLink>
-          </li>
-          <li className="mr-6">
-            {grid ? (
-              <CNavLink to="/player">Play!</CNavLink>
-            ) : (
-              <p className="text-gray-500">Play</p>
-            )}
-          </li>
-        </ul>
-      </nav>
+    <div className="">
+      <div className="text-center">
+        <h1>Game Maker and Player!</h1>
+        <nav className="flex justify-center">
+          <ul className="flex">
+            <li className="mr-6">
+              <CNavLink to="/">Welcome!</CNavLink>
+            </li>
+            <li className="mr-6">
+              <CNavLink to="/maker">Create!</CNavLink>
+            </li>
+            <li className="mr-6">
+              {grid ? (
+                <CNavLink to="/player">Play!</CNavLink>
+              ) : (
+                <p className="text-gray-500">Play</p>
+              )}
+            </li>
+          </ul>
+        </nav>
+      </div>
       <Outlet />
     </div>
   );

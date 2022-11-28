@@ -37,6 +37,10 @@ export default class Cell {
     this.value = "";
   }
 
+  setMode(mode) {
+    this.mode = mode;
+  }
+
   initStartValues() {
     this.value = "";
     this.correctValue = "";
