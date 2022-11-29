@@ -16,10 +16,16 @@ const Crossword = ({ togglePreview }) => {
         <p>loading...</p>
       ) : (
         <>
-          <div className="relative w-fit m-auto" ref={wrapperRef}>
+          <table
+            className="relative w-fit m-auto table-fixed border-collapse"
+            ref={wrapperRef}
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+          >
             {grid.cellRows.map((row, i) => {
               return (
-                <div key={row[i].id} className="flex justify-center flex-wrap">
+                <tr key={row[i].id} className="flex justify-center flex-wrap">
                   {row.map((cell) => {
                     if (cell.mode === PLAY_MODE || cell.mode === EDIT_MODE) {
                       return (
@@ -42,10 +48,10 @@ const Crossword = ({ togglePreview }) => {
                       return <DeadCell key={cell.id} />;
                     }
                   })}
-                </div>
+                </tr>
               );
             })}
-          </div>
+          </table>
         </>
       )}
     </>

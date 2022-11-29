@@ -5,14 +5,14 @@ export const SHARED_CELL_STYLES =
   "w-10 h-10 outline outline-1 outline-gray-400 border-none";
 
 export const CellWrapper = ({ children, displayNumber }) => (
-  <div className="relative">
+  <td className="relative">
     {children}
     {!!displayNumber && (
       <span className="absolute left-0.5 top-px text-xs text-slate-600 pointer-events-none">
         {displayNumber}
       </span>
     )}
-  </div>
+  </td>
 );
 
 export const DeadCell = () => (
