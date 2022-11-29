@@ -16,16 +16,16 @@ export const CellWrapper = ({ children, displayNumber }) => (
 );
 
 export const DeadCell = () => (
-  <div className={`${SHARED_CELL_STYLES}  bg-black`} />
+  <td className={`${SHARED_CELL_STYLES}  bg-black`}></td>
 );
 
 export const ViewOnlyCell = ({ children, displayNumber }) => (
   <CellWrapper displayNumber={displayNumber}>
-    <div
+    <td
       className={`${SHARED_CELL_STYLES} ${SHARED_CELL_FONT_STYLES} bg-white flex justify-center items-center`}
     >
       <span>{children}</span>
-    </div>
+    </td>
   </CellWrapper>
 );
 
