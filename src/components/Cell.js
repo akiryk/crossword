@@ -5,7 +5,7 @@ export const SHARED_CELL_STYLES =
   "w-10 h-10 outline outline-1 outline-gray-400 border-none";
 
 export const CellWrapper = ({ children, displayNumber }) => (
-  <td className="relative">
+  <td className="relative" role="gridcell">
     {children}
     {!!displayNumber && (
       <span className="absolute left-0.5 top-px text-xs text-slate-600 pointer-events-none">
@@ -23,6 +23,7 @@ export const ViewOnlyCell = ({ children, displayNumber }) => (
   <CellWrapper displayNumber={displayNumber}>
     <td
       className={`${SHARED_CELL_STYLES} ${SHARED_CELL_FONT_STYLES} bg-white flex justify-center items-center`}
+      role="gridcell"
     >
       <span>{children}</span>
     </td>
@@ -40,6 +41,7 @@ const Cell = ({
   displayNumber,
   onCompositionStart,
   onCompositionEnd,
+  tabIndex,
 }) => {
   return (
     <CellWrapper displayNumber={displayNumber}>
@@ -53,6 +55,7 @@ const Cell = ({
         onFocus={onFocus}
         onCompositionStart={onCompositionStart}
         onCompositionEnd={onCompositionEnd}
+        tabIndex={tabIndex}
       />
     </CellWrapper>
   );

@@ -24,10 +24,11 @@ const SPACEBAR_KEY = "SPACE";
 // dot for indicating a black square
 const PERIOD = "PERIOD";
 
-function CellContainer({ cell, showPreview }) {
+function CellContainer({ cell, showPreview, initialTabIndex }) {
   const { y: row, x: column, displayNumber, mode, id } = cell;
   const inputRef = useRef();
   const [value, setValue] = useState(cell.value);
+  const [tabIndex, setTabIndex] = useState(initialTabIndex);
   const [isComposing, setIsComposing] = useState(false);
   const [isInSelectedRowOrColumn, setIsInSelectedRowOrColumn] = useState(false);
   const [isSymmetrical, setIsSymmetrical] = useState(false);
@@ -48,13 +49,15 @@ function CellContainer({ cell, showPreview }) {
       if (newCellData.cellHasFocus) {
         inputRef.current.focus();
         inputRef.current.select();
+        setTabIndex("0");
+      } else {
+        setTabIndex("-1");
       }
     });
     // }
   }, [subscribe]);
 
   function setCellWithFocus(id) {
-    // grid.setCellWithFocus(id);
     setCellFocus(id);
   }
 
@@ -140,7 +143,6 @@ function CellContainer({ cell, showPreview }) {
   function getCellToTheLeft({
     currentRow,
     currentColumn,
-    isDelete,
     overrideDirectionMode,
   }) {
     let nextColumn = currentColumn;
@@ -338,6 +340,7 @@ function CellContainer({ cell, showPreview }) {
       id={id}
       mode={mode}
       isInSelectedRowOrColumn={isInSelectedRowOrColumn}
+      tabIndex={tabIndex}
     />
   );
 }

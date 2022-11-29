@@ -22,10 +22,15 @@ const Crossword = ({ togglePreview }) => {
             cellpadding="0"
             cellspacing="0"
             border="0"
+            role="grid"
           >
             {grid.cellRows.map((row, i) => {
               return (
-                <tr key={row[i].id} className="flex justify-center flex-wrap">
+                <tr
+                  key={row[i].id}
+                  className="flex justify-center flex-wrap"
+                  role="row"
+                >
                   {row.map((cell) => {
                     if (cell.mode === PLAY_MODE || cell.mode === EDIT_MODE) {
                       return (
@@ -33,6 +38,7 @@ const Crossword = ({ togglePreview }) => {
                           key={cell.id}
                           cell={cell}
                           showPreview={togglePreview}
+                          initialTabIndex={cell.id === "0:0" ? "0" : "-1"}
                         />
                       );
                     } else if (cell.mode === VIEW_ONLY_MODE) {
