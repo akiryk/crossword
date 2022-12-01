@@ -279,9 +279,6 @@ function CellContainer({ cell, showPreview, initialTabIndex }) {
   }
 
   function handleFocus() {
-    // if (!cellIsInteractive) {
-    //   return;
-    // }
     setCellWithFocus(cell.id);
     highlightDirection(cell);
   }
