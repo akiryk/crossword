@@ -1,0 +1,408 @@
+{
+  "acrossHints": [
+    {
+      "displayNumber": "1",
+      "hint": "Not in a bottle, at a bar",
+      "answer": "ONTAP"
+    },
+    {
+      "displayNumber": "6",
+      "hint": "N.Y.C. home to van Gogh's \"The Starry Night\"",
+      "answer": "MOMA"
+    },
+    {
+      "displayNumber": "10",
+      "hint": "Home of Mongolia and Myanmar",
+      "answer": "ASIA"
+    },
+    {
+      "displayNumber": "14",
+      "hint": "\"Thanks\" in French",
+      "answer": "MERCI"
+    },
+    {
+      "displayNumber": "15",
+      "hint": "Idle who sang \"Always Look on the Bright Side of Life\" while tied to a cross",
+      "answer": "Eric"
+    },
+    {
+      "displayNumber": "16",
+      "hint": "Bronzes in the sun",
+      "answer": "TANS"
+    },
+    {
+      "displayNumber": "17",
+      "hint": "Not a single person",
+      "answer": "NOONE"
+    },
+    {
+      "displayNumber": "18",
+      "hint": "Counterpart of fem.",
+      "answer": "MASC"
+    },
+    {
+      "displayNumber": "19",
+      "hint": "Sound from a pigpen",
+      "answer": "OINK"
+    },
+    {
+      "displayNumber": "20",
+      "hint": "\"Monster\" on the web",
+      "answer": "INTERNETTROLL"
+    },
+    {
+      "displayNumber": "23",
+      "hint": "Flower with thorns",
+      "answer": "ROSE"
+    },
+    {
+      "displayNumber": "24",
+      "hint": "Transfer from a device to the cloud, say",
+      "answer": "UPLOAD"
+    },
+    {
+      "displayNumber": "27",
+      "hint": "Having a graceful and elegant bearing",
+      "answer": "POISED"
+    },
+    {
+      "displayNumber": "31",
+      "hint": "\"Busy\" buzzer",
+      "answer": "BEE"
+    },
+    {
+      "displayNumber": "32",
+      "hint": "Messenger molecule",
+      "answer": "RNA"
+    },
+    {
+      "displayNumber": "33",
+      "hint": "Pinnacle",
+      "answer": "ACME"
+    },
+    {
+      "displayNumber": "\"Monster\" on the highway",
+      "hint": "34",
+      "answer": "SPEEDDEMON"
+    },
+    {
+      "displayNumber": "38",
+      "hint": "Where hair roots grow",
+      "answer": ""
+    },
+    {
+      "displayNumber": "40",
+      "hint": "Sailor's affirmation",
+      "answer": "AYE"
+    },
+    {
+      "displayNumber": "41",
+      "hint": "Not showing emotion",
+      "answer": "STOIC"
+    },
+    {
+      "displayNumber": "42",
+      "hint": "\"Monster\" with a sweet tooth",
+      "answer": "SUGARFIEND"
+    },
+    {
+      "displayNumber": "45",
+      "hint": "Word after muscle or dial",
+      "answer": "TONE"
+    },
+    {
+      "displayNumber": "46",
+      "hint": "Commercial prefix with Pen",
+      "answer": "EPI"
+    },
+    {
+      "displayNumber": "47",
+      "hint": "Not feeling well",
+      "answer": "ILL"
+    },
+    {
+      "displayNumber": "48",
+      "hint": "00s, in James Bond novels",
+      "answer": "AGENTS"
+    },
+    {
+      "displayNumber": "50",
+      "hint": "Highly active person",
+      "answer": "DYNAMO"
+    },
+    {
+      "displayNumber": "52",
+      "hint": "___ and soul",
+      "answer": "BODY"
+    },
+    {
+      "displayNumber": "54",
+      "hint": "\"Monster\" who drains people emotionally",
+      "answer": "ENERGYVAMPIRE"
+    },
+    {
+      "displayNumber": "60",
+      "hint": "Pic file format",
+      "answer": "JPEG"
+    },
+    {
+      "displayNumber": "62",
+      "hint": "Literary heroine Jane",
+      "answer": "EYRE"
+    },
+    {
+      "displayNumber": "63",
+      "hint": "Equipment in a control tower",
+      "answer": "RADAR"
+    },
+    {
+      "displayNumber": "64",
+      "hint": "Shows, as a TV show",
+      "answer": "AIRS"
+    },
+    {
+      "displayNumber": "65",
+      "hint": "1982 film whose use of C.G.I. made it ineligible for a best visual effects Oscar",
+      "answer": "TRON"
+    },
+    {
+      "displayNumber": "66",
+      "hint": "Place of combat",
+      "answer": "ARENA"
+    },
+    {
+      "displayNumber": "67",
+      "hint": "Sunset direction",
+      "answer": "WEST"
+    },
+    {
+      "displayNumber": "68",
+      "hint": "Roughly half of babies, to their parents",
+      "answer": "SONS"
+    },
+    {
+      "displayNumber": "69",
+      "hint": "Exams",
+      "answer": "TESTS"
+    }
+  ],
+  "downHints": [
+    {
+      "displayNumber": "1",
+      "hint": "Prefix with potent or present",
+      "answer": "OMNI"
+    },
+    {
+      "displayNumber": "2",
+      "hint": "Like many blinking signs that say \"Open\"",
+      "answer": "NEON"
+    },
+    {
+      "displayNumber": "3",
+      "hint": "Gait between a walk and a canter",
+      "answer": "TROT"
+    },
+    {
+      "displayNumber": "4",
+      "hint": "Teen's skin woe",
+      "answer": "ACNE"
+    },
+    {
+      "displayNumber": "",
+      "hint": "",
+      "answer": ""
+    }
+  ],
+  "grid": {
+    "cellsArray": [
+      {
+        "x": 1,
+        "y": 1,
+        "correctValue": "O",
+        "value": "",
+        "displayNumber": 1
+      },
+      {
+        "x": 2,
+        "y": 1,
+        "correctValue": "N",
+        "value": "",
+        "displayNumber": 2
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "correctValue": "T",
+        "value": "",
+        "displayNumber": 3
+      },
+      {
+        "x": 4,
+        "y": 1,
+        "correctValue": "A",
+        "value": "",
+        "displayNumber": 4
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "correctValue": "P",
+        "value": "",
+        "displayNumber": 5
+      },
+      {
+        "x": 6,
+        "y": 1
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "correctValue": "M",
+        "value": "",
+        "displayNumber": 6
+      },
+      {
+        "x": 8,
+        "y": 1,
+        "correctValue": "O",
+        "value": "",
+        "displayNumber": 7
+      },
+      {
+        "x": 9,
+        "y": 1,
+        "correctValue": "M",
+        "value": "",
+        "displayNumber": 8
+      },
+      {
+        "x": 10,
+        "y": 1,
+        "correctValue": "A",
+        "value": "",
+        "displayNumber": 9
+      },
+      {
+        "x": 11,
+        "y": 1
+      },
+      {
+        "x": 12,
+        "y": 1,
+        "correctValue": "A",
+        "value": "",
+        "displayNumber": 10
+      },
+      {
+        "x": 13,
+        "y": 1,
+        "correctValue": "S",
+        "value": "",
+        "displayNumber": 11
+      },
+      {
+        "x": 14,
+        "y": 1,
+        "correctValue": "I",
+        "value": "",
+        "displayNumber": 12
+      },
+      {
+        "x": 15,
+        "y": 1,
+        "correctValue": "A",
+        "value": "",
+        "displayNumber": 13
+      },
+      {
+        "x": 1,
+        "y": 2,
+        "correctValue": "M",
+        "value": "",
+        "displayNumber": 14
+      },
+      {
+        "x": 2,
+        "y": 2,
+        "correctValue": "E",
+        "value": ""
+      },
+      {
+        "x": 3,
+        "y": 2,
+        "correctValue": "R",
+        "value": ""
+      },
+      {
+        "x": 4,
+        "y": 2,
+        "correctValue": "C",
+        "value": ""
+      },
+      {
+        "x": 5,
+        "y": 2,
+        "correctValue": "I",
+        "value": ""
+      },
+      {
+        "x": 6,
+        "y": 2
+      },
+      {
+        "x": 7,
+        "y": 2,
+        "correctValue": "E",
+        "value": "",
+        "displayNumber": 15
+      },
+      {
+        "x": 8,
+        "y": 2,
+        "correctValue": "R",
+        "value": ""
+      },
+      {
+        "x": 9,
+        "y": 2,
+        "correctValue": "I",
+        "value": ""
+      },
+      {
+        "x": 10,
+        "y": 2,
+        "correctValue": "C",
+        "value": ""
+      },
+      {
+        "x": 11,
+        "y": 2
+      },
+      {
+        "x": 12,
+        "y": 2,
+        "correctValue": "T",
+        "value": "",
+        "displayNumber": 16
+      },
+      {
+        "x": 13,
+        "y": 2,
+        "correctValue": "A",
+        "value": ""
+      },
+      {
+        "x": 14,
+        "y": 2,
+        "correctValue": "N",
+        "value": ""
+      },
+      {
+        "x": 15,
+        "y": 2,
+        "correctValue": "S",
+        "value": ""
+      }
+    ]
+  }
+}

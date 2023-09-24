@@ -1,0 +1,19 @@
+type Query {
+  hints: [Hint!]!
+  grid: Grid!
+}
+
+type Hint {
+  id: ID!
+  hint: String!
+  direction: Direction
+}
+
+enum Direction {
+  ACROSS
+  DOWN
+}
+
+type Grid {
+  cells: [Cell!]!
+}
